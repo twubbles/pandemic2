@@ -1,0 +1,49 @@
+{{extend 'layout.html'}}
+{{block layer01}}
+{{include 'admindefault.html'}}
+{{end}}
+
+
+
+{{block layer02}}
+<hr/>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
+
+ <div class="table-responsive">
+			<table class="table">
+			<thead>
+				<tr>
+                  <th class="hidden-xs">Game ID</th>
+				  <th>Name</th>
+				  <th class="hidden-xs">Starts</th>
+				  <th class="hidden-xs">Ends</th>
+                </tr>
+              </thead>
+			  <tbody>
+			 <tr>
+				{{for game in games:}}
+                  <td class="hidden-xs"><a href="{{=URL('admin','editgame',args=game.id)}}">{{=game.id}}</a></td>
+                  <td><a href="{{=URL('admin','editgame',args=game.id)}}">{{=game.game_name}}</a></td>
+                  <td class="hidden-xs">{{=game.start_at}}</td>
+                  <td class="hidden-xs">{{=game.end_at}}</td>
+                </tr>
+             {{pass}}
+              </tbody>
+            </table>
+          </div>
+
+ 
+  <INPUT type="button" class="btn btn-info" value="Create a new Game"
+onclick="location.href='{{=URL(r=request, f='creategame')}}'"/>
+ 
+ 
+</div>
+</div>
+</div>
+{{end}}
+
+{{block postfooter}}
+{{include 'adminfooter.html'}}
+{{end}}

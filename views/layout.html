@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+<title>{{=response.title or request.application}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="application-name" content="{{=request.application}}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="image_src" href="http://i.imgur.com/QDGEJpR.png" />
+    <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
+	<link href='http://fonts.googleapis.com/css?family=Carme' rel='stylesheet' type='text/css'>
+	{{response.include_meta()}}
+
+	<script src="{{=URL('static','js/modernizr.custom.js')}}"></script>
+	
+{{
+	response.files.insert(0,URL('static','css/bootstrap.css'))
+	response.files.insert(1,URL('static','css/pandemic.css'))
+	response.files.insert(2,URL('static','css/jquery-ui-1.10.4.custom.css'))
+	response.files.insert(3,URL('static','css/dashboard.css'))
+}}
+{{response.include_files()}}
+
+</head>
+<body>
+    <header>
+		
+		
+  <nav class="navbar navbar-default navbar-fixed-top navbartext " role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{=URL('default', 'index')}}">UMASSHvZ</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="main-navbar-collapse-1">
+	  
+      <ul class="nav navbar-nav">
+		{{if response.adminmenu:}}
+			{{=response.adminmenu[0]}}
+		{{pass}}
+		{{if response.menu:}}
+          	   {{=response.menu[0]}}
+		{{pass}}
+		{{if auth.is_logged_in():}}
+            		{{if response.squadmenu:}}   
+            			{{=response.squadmenu[0]}} 
+            		{{pass}}
+            		{{if response.statusmenu:}}   
+            			{{=response.statusmenu[0]}}  						
+            		{{else:}}
+            		{{pass}}
+            		
+         {{pass}}
+      </ul>
+	  <ul class="nav navbar-nav">
+	  </ul>
+	  
+      <ul class="nav navbar-nav navbar-right " style="margin-right: 0px;">
+		 {{if auth.is_logged_in():}}
+			{{=user_bar()[0]}}
+		{{else:}}
+		<li><a id="loginnavbutton" href="/pandemic2/default/user/login?_next=/pandemic2/default/index" class="btn btn-default navbar-btn" >Login</a></li>
+		{{pass}}
+	  </ul>  
+		{{block menuitem}}
+		{{end}}
+	  
+	  
+	</div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+</header>
+		{{include}}	
+        {{block layer01}}
+		{{end}}
+        {{block layer02}}
+		{{end}}
+		{{block layer03}}
+		{{end}}
+		{{block layer04}}
+		{{end}}
+
+<footer>	
+{{block footer}}
+
+
+
+
+{{end}}
+</footer>
+	<script src="{{=URL('static','js/jquery-1.11.0.min.js')}}"></script>
+	<script src="{{=URL('static','js/jquery-ui-1.10.4.custom.min.js')}}"></script>
+	<script src="{{=URL('static','js/bootstrap-3.1.0.js')}}"></script>
+	<script src="{{=URL('static','js/prefixfree.js')}}"></script>
+	
+	
+
+{{block postfooter}}
+
+{{end}}
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+{{include 'header.html'}}
+{{if request.user_agent().is_mobile:}}
+<!--Mobile view-->
+
+	<div class="mobilecontainer">
+	
+	</div>
+	
+{{else:}}
+
+<!-- Desktop View -->
+	<div class="infoheaderwrapper">
+        <a href="http://facebook.com/people/@/{{=cparts[0].auth_user.registration_id}}"><div class="infoprofilepicbox" style="background: url('{{=fbphotofull(cparts[0].auth_user.registration_id)}}') no-repeat center top;">		
+	</div></a>
+        <div style='text-align:center;'><h2>{{=T(cparts[0].auth_user.first_name + ' ' + cparts[0].auth_user.last_name)}}</h2></div> 
+	<div class="profileinfobox">
+        
+        {{if cparts[0].auth_user.handle:}}
+        <p><h4>Handle: {{=T(cparts[0].auth_user.handle)}}</h4></p>
+        {{pass}}   
+        {{if cparts[0].auth_user.bio:}}
+        <p>{{=cparts[0].auth_user.bio}}</p>
+        {{pass}}
+                    <hr>
+				{{try:}}
+						<h4>Current Status: {{=cparts[0].creature_type.name}}</h4>
+						{{if cparts[0].creature_type.zombie:}} 
+							{{if not cparts[0].creature_type.immortal and not isZombieDead(cparts[0]):}}
+								<h4>Starves: {{=pretty_date(cparts[0].game_part.zombie_expires_at)}}</h4>
+							{{elif not cparts[0].creature_type.immortal and isZombieDead(cparts[0]):}}
+								<h4>Starved @: {{=pretty_date(cparts[0].game_part.zombie_expires_at)}}</h4>
+							{{elif cparts[0].creature_type.immortal:}}
+								<h4>Immortal</h4>
+                            {{pass}}
+                        {{pass}}
+					{{if cparts[0].game_part.pinktext:}}
+							<h3 style="color:#FAC6E8;"> PINKTEXTED </h3>
+					{{pass}}
+				{{except:}}
+						No recent game data
+				{{pass}}
+	
+	</div>
+	<div class="infocontentwrapper">
+	<div class="infohistory">
+				   
+                    <table id='tablestylepro'>
+       					<tr><th colspan="4">Game History</th></tr>
+        				<tr>
+							<td> Game </td>
+                            <td> Squad </td>
+							<td> Ending Status </td>
+                            <td> Kills </td>
+						</tr>
+					{{for cpart in cparts:}}
+        				<tr>
+                            <td>{{=cpart.games.game_name}}</td>
+                            <td>{{=cpart.squads.name}}</td>
+							<td>{{=cpart.creature_type.name}}</td>
+                            <td>{{=cpart['COUNT(bite_event.zombie_id)']}}</td>
+
+        				</tr>
+					{{pass}}
+					</table>
+				
+                	
+	</div>
+	</div>
+
+{{pass}}
+
+{{include 'footer.html'}}

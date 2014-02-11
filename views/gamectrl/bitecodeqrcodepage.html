@@ -1,0 +1,24 @@
+{{include 'header.html'}}
+
+<script src="{{=URL('static','js/jquery.min.js')}}"></script>
+<script src="{{=URL('static','js/qrcode.js')}}"></script>
+<div class='mobilecontainer' style='background-color:#ffffff;'>
+<div style='padding:5px;' id="qrcode"></div>
+<script type="text/javascript">
+new QRCode(document.getElementById("qrcode"), {
+    text: "http://leetmeatgolem.pythonanywhere.com/pandemic/gamectrl/bitecodepg/{{=gpart.bitecode}}",
+    width: 300,
+    height: 300,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.M
+});
+</script>
+    <h4 style='color:black;'>{{=gpart.bitecode}}</h4>
+    
+</div>
+<h4 style="text-align:center;">
+        Scan this with any QR code reader and follow the link to bite this person.
+    </h4>
+
+{{include 'footer.html'}}

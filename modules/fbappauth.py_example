@@ -1,0 +1,6 @@
+FB_AUTH_URL = 'https://graph.facebook.com/oauth/authorize?'
+APP_SCOPE = ''
+APP_TITLE = 'appnamehere'
+APP_URL = 'http://appurlhere'
+CLIENT_ID = 'appid'
+CLIENT_SECRET = 'appsecret'

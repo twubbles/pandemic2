@@ -1,0 +1,129 @@
+{{include 'header.html'}}
+{{lid=leader.user_id}}
+{{is_mobile=request.user_agent().is_mobile}}
+{{if is_mobile:}}
+<!--Mobile view-->
+
+<div class="mobilecontainer">
+<p><h2>{{=squad.name}}</h2></p>
+
+<table class='mobilesquaddroptable'>
+		<thead>
+		<tr style="background-color:#fff720;">
+            <th> {{if leader.squad_title:}}{{=leader.squad_title}}{{else:}}Squad Leader{{pass}}</th>
+            <th>{{=A(db.auth_user(lid).first_name + ' ' + db.auth_user(lid).last_name,  _href=URL(c='default',f='userinfo', args=lid))}}</th>
+            <th>{{=db.creature_type(leader.creature_type).name}}</th> 
+
+        </tr>
+    {{if members:}}
+	{{ for member in members: }}
+		{{uid=member.user_id}}
+		<tr {{if db.creature_type(member.creature_type).zombie == True:}}style="background-color:#9A1C19;"{{else:}}style="background-color:#9AC548;" {{pass}}>
+            <td>{{if member.squad_title:}}{{=member.squad_title}}{{else:}}Member{{pass}}</td>
+        <td> {{=A(db.auth_user(uid).first_name + ' ' + db.auth_user(uid).last_name,  _href=URL(c='default',f='userinfo', args=uid))}}</td>
+		<td>{{=db.creature_type(member.creature_type).name}}</td>
+        </tr>
+                    
+	{{pass}}
+    {{pass}}
+        </thead>
+    </table>
+
+<div class='mobilesquadpostwrapper'>
+                    <h3>Squad Notices</h3>
+                    {{id=1}}
+            		{{for post in posts:}}
+           	
+                        <a id="dropdown" class="post{{=id}}" href="#" title="Click to Display"><div class="sqcontainer"><h3>{{=post.title}}</h3></div></a>
+                    	<div class="dropdownwrap" id="post{{=id}}" style="display:none;">
+                            <p>{{=XML(post.description,sanitize=True)}}</p>
+                    	<p><em>{{=prettydate(post.created)}}</em></p>
+                    	</div>
+                    	<script>
+							$(document).ready(function(e) {	
+    							$('.post{{=id}}').on('click',function(){	
+									$('#post{{=id}}').slideToggle();		
+								});	
+							});
+						</script>	
+                    {{id = id + 1}}
+                    {{pass}}
+        </div>
+
+		<div class='mobilesquadfeed'>
+        </div>
+</div>
+
+
+
+{{else:}} 
+<!--Desktop view-->
+    <div class='squadbodywrapper'>
+        <a id="dropdown" class="memberlist" href="#" title="Members">{{=IMG(_src=URL(c='default',f='download',args=squad.image), _width="960", _class='nospace')}}</a> 
+        <div class="membersdropdown" id="memberlist" style="display:none;">   
+ 		   
+        <table class='squaddroptable'>
+        	<thead>		
+        	
+        	<tr style="background-color:#fff720;">
+            	<th>{{if leader.squad_title:}}{{=leader.squad_title}}{{else:}}Squad Leader{{pass}} </th>
+            	<th>{{=A(db.auth_user(lid).first_name + ' ' + db.auth_user(lid).last_name,  _href=URL(c='default',f='userinfo', args=lid))}}</th>
+            	<th>{{=db.creature_type(leader.creature_type).name}}</th>      
+        	</tr>
+    		{{if members:}}
+    		{{ for member in members: }}
+        	{{uid=member.user_id}}
+                <tr {{if db.creature_type(member.creature_type).zombie == True:}}style="background-color:#9A1C19;"{{else:}}style="background-color:#9AC548;" {{pass}}>
+            	<td>{{if member.squad_title:}}{{=member.squad_title}}{{else:}}Member{{pass}}</td>
+        		<td> {{=A(db.auth_user(uid).first_name + ' ' + db.auth_user(uid).last_name,  _href=URL(c='default',f='userinfo', args=uid))}}</td>
+                <td>{{=db.creature_type(member.creature_type).name}}</td>
+        	</tr>                 
+    		{{pass}}
+    		{{pass}}
+        	</thead>
+    	</table> 
+
+        </div>
+               <script>
+				$(document).ready(function(e) {	
+    				$('.memberlist').on('click',function(){	
+						$('#memberlist').slideToggle();		
+					});	
+				});
+		</script>	
+
+     
+   
+
+	
+                    <div class='squadpostwrapper'>
+                    <h3>Squad Notices</h3>
+                    {{id=1}}
+            		{{for post in posts:}}
+           	
+                        <a id="dropdown" class="post{{=id}}" href="#" title="Click to Display"><div class="sqcontainer"><h3>{{=post.title}}</h3></div></a>
+                    	<div class="dropdownwrap" id="post{{=id}}" style="display:none;">
+                            <p>{{=XML(post.description,sanitize=True)}}</p>
+                    	<p><em>{{=prettydate(post.created)}}</em></p>
+                    	</div>
+                    	<script>
+							$(document).ready(function(e) {	
+    							$('.post{{=id}}').on('click',function(){	
+									$('#post{{=id}}').slideToggle();		
+								});	
+							});
+						</script>	
+                    {{id = id + 1}}
+                    {{pass}}
+        </div>
+      <div class="squadfeedboxwrapper">
+        <h3>Squad Feed</h3>
+        <div class='squadfeed'>
+          </div>
+        </div>
+    </div>
+</div> 
+
+{{pass}}
+
+{{include 'footer.html'}}

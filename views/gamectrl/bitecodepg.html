@@ -1,0 +1,31 @@
+{{include 'header.html'}}
+{{if form:}}
+{{=form}}
+{{pass}}
+{{if results:}}
+    <h4>{{=results}}</h4>
+    <script src='http://connect.facebook.net/en_US/all.js'></script>
+    <INPUT type="button" class="button" value="Post this bite to facebook!"
+onclick='postToFeed(); return false;'/>
+    <p id='msg'></p>
+<!--Quick and dirty solution to having bites posted to facebook with javascript. -->
+    <script> 
+      FB.init({appId: "	148476551982686", status: true, cookie: true});
+      function postToFeed() {
+        var obj = {
+          method: 'feed',
+            redirect_uri: 'http://leetmeatgolem.pythonanywhere.com',
+          link: 'leetmeatgolem.pythonanywhere.com',
+          picture: 'http://i.imgur.com/QDGEJpR.png',
+          name: 'UMASS Amherst Humans vs Zombies',
+            caption: '{{=results}}!',
+          description: 'Have you signed up yet?'
+        };
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+        FB.ui(obj, callback);
+      }
+    </script>
+{{pass}}
+{{include 'footer.html'}}

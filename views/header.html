@@ -1,0 +1,12 @@
+{{if auth.is_logged_in() and returncurrentuserpart() and db.game_part(returncurrentuserpart().id).pinktext:}}
+{{response.files.append(URL('static','css/pinkstyle.css'))}}
+{{else:}}
+{{response.files.append(URL('static','css/newstyle.css'))}}
+{{pass}}
+
+
+
+
+
+{{extend 'layout.html'}}
+{{include 'web2py_ajax.html'}}

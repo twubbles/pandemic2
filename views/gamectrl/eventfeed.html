@@ -1,0 +1,50 @@
+{{include 'header.html'}}
+{{if request.user_agent().is_mobile:}}
+<!--Mobile view-->
+
+{{else:}}
+<!--Desktop view-->
+<script src="http://listjs.com/no-cdn/list.js"></script>
+<script src="http://listjs.com/no-cdn/list.pagination.js"></script>
+<style>
+    .pagination li {display:inline-block;padding:3px;}
+    ul.list  li {display:inline;margin:1px;list-style: none;font-size: 1em;float:left;;position:relative;}
+    .name {vertical-align:middle;}
+    .events {overflow: hidden;width: 100%;display: table; margin: 0 auto;}
+    .search {position:absolute;left:377px;top:10px;}
+
+</style>
+
+<div id="eventbox" class="eventcontentbox">
+<div id="events" class="events"><input type="text" class="search" />
+    </br>
+    </br>
+<ul id="eventlist" class="list">
+</ul>
+</div>
+<ul class="pagination"></ul>
+</div>
+{{pass}}
+{{include 'footer.html'}}
+<script>
+window.onload = function(){
+        var users = {};
+        {{for name in zombienames:}}
+            {{if name.auth_user.handle:}}users[{{=name.game_part.id}}] = ['{{=name.auth_user.handle}}'];{{else:}}users[{{=name.game_part.id}}] = ['{{=name.auth_user.first_name}} {{=name.auth_user.last_name}}'];{{pass}}{{pass}}
+
+var html = "";
+	{{for event in events:}}
+            html += '<div class="eventcontenttext"><li class="eventitem"><p class="name">' + users[{{=event[u'zombie_id']}}] + ' bit ' + users[{{=event[u'human_id']}}] + '</p></li></div>';
+	{{pass}}
+	document.getElementById("eventlist").innerHTML = html;
+
+
+var monkeyList = new List('events', {
+  valueNames: ['name'],
+  page: 60,
+  plugins: [ ListPagination({}) ]
+});
+
+};
+
+</script>

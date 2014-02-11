@@ -1,0 +1,104 @@
+{{extend 'layout.html'}}
+
+
+	{{block menuitem}}
+        {{=UL('', LI(A('All',SPAN(len(players), _class="badge "), _href="#")),
+		LI(A('Humans',SPAN(humanTotal, _class="badge badge-success"), _href='#humans')),
+		LI(A('Zombies',SPAN(zombieTotal, _class="badge badge-danger"), _href='#zombies')),
+		LI(A('Graveyard',SPAN(deadTotal, _class="badge badge-default"), _href='#graveyard')),
+		_class='nav nav-pills')}}   
+	{{end}}
+
+
+{{block layer01}}
+
+	<div class="container-fluid">
+
+	<div class="col-md-6">
+	  <table class='table table-striped' id="humans">
+        <tr><th colspan="2" style="color:white;"><h3><span class="label label-success center-block">Humans</span></h3></th></tr>
+        <tr>
+        <td> Name</td>
+        <td> Status </td>
+        </tr>
+        {{n=1}}
+    {{ for player in players: }}
+        {{if not player.creature_type.zombie:}}
+        <tr> 
+            <td>   
+                {{if player.auth_user.handle:}}
+                {{=A(player.auth_user.handle,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{else:}}
+                {{=A(player.auth_user.first_name + ' ' + player.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{pass}}
+            </td>
+            <td>{{=player.creature_type.name}}</td>
+            </tr>
+        {{n+=1}}       
+        {{pass}}
+        
+    {{pass}}
+    </table>
+	</div>
+	<div class="col-md-6">
+    <table class='table table-striped' id="zombies">
+         <tr><th colspan="3" style="color:white;"><h3><span class="label label-danger center-block">Zombies</span></h3></th></tr>
+        <tr>
+        <td> Name</td>
+        <td> Status </td>
+        <td> Starve @</td>
+    </tr>  
+    {{ for player in players: }}
+        {{if player.creature_type.zombie and not isZombieDead(player) or player.creature_type.immortal:}}
+            <tr>
+            <td>   
+            {{if player.auth_user.handle:}}
+                {{=A(player.auth_user.handle,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{else:}}
+                {{=A(player.auth_user.first_name + ' ' + player.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{pass}}
+            </td>
+            <td>{{=player.creature_type.name}}</td>
+
+                {{if player.creature_type.immortal:}}
+                    <td> Immortal! </td>
+                {{else:}}
+                    <td>{{=pretty_date(player.game_part.zombie_expires_at)}}</td>
+                {{pass}}
+            </tr>
+             {{n+=1}}  
+        {{pass}}          
+            {{pass}}
+    </table>
+	  <table class='table table-striped' id="graveyard">
+        <tr><th colspan="2" style="color:white;"><h3><span class="label label-default center-block">Graveyard</span></h3></th></tr>
+        <tr  >
+        <td> Name</td>
+        <td> Starved</td>
+    </tr>
+        {{n=1}}
+    {{ for player in players: }}
+        {{if player.creature_type.zombie and isZombieDead(player) and not player.creature_type.immortal:}}
+        <tr>
+            <td>   
+            {{if player.auth_user.handle:}}
+                {{=A(player.auth_user.handle,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{else:}}
+                {{=A(player.auth_user.first_name + ' ' + player.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{pass}}
+            </td>
+            <td>{{=pretty_date(player.game_part.zombie_expires_at)}}</td>
+            </tr>
+        {{n+=1}}
+        {{pass}}  
+        
+            {{pass}}
+    </table>
+	</div>
+
+    </div><!-- /.container -->
+
+
+
+
+{{end}}

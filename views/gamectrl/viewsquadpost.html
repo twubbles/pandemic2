@@ -1,0 +1,22 @@
+{{include 'header.html'}}
+
+
+
+    <div class="squaddiv">
+ 		{{=A(IMG(_src=URL(c='default',f='download',args=squad.image), _width="800", _height="200", _id="profilepic"),)}} 
+				<div id='post_snippet'>
+            	
+                    <div class="content-main-body-title"><a href= "{{=URL(r=request, f='viewsquadpost', args=post.id)}}"> {{=post.title}}</a></div>
+           			 	{{=XML(post.description,sanitize=True)}}
+                		<br/>
+                    
+                    <p><em>{{=prettydate(post.created)}}</em></p>
+				</div>
+      
+        <div class="content-info-body-mis"><a href= "{{=URL(r=request, f='squadhq', args=post.squad_id)}}">Back to HQ</a></div>
+</div> 
+ 
+
+    
+
+{{include 'footer.html'}}

@@ -1,0 +1,53 @@
+
+{{extend 'layout.html'}}
+{{block layer01}}
+{{include 'admindefault.html'}}
+{{end}}
+
+
+{{block layer02}}
+<hr/>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
+
+ <div class="table-responsive">
+			<table class="table">
+			<thead>
+				<tr>
+                 <th>Game</th>
+				 <th>game_part</th>
+				 <th class="hidden-xs">Name</th>
+				 <th class="hidden-xs">Handle</th>
+				 <th>Bitecode</th>
+				 <th>Status</th>
+				 <th class="hidden-xs">Timer</th>
+				 <th>Actions</th>
+                </tr>
+              </thead>
+			  <tbody>
+				{{for part in parts:}}
+				<tr>
+                  <td>{{=part.games.game_name}}</td>
+                  <td><a href="{{=URL('admin', 'editgamepart', args=part.game_part.id)}}">{{=part.game_part.id}}</a></td>
+                  <td class="hidden-xs">{{=part.auth_user.first_name}} {{=part.auth_user.last_name}}</td>
+                  <td class="hidden-xs">{{=part.auth_user.handle}}</td>
+				  <td>{{=part.game_part.bitecode}}</td>
+				  <td>{{=part.creature_type.name}}</td>
+				  <td class="hidden-xs">{{if isZombieDead(part):}} Starved {{else:}}{{=part.game_part.zombie_expires_at}}{{pass}}</td>
+				  <td><a href="{{=URL('admin', 'regencode', args=[part.game_part.id,part.auth_user.id])}}" class="btn-sm btn btn-default" >Regen Code</a></td>
+                </tr>
+             {{pass}}
+              </tbody>
+            </table>
+          </div>
+
+ 
+</div>
+</div>
+</div>
+{{end}}
+
+{{block postfooter}}
+{{include 'adminfooter.html'}}
+{{end}}

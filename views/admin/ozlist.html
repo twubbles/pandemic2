@@ -1,0 +1,66 @@
+{{extend 'layout.html'}}
+{{block layer01}}
+{{include 'admindefault.html'}}
+{{end}}
+
+
+{{block layer02}}
+<hr/>
+ <div class="container-fluid">
+      <div class="row">
+	{{if users:}}
+	<div class="col-xs-12 col-sm-9 col-md-8 col-sm-offset-3">
+    <table class='table'>
+	<tr>
+        <th> Name</th>
+        <th> Status </th>
+        <th class="hidden-xs"> Starve Timer </th>
+        <th colspan=2> Options </th>
+    </tr>  
+	{{ for user in users: }}
+        <tr>
+        	
+			<td>
+			{{=user.auth_user.first_name}} {{=user.auth_user.last_name}}</a>
+        	</td>
+        	<td>{{=user.creature_type.name}}</td>
+        	{{if user.creature_type.immortal == True:}}
+            	<td> Immortal! </td>
+        	{{else:}}
+            	<td class="hidden-xs">{{=user.game_part.zombie_expires_at}}</td>
+        	{{pass}}
+            <td><a href= "{{=URL(r=request, f='editgamepart', args=user.game_part.id)}}">  Edit </a></td>
+            <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='gamectrl', f='makeoz', args=[user.game_part.id])}}'"/></td>
+        </tr>
+        
+	{{pass}}
+	</table>
+	</div>
+	{{pass}}
+	
+	{{if games:}}
+	
+	<div class="col-xs-6 col-md-6 hidden-xs">
+	</div>
+	<div class="col-xs-6 col-md-6 col-xs-offset-6">
+	{{for game in games:}}
+	<a href={{=URL('admin', 'ozlist', args=game.id)}}><h2>{{=game.game_name}}</h2></a>
+	
+	{{pass}}
+	</div>
+	
+	{{pass}}
+	
+	
+	
+	
+	
+	
+	
+	    </div>
+    </div>
+{{end}}
+
+{{block postfooter}}
+{{include 'adminfooter.html'}}
+{{end}}
