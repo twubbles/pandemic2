@@ -2,7 +2,6 @@
 response.static_version = '1.0.0'
 
 # This model has various common functions in it.
-import datetime
 import re
 
 # Converts the current time, whatever zone it may be in, to EST, and returns it.

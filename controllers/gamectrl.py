@@ -18,14 +18,6 @@ def bitetree():
     return dict(events=events,zombienames=zombienames)
 
 
-
-def pinky():
-    form=db((db.bite_event.zombie_id==db.game_part.id) & (db.game_part.user_id==db.auth_user.id) & (db.bite_event.game_id==db.games.id)).select(
-    db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name,db.auth_user.handle,db.game_part.id,
-    db.bite_event.human_id, db.bite_event.created, db.games.id, groupby=db.auth_user.id)
-    return dict(form=form)
-
-
 @auth.requires_login()
 def resetregistration():
     regalive=checkreg(currentgame())
