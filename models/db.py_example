@@ -1,0 +1,375 @@
+# -*- coding: utf-8 -*-
+response.static_version = '1.0.0'
+
+if not request.env.web2py_runtime_gae:
+    ## if NOT running on Google App Engine use SQLite or other DB
+    db = DAL('mysql://username:password@mysqlhost:3306/databasename',pool_size=1,check_reserved=['all'])
+else:
+    ## connect to Google BigTable (optional 'google:datastore://namespace')
+    db = DAL('google:datastore')
+    ## store sessions and tickets there
+    session.connect(request, response, db=db)
+    ## or store session in Memcache, Redis, etc.
+    ## from gluon.contrib.memdb import MEMDB
+    ## from google.appengine.api.memcache import Client
+    ## session.connect(request, response, db = MEMDB(Client()))
+
+## by default give a view/generic.extension to all actions from localhost
+## none otherwise. a pattern can be 'controller/function.extension'
+response.generic_patterns = ['*'] if request.is_local else []
+## (optional) optimize handling of static files
+# response.optimize_css = 'concat,minify,inline'
+# response.optimize_js = 'concat,minify,inline'
+
+
+
+from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
+auth = Auth(db)
+crud, service, plugins = Crud(db), Service(), PluginManager()
+
+db.define_table(
+    auth.settings.table_user_name,
+    Field('first_name', length=32, default=''),
+    Field('last_name', length=32, default=''),
+    Field('email', length=64, default='',), # required
+    Field('password', 'password', length=512,readable=False,),
+    Field('bio','text', length=1028,),
+    Field('phone', length=16),
+    Field('handle', length=32),
+    Field('registration_key', length=512,                # required
+          writable=False, readable=False, default=''),
+    Field('registration_id', length=512,                 # required
+          writable=False, readable=False, default=''),
+    migrate=False)
+
+
+
+auth.define_tables(username=True, signature=False, migrate=False)
+
+import sys, os
+from fbappauth import CLIENT_ID,CLIENT_SECRET
+from facebook import GraphAPI, GraphAPIError
+from gluon.contrib.login_methods.oauth20_account import OAuthAccount
+
+class FacebookAccount(OAuthAccount):
+    AUTH_URL="https://graph.facebook.com/oauth/authorize"
+    TOKEN_URL="https://graph.facebook.com/oauth/access_token"
+    def __init__(self, g):
+        OAuthAccount.__init__(self, g, CLIENT_ID, CLIENT_SECRET, self.AUTH_URL, self.TOKEN_URL, scope='user_photos,friends_photos')
+        self.graph = None
+    def get_user(self):
+        '''Returns the user using the Graph API.'''
+        if not self.accessToken():
+            return None
+        if not self.graph:
+            self.graph = GraphAPI((self.accessToken()))
+            user = None
+        try:
+            user = self.graph.get_object("me")
+
+        except GraphAPIError, e:
+            self.session.token = None
+            self.graph = None
+        if user:
+            return dict(first_name = user['first_name'], last_name = user['last_name'], username = user['id'], registration_id = user['id'])
+
+auth.settings.actions_disabled = ['register','change_password', 'request_reset_password','retrieve_username']
+auth.settings.login_form=FacebookAccount(globals())
+if not request.user_agent().is_mobile:
+    auth.settings.login_next=URL(f='user')
+
+
+
+## configure auth policy
+auth.settings.registration_requires_verification = False
+auth.settings.registration_requires_approval = False
+auth.settings.reset_password_requires_verification = True
+
+auth.settings.expiration = 3600
+
+auth.enable_record_versioning(db)
+
+# Defines the posts that end up on the landing page.
+db.define_table('posts',
+    Field('title', length=128, required=True, requires=IS_NOT_EMPTY()),
+    Field('description','text', required=True, requires=IS_NOT_EMPTY()),
+    Field('author', default=auth.user.id if auth.user else 'null', writable=False),
+    Field('pub_date', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+
+# Defines the games table.
+db.define_table('games',
+    Field('game_name', length=64, required=True),
+    Field('start_at', 'datetime', required=True),
+    Field('end_at', 'datetime', required=True),
+    Field('signup_start_at', 'datetime', required=True),
+    Field('signup_end_at', 'datetime', required=True),
+    Field('time_per_food', 'integer', required=True),
+    Field('stun_timer', 'integer'),
+    Field('cure_timer', 'integer'),
+    Field('bite_shares_per_food', 'integer'),
+    Field('pause_starts_at', 'datetime', required=True),
+    Field('pause_ends_at', 'datetime', required=True),
+    Field('created', 'datetime', default=request.now, writable=False),
+	Field('posttimeout','integer', default=5, required=True),
+    migrate=False
+    )
+
+# Defines the creature types. The Zombie field is boolean to facilitate multiple types of zombies. Immortal is also a boolean.
+db.define_table('creature_type',
+    Field('cid', 'integer'),
+    Field('zombie', 'boolean'),
+    Field('name', length=32, required=True, requires=IS_NOT_EMPTY()),
+    Field('immortal', 'boolean'),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+# Defines the game participation. Each is linked to an auth_user and game.
+db.define_table('game_part',
+    Field('user_id', db.auth_user),
+    Field('game_id', db.games),
+    Field('bitecode', length=16),
+    Field('creature_type', db.creature_type),
+    Field('original_request', 'boolean',  default=False),
+    Field('zombie_expires_at', 'datetime'),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('squad_id',),
+    Field('squad_leader', 'boolean',  default=False, ),
+    Field('squad_apps', 'integer'),
+    Field('squad_title', length=48),
+    Field('squad_name', length=128),
+    Field('registration_email',),
+	Field('lastpost', 'datetime', default=request.now, writable=False),
+    Field('pinktext','boolean', default=False),
+    Field('banned','boolean', default=False),
+    migrate=False
+    )
+
+
+# Defines the table to track all of the bites.
+db.define_table('bite_event',
+    Field('zombie_id', db.game_part),
+    Field('human_id', db.game_part),
+    Field('game_id', db.games),
+    Field('bite_shared', 'boolean'),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+
+# Defines the table for curecodes
+db.define_table('cures',
+    Field('game_id', db.games),
+    Field('curecode', length=16),
+    Field('expiration', 'datetime', required=True),
+    Field('used', 'boolean'),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+# Defines the table for cure events
+db.define_table('cure_event',
+    Field('game_id', db.games),
+    Field('player_id', db.game_part),
+    Field('cure_id', db.cures),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+# Mission table
+db.define_table('missions',
+    Field('game_id', db.games),
+    Field('mission_start','datetime', required=True),
+    Field('mission_end','datetime', required=True),
+    Field('mission_reveal','datetime', required=True),
+    Field('stun_timer', 'integer'),
+    Field('name', length=64),
+    Field('details','text', required=True, requires=IS_NOT_EMPTY()),
+    Field('image','upload', requires=IS_IMAGE()),
+    migrate=False
+    )
+
+
+# Defines the squads. Each is linked to a game.
+db.define_table('squads',
+    Field('game_id', db.games),
+    Field('horde','boolean', default=False),
+    Field('name', length=128, required=True),
+    Field('description','text', length=2000,required=True, requires=IS_NOT_EMPTY()),
+    Field('image','upload', requires=IS_IMAGE(),required=True, uploadfolder=request.folder+'static/images'),
+    Field('thumb','upload', uploadfolder=request.folder+'uploads', compute=lambda r: resize_image(r['image'], (600,150), 'thumb')),
+    Field('leader', db.game_part),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('sigid', 'text'),
+    migrate=False
+    )
+
+# The squad application table
+db.define_table('squads_app',
+    Field('game_id', db.games),
+    Field('horde','boolean', default=False),
+    Field('name', length=128, required=True),
+    Field('description','text', length=2000, required=True, requires=IS_NOT_EMPTY()),
+    Field('image','upload', requires=IS_IMAGE(),required=True, uploadfolder=request.folder+'static/images'),
+    Field('players','list:integer'),
+    Field('leader', db.game_part),
+    Field('reviewed','boolean', default=False),
+    Field('approved','boolean', default=False),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('sigid', 'text'),
+    Field('reviewer',db.auth_user,writable=False,readable=False),
+    migrate=False
+    )
+
+# table that tracks applications to join squads.
+db.define_table('squads_member_app',
+    Field('player_id', db.game_part),
+    Field('squad_id', db.squads),
+    Field('reviewed','boolean', default=False),
+    Field('approved','boolean', default=False),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+# Defines forum catagories
+db.define_table('forum_cats',
+    Field('name', length=128, required=True, requires=IS_NOT_EMPTY()),
+    Field('description',length=256, required=True, requires=IS_NOT_EMPTY()),
+    Field('alevel', 'integer', requires=IS_NOT_EMPTY()),
+    Field('game_id', db.games, default=0),
+    migrate=False
+    )
+
+# Defines forum forums
+db.define_table('forum_forums',
+    Field('cat_id', db.forum_cats, requires=IS_NOT_EMPTY()),
+    Field('name', length=128, required=True, requires=IS_NOT_EMPTY()),
+    Field('description',length=256, required=True, requires=IS_NOT_EMPTY()),
+    Field('alevel', 'integer', requires=IS_NOT_EMPTY()),
+	Field('moderator', db.auth_user),
+    Field('publicfor', 'boolean', default=False),
+    Field('player', 'boolean', default=False),
+    Field('human', 'boolean', default=False),
+    Field('zombie', 'boolean', default=False),
+    Field('squad', db.squads),
+    migrate=False
+    )
+
+# Defines the threads for the forums
+db.define_table('forum_threads',
+    Field('forum_id', db.forum_forums, requires=IS_NOT_EMPTY()),
+    Field('name', length=128, required=True, requires=IS_LENGTH(maxsize=128,minsize=5)),
+    Field('author', db.auth_user,writable=False,readable=False,),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('updated', 'datetime', default=request.now, writable=False),
+    Field('publicfor', 'boolean', default=False),
+    Field('player', 'boolean', default=False),
+    Field('human', 'boolean', default=False),
+    Field('zombie', 'boolean', default=False),
+    Field('squad', db.squads),
+    migrate=False
+    )
+
+# defines the forum posts table
+db.define_table('forum_posts',
+    Field('thread_id', db.forum_threads, ),
+    Field('name', length=128,readable=False, writable=False),
+    Field('body','text',required=True, requires=IS_LENGTH(maxsize=4000,minsize=5)),
+    Field('author', db.auth_user,writable=False,readable=False,),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('edited', 'datetime',writable=False),
+    Field('moderated', 'boolean', writable=False),
+    migrate=False
+    )
+
+#defines the table of images that are used throughout the site for flavor
+db.define_table('cycleimages',
+    Field('title', length=64),
+    Field('caption','text', length=1024),
+    Field('image','upload', requires=IS_IMAGE(),required=True, uploadfolder=request.folder+'static/images'),
+    Field('thumb','upload', uploadfolder=request.folder+'static/images', compute=lambda r: resize_image(r['image'], (170,101), 'thumb')),
+    migrate=False
+    )
+
+# Squad posts table.
+db.define_table('squad_posts',
+    Field('title', length=128, required=True, requires=IS_NOT_EMPTY()),
+    Field('description','text', required=True, requires=IS_NOT_EMPTY()),
+    Field('sleader', default=auth.user.first_name if auth.user else 'null', writable=False),
+    Field('squad_id', required=True,requires=IS_NOT_EMPTY()),
+    Field('created', 'datetime', default=request.now, writable=False),
+    migrate=False
+    )
+
+# email domains for registration.
+db.define_table('emails',
+    Field('email', required=True, requires=IS_NOT_EMPTY()),
+    Field('description','text'),
+    migrate=False
+    )
+
+# Defines the registration app table.
+db.define_table('registration_app',
+    Field('user_id', db.auth_user),
+    Field('game_id', db.games),
+    Field('registration_code', length=16),
+    Field('original_request', 'boolean',  default=False),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('registration_email',),
+    Field('reviewed', 'boolean', default=False),
+    Field('reviewer', db.auth_user, writable=False, readable=False),
+    migrate=False
+    )
+
+# Defines the registration app table.
+db.define_table('registration_request',
+    Field('user_id', db.auth_user),
+    Field('game_id', db.games),
+    Field('registration_code', length=16),
+    Field('original_request', 'boolean',  default=False),
+    Field('created', 'datetime', default=request.now, writable=False),
+    Field('registration_email',),
+    Field('reviewed', 'boolean', default=False),
+    Field('approved', 'boolean', default=False),
+    Field('appeal','text', required=True, requires=IS_NOT_EMPTY()),
+    Field('judgement','text',),
+    Field('reviewer', db.auth_user, writable=False, readable=False),
+    migrate=False
+    )
+
+# defines the sassy post throttling comments table.
+db.define_table('sassypost',
+    Field('phrase', 'text'),
+    migrate=False
+    )
+	
+
+#field validators
+db.missions.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
+db.game_part.squad_id.requires = IS_NULL_OR(IS_IN_DB(db, db.squads,'%(name)s',))
+db.game_part.creature_type.requires = IS_IN_DB(db, db.creature_type,'%(name)s', zero=T('choose one'))
+db.game_part.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
+db.game_part.user_id.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
+db.squads.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
+db.forum_cats.alevel.requires = IS_INT_IN_RANGE(0,4)
+db.forum_cats.game_id.requires = IS_NULL_OR(IS_IN_DB(db, db.games,'%(game_name)s', zero=0,))
+db.forum_forums.cat_id.requires = IS_IN_DB(db, db.forum_cats,'%(name)s', zero=T('choose one'))
+
+db.forum_threads.forum_id.requires = IS_IN_DB(db, db.forum_forums,'%(name)s',)
+db.forum_threads.author.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
+db.forum_posts.thread_id.requires = IS_IN_DB(db, db.forum_threads,'%(name)s',)
+db.forum_posts.author.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
+db.bite_event.zombie_id.requires = IS_IN_DB(db, db.game_part, '%(user_id)s', zero=T('choose one'))
+db.bite_event.human_id.requires = IS_IN_DB(db, db.game_part, '%(user_id)s', zero=T('choose one'))
+db.bite_event.game_id.requires = IS_IN_DB(db, db.games, '%(game_name)s', zero=T('choose one'))
+db.squads.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
+db.squads_app.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
+db.squads_app.leader.requires = IS_IN_DB(db, db.game_part, '%(user_id)s', zero=T('choose one'))
+db.squads_member_app.squad_id.requires = IS_IN_DB(db, db.squads,'%(name)s',)
+db.squads_member_app.player_id.requires = IS_IN_DB(db, db.game_part,'%(id)s',)
+db.squad_posts.squad_id.requires = IS_IN_DB(db, db.squads,'%(name)s',)
+db.squads_app.reviewer.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
+db.registration_request.reviewer.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
