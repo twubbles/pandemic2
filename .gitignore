@@ -23,6 +23,7 @@ models/mailer.py
 models/mailer.py.bak
 static/.sass-cache/
 static/fonts/
+static/images/
 databases/
 languages/
 static/js/

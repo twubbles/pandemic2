@@ -1,0 +1,42 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+
+
+<div class="container">
+
+    <div class="page-header">
+        <h1><b>Squads</b></h1>
+    </div>
+    <div class="row" id="packme">
+
+
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+
+            {{if squads:}}
+            <ul class="list-group">
+                {{ for squad in squads: }}
+                <a href="{{=URL('default','squadinfo', args=squad.id)}}">
+                    <li class="list-group-item">
+                        <h4 class="hvzfont centertext">{{=squad.name[0:54]}}</h4>
+                    </li>
+                </a>
+
+
+                {{pass}}
+            </ul>
+            {{pass}}
+
+        </div>
+
+    </div>
+</div>
+
+
+{{end}}
+
+{{block postfooter}}
+
+
+{{end}}

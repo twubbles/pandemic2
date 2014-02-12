@@ -9,42 +9,7 @@ def fblogin():
     form = auth.profile()
     return dict(form=form)
 
-# Starved roster page.
-def rosterdead():
-    if not currentgame():
-        response.flash = 'No current or upcoming game!'
-        redirect(URL('index'))
-    else:
-        count = db.bite_event.zombie_id.count()
-        count.readable = True
-        players = db((db.auth_user.id==db.game_part.user_id) & (db.game_part.game_id==currentgame()) & (db.game_part.creature_type==db.creature_type.id) & (db.creature_type.zombie==True) ).select(db.auth_user.id, count , db.auth_user.registration_id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.squads.name, db.game_part.squad_id, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,db.creature_type.zombie, left=[db.squads.on(db.squads.id==db.game_part.squad_id),db.bite_event.on(db.bite_event.zombie_id==db.game_part.id)], groupby=db.auth_user.id,cache=(cache.ram, 1),cacheable=True)
-        for player in players.exclude(lambda player: isZombieDead(player)==False):
-            n=0
-        return dict(players=players)
-
-# Zombies roster page.
-def rosterzombies():
-    if not currentgame():
-        response.flash = 'No current or upcoming game!'
-        redirect(URL('index'))
-    else:
-        count = db.bite_event.zombie_id.count()
-        count.readable = True
-        players = db((db.auth_user.id==db.game_part.user_id) & (db.game_part.game_id==currentgame()) & (db.game_part.creature_type==db.creature_type.id) & (db.creature_type.zombie==True) ).select(db.auth_user.id, count , db.auth_user.registration_id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.squads.name, db.game_part.squad_id, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,db.creature_type.zombie, left=[db.squads.on(db.squads.id==db.game_part.squad_id),db.bite_event.on(db.bite_event.zombie_id==db.game_part.id)], groupby=db.auth_user.id,cache=(cache.ram, 1),cacheable=True)
-        for player in players.exclude(lambda player: isZombieDead(player)==True):
-            n=0
-        return dict(players=players)
-
-# Humans roster page.
-def rosterhumans():
-    if not currentgame():
-        response.flash = 'No current or upcoming game!'
-        redirect(URL('index'))
-    else:
-        players = db((db.auth_user.id==db.game_part.user_id) & (db.game_part.game_id==currentgame()) & (db.game_part.creature_type==db.creature_type.id) & (db.creature_type.zombie!=True) ).select(db.auth_user.id, db.auth_user.registration_id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.squads.name, db.game_part.squad_id, db.creature_type.name, left=db.squads.on(db.squads.id==db.game_part.squad_id),cache=(cache.ram, 1),cacheable=True)
-    return dict(players=players)
-
-# Default roster page. Pulls all the game_part info for the current game.
+# Default roster page. Pulls all the game_part info for the current game and also returns player counts.
 def roster():
     if not currentgame() and not request.args(0):
         response.flash = 'No current or upcoming game!'
@@ -81,12 +46,6 @@ def roster():
                 else:
                     zombieTotal += 1
         return dict(players=players, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal)
-
-
-# The image gallery function for cycleimages DB.
-def gallery():
-    image = db.cycleimages[request.args(0)] or redirect(URL(r=request,f='index'))
-    return dict(image=image)
 
 
 #paginated posts feed
@@ -126,60 +85,17 @@ def index():
         missions = False
     return dict(missions=missions)
 
-# Create a post page
-@auth.requires_membership('admins')
-def create():
-    response.view='default.html'
-    response.flash = "Create a post!"
-    form=SQLFORM(db.posts)
-    if form.process().accepted:
-        response.flash = 'Post accepted.'
-    elif form.errors:
-        response.flash = 'The post has errors, idiot!'
-    else:
-        response.flash = 'Make your post!'
-    return dict(form=form)
-
-# Edit a post page
-@auth.requires_membership('admins')
-def edit():
-    response.view='default.html'
-    post = db.posts(request.args(0)) or redirect(URL('error'))
-    form=SQLFORM(db.posts, post, deletable = True)
-    response.flash = 'Edit the post!'
-    if form.validate():
-        if form.deleted:
-            db(db.posts.id==post.id).delete()
-            redirect(URL('index'))
-            response.flash = 'POST BALEETED!'
-        else:
-            post.update_record(**dict(form.vars))
-            response.flash = 'Changes saved.'
-    else:
-        response.flash = 'Edit the post!'
-    return dict(form=form)
-
-# View post page. Also, looks up comments for post.
+# View post page.
 def view_post():
     post = db.posts[request.args(0)] or redirect(URL(r=request,f='index'))
 
     return dict(post=post, comments=False)
 
-# Scaffolding stuff, manage users page
-@auth.requires_membership('admins')
-def manage_users():
-    return dict(form=SQLFORM.smartgrid(db.auth_user))
-
-# Scaffolding stuff, manage groups
-@auth.requires_membership('admins')
-def manage_groups():
-    return dict(form=SQLFORM.grid(db.auth_membership))
-
 # Returns the rules doc for the game. In the future I may make this a page and not a file.
 def rules():
     redirect(URL('static', 'hvzrules.pdf'))
 
-# View post page. Also, looks up comments for post.
+# View mission page.
 def viewmission():
     mission = db.missions[request.args(0)] or redirect(URL(r=request,f='index'))
     if isunlocked(mission):
@@ -199,11 +115,14 @@ def userinfo():
 
 # The public squadlist
 def squadlist():
-    if request.args(0):
-        squads=db(db.squads.game_id==request.args(0)).select(orderby='<random>', cache=(cache.ram, 300),cacheable=True)
+    if not currentgame() and not request.args(0):
+        response.flash = 'No current or upcoming game!'
+        redirect(URL('index'))
+    elif request.args(0):
+        squads=db(db.squads.game_id==request.args(0)).select(orderby='<random>')
         return dict(squads=squads, gid=request.args(0))
     else:
-        squads=db(db.squads.game_id).select(orderby=~db.squads.game_id, cache=(cache.ram, 300),cacheable=True)
+        squads=db(db.squads.game_id).select(orderby='<random>')
         return dict(squads=squads, gid=False)
 
 # squad info page
@@ -213,19 +132,20 @@ def squadinfo():
          cpart=returncurrentuserpart()
      except:
          cpart=False
+     players = db((db.auth_user.id==db.game_part.user_id) & (db.creature_type.id==db.game_part.creature_type) & (db.squads.id==db.game_part.squad_id) & (db.squads.id==request.args(0))).select(
+             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.auth_user.registration_id,
+             db.creature_type.name, db.game_part.zombie_expires_at, db.game_part.squad_title,
+             db.game_part.squad_leader,orderby=db.game_part.created)
      if squad and cpart:
          #checks if the view should display a registration button or not
          if not isdead(cpart) and not cpart.squad_apps and not cpart.squad_id:
              app=True
          else:
              app=False
-         members = db((db.game_part.squad_id==squad.id) & (db.game_part.squad_leader==False)).select(orderby=db.game_part.created, cache=(cache.ram, 60),cacheable=True)
-         leader = db.game_part(squad.leader)
-         return dict(squad=squad,members=members,leader=leader, app=app, cpart=cpart)
+         return dict(squad=squad,players=players, app=app)
      else:
-         members = db((db.game_part.squad_id==squad.id) & (db.game_part.squad_leader==False)).select(orderby=db.game_part.created, cache=(cache.ram, 60),cacheable=True)
-         leader = db.game_part(squad.leader)
-         return dict(squad=squad,members=members,leader=leader, app=False)
+         return dict(squad=squad,players=players, app=False)
+
 
 def userlogin():
     form=auth.login(next=URL(r=request,args=request.args))

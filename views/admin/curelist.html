@@ -5,11 +5,12 @@
 
 {{block layer02}}
 <hr/>
+
 <div class="container-fluid">
 <div class="row">
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
 
- 
+
 
  <table>
 	<thead>
@@ -37,18 +38,19 @@
             <td style="background-color:green;">{{=cure.used}}</td>
             {{pass}}
         <td><a href= "{{=URL(r=request, f='editcure', args=cure.id)}}">  Edit/Delete </a></td>
-        </tr>           
+        </tr>
     {{pass}}
 	</tbody>
     </thead>
     </table>
 
-<INPUT type="button" class="btn btn-success" value="Generate a Cure code" onclick="location.href='{{=URL(c='admin', f='createcure')}}'"/> 
 </div>
 </div>
 </div>
 
+
 {{end}}
+
 
 {{block postfooter}}
 {{include 'adminfooter.html'}}

@@ -1,0 +1,98 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            {{=IMG(_src=URL('download',args=squad.image), _class='img-responsive')}}
+            <h1><b>{{=squad.name}}</b></h1>
+        </div>
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-5">
+
+                {{if players:}}
+                <table class='table table-striped' id="humans">
+                    <tr>
+                        <th colspan="3" style="color:white;">
+                            <h3><span class="label center-block">Members</span></h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td> Name</td>
+                        <td> Title</td>
+                        <td> Status</td>
+                    </tr>
+                    {{for player in players:}}
+                    <tr data-toggle="tooltip" data-placement="top" title="{{=prettydate(player.game_part.zombie_expires_at)}}">
+                        <td>
+                            {{if player.auth_user.handle:}}
+                            {{=A(player.auth_user.handle, _href=URL(c='default',f='userinfo',args=player.auth_user.id))}}
+                            {{else:}}
+                            {{=A(player.auth_user.first_name + ' ' + player.auth_user.last_name,
+                            _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                            {{pass}}
+
+
+                        </td>
+
+                        <td>
+                            {{if player.game_part.squad_title:}}
+                                {{if len(player.game_part.squad_title) > 35:}}
+                                    <small>{{=player.game_part.squad_title}} </small>
+                                {{else:}}
+                                {{=player.game_part.squad_title}}
+                                {{pass}}
+                            {{else:}}
+                            Member
+                            {{pass}}
+
+
+                        </td>
+
+                        <td>{{=player.creature_type.name}}</td>
+                    </tr>
+                    {{pass}}
+                </table>
+                {{pass}}
+
+            </div>
+            <div class="col-md-7">
+
+
+                <p>{{=XML(squad.description,sanitize=True)}}</p>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+
+                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis
+                    euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,
+                    tellus ac cursus commodo.</p>
+            </div>
+            <div class="col-md-5">
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+{{end}}
+
+{{block postfooter}}
+
+
+{{end}}

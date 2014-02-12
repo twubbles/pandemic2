@@ -1,26 +1,36 @@
+/* line 20, ../sass/pandemic.scss */
 html {
   background: url(pandemicbg01.jpg) no-repeat center center fixed;
   background-size: cover;
   background-color: #1c3240;
   color: #e5e5e5; }
 
+/* line 27, ../sass/pandemic.scss */
 input, select {
   color: black; }
 
+/* line 31, ../sass/pandemic.scss */
 body {
   font-family: "Carme", sans-serif;
   padding-top: 70px;
   color: #e5e5e5;
   font-size: 1.4em; }
 
+/* line 38, ../sass/pandemic.scss */
 .container {
   padding-left: 15px;
   padding-right: 15px; }
 
+/* line 45, ../sass/pandemic.scss */
 .press {
   color: #222;
   text-shadow: 0px 2px 3px #555; }
 
+/* line 50, ../sass/pandemic.scss */
+.hvzfont {
+  font-family: "Carme", sans-serif; }
+
+/* line 55, ../sass/pandemic.scss */
 .hvzbigheader {
   font-family: Arial, sans-serif;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
@@ -31,6 +41,7 @@ body {
   left: 10px;
   position: absolute; }
 
+/* line 67, ../sass/pandemic.scss */
 #loginnavbutton {
   color: white;
   background-color: #447799;
@@ -39,63 +50,78 @@ body {
   padding-bottom: 5px;
   border: 1px solid #e5e5e5; }
 
+/* line 77, ../sass/pandemic.scss */
 .form-control {
   color: black; }
 
+/* line 81, ../sass/pandemic.scss */
 .badge-primary {
   background-color: #428bca; }
 
+/* line 84, ../sass/pandemic.scss */
 .badge-success {
   background-color: #5cb85c; }
 
+/* line 87, ../sass/pandemic.scss */
 .badge-info {
   background-color: #5bc0de; }
 
+/* line 90, ../sass/pandemic.scss */
 .badge-warning {
   background-color: #f0ad4e; }
 
+/* line 93, ../sass/pandemic.scss */
 .badge-danger {
   background-color: #d9534f; }
 
+/* line 96, ../sass/pandemic.scss */
 .badge-default {
   background-color: #999; }
 
+/* line 101, ../sass/pandemic.scss */
 .navbartext {
   font-size: 1.3em; }
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 /* Carousel base class */
+/* line 111, ../sass/pandemic.scss */
 .carousel {
   width: 100%;
   height: 500px;
   margin-bottom: 20px;
   transition: all 1s linear; }
   @media (max-width: 768px) {
+    /* line 111, ../sass/pandemic.scss */
     .carousel {
       height: 300px; } }
 
 /* Since positioning the image, we need to help out the caption */
+/* line 123, ../sass/pandemic.scss */
 .carousel-caption {
   z-index: 10; }
 
 /* Declare heights because of positioning of img element */
+/* line 129, ../sass/pandemic.scss */
 .carousel .item {
   height: 500px;
   border-radius: 0.1em;
   transition: all 1s linear; }
   @media (max-width: 768px) {
+    /* line 129, ../sass/pandemic.scss */
     .carousel .item {
       height: 300px; } }
 
 /* Center align the text within the three columns below the carousel */
 /* Featurettes
 ------------------------- */
+/* line 144, ../sass/pandemic.scss */
 .featurette-divider {
   margin: 40px 0;
   /* Space out the Bootstrap <hr> more */ }
 
 /* Thin out the marketing headings */
+/* line 151, ../sass/pandemic.scss */
 .featurette-heading {
   font-weight: 300;
   line-height: 1;
@@ -105,16 +131,20 @@ body {
 -------------------------------------------------- */
 @media (min-width: 768px) {
   /* Remove the edge padding needed for mobile */
+  /* line 162, ../sass/pandemic.scss */
   .marketing {
     padding-left: 0;
     padding-right: 0; }
 
   /* Navbar positioning foo */
+  /* line 167, ../sass/pandemic.scss */
   .navbar-wrapper {
     margin-top: 20px; }
+    /* line 169, ../sass/pandemic.scss */
     .navbar-wrapper .container {
       padding-left: 15px;
       padding-right: 15px; }
+    /* line 173, ../sass/pandemic.scss */
     .navbar-wrapper .navbar {
       padding-left: 0;
       padding-right: 0;
@@ -122,16 +152,20 @@ body {
 
   /* The navbar becomes detached from the top, so we round the corners */
   /* Bump up size of carousel content */
+  /* line 181, ../sass/pandemic.scss */
   .carousel-caption p {
     margin-bottom: 20px;
     font-size: 21px;
     line-height: 1.4; }
 
+  /* line 186, ../sass/pandemic.scss */
   .featurette-heading {
     font-size: 50px; } }
 @media (min-width: 992px) {
+  /* line 192, ../sass/pandemic.scss */
   .featurette-heading {
     margin-top: 120px; } }
+/* line 197, ../sass/pandemic.scss */
 .elementbox {
   position: relative;
   padding: 30px 15px 20px;
@@ -141,6 +175,7 @@ body {
   border-color: #e5e5e5 #eee #eee;
   border-style: solid;
   border-width: 1px 0; }
+  /* line 206, ../sass/pandemic.scss */
   .elementbox:after {
     position: absolute;
     top: 15px;
@@ -150,18 +185,23 @@ body {
     color: #bbb;
     text-transform: uppercase;
     letter-spacing: 1px; }
+  /* line 216, ../sass/pandemic.scss */
   .elementbox + .highlight {
     margin: -15px -15px 15px;
     border-radius: 0;
     border-width: 0 0 1px; }
+  /* line 221, ../sass/pandemic.scss */
   .elementbox .container {
     width: auto; }
+  /* line 225, ../sass/pandemic.scss */
   .elementbox > p:last-child, .elementbox > ul:last-child, .elementbox > ol:last-child, .elementbox > blockquote:last-child, .elementbox > .form-control:last-child, .elementbox > .table:last-child, .elementbox > .navbar:last-child, .elementbox > .jumbotron:last-child, .elementbox > .alert:last-child, .elementbox > .panel:last-child, .elementbox > .list-group:last-child, .elementbox > .well:last-child, .elementbox > .progress:last-child, .elementbox > .table-responsive:last-child > .table {
     margin-bottom: 0; }
+  /* line 228, ../sass/pandemic.scss */
   .elementbox > p > .close {
     float: none; }
 
 @media (min-width: 768px) {
+  /* line 235, ../sass/pandemic.scss */
   .elementbox {
     margin-left: 0;
     margin-right: 0;
@@ -170,6 +210,7 @@ body {
     border-color: #ddd;
     border-radius: 4px 4px 0 0;
     box-shadow: none; }
+    /* line 243, ../sass/pandemic.scss */
     .elementbox + .highlight {
       margin-top: -16px;
       margin-left: 0;
@@ -177,75 +218,100 @@ body {
       border-width: 1px;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px; } }
+/* line 256, ../sass/pandemic.scss */
 .elementbox-type .table .type-info {
   color: #999;
   vertical-align: middle; }
+/* line 260, ../sass/pandemic.scss */
 .elementbox-type .table td {
   padding: 15px 0;
   border-color: #eee; }
+/* line 264, ../sass/pandemic.scss */
 .elementbox-type .table tr:first-child td {
   border-top: 0; }
+/* line 268, ../sass/pandemic.scss */
 .elementbox-type h1, .elementbox-type h2, .elementbox-type h3, .elementbox-type h4, .elementbox-type h5, .elementbox-type h6 {
   margin: 0; }
 
+/* line 273, ../sass/pandemic.scss */
 .elementbox-bg-classes p {
   padding: 15px; }
 
+/* line 278, ../sass/pandemic.scss */
 .elementbox > .img-circle, .elementbox > .img-rounded, .elementbox > .img-thumbnail {
   margin: 5px; }
+/* line 281, ../sass/pandemic.scss */
 .elementbox > .table-responsive > .table {
   background-color: #fff; }
+/* line 284, ../sass/pandemic.scss */
 .elementbox > .btn, .elementbox > .btn-group {
   margin-top: 5px;
   margin-bottom: 5px; }
+/* line 288, ../sass/pandemic.scss */
 .elementbox > .btn-toolbar + .btn-toolbar {
   margin-top: 10px; }
 
+/* line 294, ../sass/pandemic.scss */
 .elementbox-control-sizing select, .elementbox-control-sizing input[type=text] + input[type=text] {
   margin-top: 10px; }
 
+/* line 299, ../sass/pandemic.scss */
 .elementbox-form .input-group {
   margin-bottom: 10px; }
 
+/* line 305, ../sass/pandemic.scss */
 .elementbox > textarea.form-control {
   resize: vertical; }
+/* line 308, ../sass/pandemic.scss */
 .elementbox > .list-group {
   max-width: 400px; }
+/* line 312, ../sass/pandemic.scss */
 .elementbox .navbar:last-child {
   margin-bottom: 0; }
 
 /* datetimepicker styles */
+/* line 320, ../sass/pandemic.scss */
 .ui-timepicker-div .ui-widget-header {
   margin-bottom: 8px; }
+/* line 323, ../sass/pandemic.scss */
 .ui-timepicker-div dl {
   text-align: left; }
+  /* line 325, ../sass/pandemic.scss */
   .ui-timepicker-div dl dt {
     float: left;
     clear: left;
     padding: 0 0 0 5px; }
+  /* line 330, ../sass/pandemic.scss */
   .ui-timepicker-div dl dd {
     margin: 0 10px 10px 45%; }
+/* line 334, ../sass/pandemic.scss */
 .ui-timepicker-div td {
   font-size: 90%; }
 
+/* line 339, ../sass/pandemic.scss */
 .ui-tpicker-grid-label {
   background: none;
   border: none;
   margin: 0;
   padding: 0; }
 
+/* line 346, ../sass/pandemic.scss */
 .ui-timepicker-rtl {
   direction: rtl; }
+  /* line 348, ../sass/pandemic.scss */
   .ui-timepicker-rtl dl {
     text-align: right;
     padding: 0 5px 0 0; }
+    /* line 351, ../sass/pandemic.scss */
     .ui-timepicker-rtl dl dt {
       float: right;
       clear: right; }
+    /* line 355, ../sass/pandemic.scss */
     .ui-timepicker-rtl dl dd {
       margin: 0 45% 10px 10px; }
 
 /* timepicker styles end */
+/* line 370, ../sass/pandemic.scss */
 .table-no-border > thead > tr > th,
 .table-no-border > tbody > tr > th,
 .table-no-border > tfoot > tr > th,
@@ -266,6 +332,32 @@ body {
 /* iPads (portrait) ----------- */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
   /* Styles */ }
-/* Desktops and laptops ----------- */
-@media only screen and (min-width: 1224px) {
-  /* Styles */ }
+/* line 404, ../sass/pandemic.scss */
+.container-wide {
+  margin-left: auto;
+  margin-right: auto; }
+  @media (min-width: 1200px) {
+    /* line 404, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1200px) {
+    /* line 404, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1400px) {
+    /* line 404, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1400px; } }
+
+/* line 419, ../sass/pandemic.scss */
+.squaditem {
+  margin-bottom: 0px;
+  background-color: #321340;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }
+
+/* line 428, ../sass/pandemic.scss */
+.centertext {
+  text-align: center; }
