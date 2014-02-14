@@ -1,7 +1,3 @@
-import re
-import datetime
-from gluon.tools import prettydate
-from time import sleep
 
 
 def fblogin():
@@ -108,7 +104,13 @@ def userinfo():
      if request.args(0):
          count = db.bite_event.zombie_id.count()
          count.readable = True
-         cparts = db((db.auth_user.id==db.game_part.user_id) & (db.auth_user.id==request.args(0)) & (db.game_part.game_id==db.games.id)).select(db.auth_user.id, db.auth_user.bio, db.auth_user.registration_id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal, db.squads.id, db.squads.name, count ,db.game_part.game_id, db.games.id, db.games.game_name, db.game_part.pinktext, left=[db.squads.on(db.squads.id==db.game_part.squad_id),db.bite_event.on(db.bite_event.zombie_id==db.game_part.id)],groupby=~db.game_part.game_id, cache=(cache.ram, 300),cacheable=True)
+         cparts = db((db.auth_user.id==db.game_part.user_id) & (db.game_part.game_id==db.games.id) & (db.auth_user.id==request.args(0)) & (db.game_part.creature_type==db.creature_type.id)).select(
+                db.auth_user.id, db.auth_user.bio, db.auth_user.registration_id, db.auth_user.first_name, db.auth_user.last_name,
+                db.auth_user.handle, db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at,
+                db.creature_type.immortal, db.squads.id, db.squads.name, count ,db.game_part.game_id, db.games.id,
+                db.games.game_name, db.game_part.pinktext, left=[db.squads.on(db.squads.id==db.game_part.squad_id),
+                db.bite_event.on(db.bite_event.zombie_id==db.game_part.id)],groupby=~db.game_part.game_id,
+                cache=(cache.ram, 1),cacheable=True)
          return dict(cparts=cparts)
      else:
          redirect(URL(r=request,f='index'))
@@ -116,14 +118,20 @@ def userinfo():
 # The public squadlist
 def squadlist():
     if not currentgame() and not request.args(0):
-        response.flash = 'No current or upcoming game!'
-        redirect(URL('index'))
+        msg = 'No current or upcoming game!'
+        return dict(squads=False, gid=False,msg=msg)
     elif request.args(0):
         squads=db(db.squads.game_id==request.args(0)).select(orderby='<random>')
-        return dict(squads=squads, gid=request.args(0))
+        msg= ''
+        return dict(squads=squads, gid=request.args(0),msg=msg)
     else:
-        squads=db(db.squads.game_id).select(orderby='<random>')
-        return dict(squads=squads, gid=False)
+        if not gpart.game_part.squad_id and not gpart.game_part.squad_apps:
+            msg = A("Create Squad", _class='btn btn-success btn-lg pull-right', _href=URL(c='gamectrl', f='createsquadapp'))
+
+        else:
+            msg= ''
+        squads=db(db.squads.game_id==currentgame()).select(orderby='<random>')
+        return dict(squads=squads, gid=False,msg=msg)
 
 # squad info page
 def squadinfo():

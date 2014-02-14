@@ -1,0 +1,53 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+
+<hr/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-1 col-lg-offset-1">
+
+            <div class="jumbotron" style="background-color:#181818;border-radius: 5px;">
+                <h1>{{=squadinfo.name}}</h1>
+
+                {{try:}}
+                <p>{{=session.flash}}</p>
+                {{session.flash = ''}}
+                {{except:}}
+
+                {{pass}}
+
+
+                {{if form:}}
+                <div class='inline'>
+                    {{=form}}
+                </div>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+
+    {{end}}
+
+    {{block postfooter}}
+
+    <script src="{{=URL('static','js/timepicker.js')}}"></script>
+    <script src="{{=URL('static','js/formfix.js')}}"></script>
+    <script type="text/javascript" charset="utf-8">
+$( "input" ).addClass( "form-control" );
+$( "textarea" ).addClass( "form-control" );
+$( "select" ).addClass( "form-control" );
+$( "table" ).addClass( "table table-no-border" );
+$( ".web2py_breadcrumbs" ).hide();
+$( "#submit_record__row td.w2p_fl" ).remove();
+$( "#submit_record__row td.w2p_fc" ).remove();
+$( "#submit_record__row td.w2p_fw" ).attr( "colspan", "3");
+
+$( "table" ).addClass( "table table-no-border" );
+
+
+    </script>
+
+
+    {{end}}

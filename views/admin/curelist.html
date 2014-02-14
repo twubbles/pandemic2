@@ -7,45 +7,95 @@
 <hr/>
 
 <div class="container-fluid">
-<div class="row">
-<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
-
-
-
- <table>
-	<thead>
-		<tr>
-        <th>Game Name</th>
-         <th>Cure Code</th>
-        <th>Expiration</th>
-            <th>Used</th>
-		<th>Options</th>
-        </tr>
-	<tbody>
-	{{ for cure in cures: }}
-        <tr>
-        {{expired = isexpired(cure)}}
-        <td>{{=db.games(cure.game_id).game_name}}</td>
-        <td>{{=cure.curecode}}</td>
-            {{if expired:}}
-            <td style="background-color:red;">{{=converttotz(cure.expiration)}}</td>
-            {{else:}}
-            <td style="background-color:green;">{{=converttotz(cure.expiration)}}</td>
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
+            {{if session.msg:}}
+            {{=session.msg}}
+            {{session.msg = False}}
             {{pass}}
-            {{if cure.used:}}
-            <td style="background-color:red;">{{=cure.used}}</td>
-            {{else:}}
-            <td style="background-color:green;">{{=cure.used}}</td>
-            {{pass}}
-        <td><a href= "{{=URL(r=request, f='editcure', args=cure.id)}}">  Edit/Delete </a></td>
-        </tr>
-    {{pass}}
-	</tbody>
-    </thead>
-    </table>
 
-</div>
-</div>
+            <INPUT type="button" class="button btn btn-info margin-bot" value="Generate Cure"
+                   onclick="location.href='{{=URL(c='admin', f='createcure')}}'"/>
+
+            <h1><b>Unused Cures</b></h1>
+            <table class="table" id="bigtable">
+                <thead>
+                <tr>
+
+                    <th class="hidden-xs">Cure Code</th>
+                    <th class="hidden-xs">Game</th>
+                    <th class="hidden-xs">Expiration</th>
+                    <th class="hidden-xs">Options</th>
+
+                </tr>
+                <tbody>
+                {{ for cure in unusedcures:}}
+                <tr>
+                    {{expired = isExpiredCure(cure)}}
+                    <td class="hidden-xs">{{=cure.cures.curecode}}</td>
+                    <td class="hidden-xs">{{=cure.games.game_name}}</td>
+                    {{if expired:}}
+                    <td style="background-color:red;text-align:center;">
+                        <p class="visible-xs">{{=cure.cures.curecode}}</p>
+                        {{=converttotz(cure.cures.expiration)}}
+                    </td>
+                    {{else:}}
+                    <td style="background-color:green;text-align:center;">
+                        <p class="visible-xs">{{=cure.cures.curecode}}</p>
+
+                        {{=converttotz(cure.cures.expiration)}}
+
+
+                    </td>
+                    </td>
+                    {{pass}}
+                    <td class="hidden-xs"><a href="{{=URL(r=request, f='editcure', args=cure.cures.id)}}">
+                        Edit/Delete </a></td>
+                </tr>
+                {{pass}}
+                </tbody>
+                </thead>
+            </table>
+
+
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
+            <h1><b>Used Cures</b></h1>
+            <table class="table" id="bigtable2">
+                <thead>
+                <tr>
+                    <th class="hidden-xs" >Game</th>
+                    <th>Used Code</th>
+                    <th class="hidden-xs" >Used By</th>
+                    <th class="hidden-xs">Datetime Used</th>
+
+                </tr>
+                <tbody>
+                {{ for cure in usedcures:}}
+                <tr>
+                    <td class="hidden-xs" >{{=cure.games.game_name}}</td>
+                    <td class="hidden-xs" >{{=cure.cures.curecode}}</td>
+
+                    <td style="text-align:center;">
+                        {{=A(cure.auth_user.first_name + ' ' + cure.auth_user.last_name,
+                        _href=URL(c='default',f='userinfo', args=cure.auth_user.id))}}
+                        <p class="visible-xs">{{=cure.cures.curecode}}</p>
+                        <p class="visible-xs">{{=cure.cure_event.created}}</p>
+
+                    </td>
+                    <td class="hidden-xs">
+                        {{=cure.cure_event.created}}
+                    </td>
+
+
+                </tr>
+                {{pass}}
+                </tbody>
+                </thead>
+            </table>
+
+        </div>
+    </div>
 </div>
 
 
@@ -53,5 +103,16 @@
 
 
 {{block postfooter}}
-{{include 'adminfooter.html'}}
+
+
+<script src="{{=URL('static','js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#bigtable').dataTable();
+				$('#bigtable2').dataTable();
+			} );
+
+</script>
+
+
 {{end}}

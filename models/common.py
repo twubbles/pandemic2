@@ -1,22 +1,24 @@
 # coding: utf8
 response.static_version = '1.0.0'
 
-# This model has various common functions in it.
+# import any modules needed here. web2py freaks out if you have imports in more than one place
 import re
+from datetime import datetime
+from datetime import timedelta
+from pytz import timezone
+from gluon.tools import prettydate
+
+# This model has various common functions in it.
 
 # Converts the current time, whatever zone it may be in, to EST, and returns it.
 def getesttime():
-    from datetime import datetime
-    from pytz import timezone
     localtz = timezone('US/Eastern')
-    now_utc =datetime.now(timezone('UTC'))
+    now_utc = datetime.now(timezone('UTC'))
     now_east = now_utc.astimezone(timezone('US/Eastern'))
     return now_east
 
 # Converts TZ unaware datetime objects to EST aware.    
 def converttotz(unaware):
-    from datetime import datetime
-    from pytz import timezone
     localtz = timezone('US/Eastern')
     return localtz.localize(unaware)
 
@@ -31,7 +33,7 @@ def fbphotofull(fburl):
      return 'http://graph.facebook.com/'+str( fbid[0])+'/picture?width=200&height=200'
 
 
-# Accepts a tz unaware datetime object and returns an easier to read datetime string. credit to Jeb Smith for the snippet this is based on.     
+# Accepts a tz unaware datetime object and returns an easier to read datetime string.
 def pretty_date(d):
     diff = getesttime() - converttotz(d)
     s = diff.seconds

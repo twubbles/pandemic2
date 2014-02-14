@@ -13,24 +13,29 @@
 
 	<table>
 	<thead>
-	</tbody>
+    <tr>
+        <th>Game</th>
+        <th>Squad Name</th>
+        <th>Creator</th>
+        <th>Image</th>
+        <th colspan="2">Options</th>
+
+    </tr>
+    </thead>
+    <tbody>
 	{{ for squad in squadsapp: }}
-        {{if not squad.reviewed:}} 
-			{{if auth.is_logged_in() == True and auth.has_membership('admins'):}}
-        	{{creator=db.auth_user(db.game_part(squad.leader).user_id)}}     
 			<tr>
-       		<th>{{=db.games(squad.game_id).game_name}}</th>
-        	<th>{{=squad.name}}</th>
-        	<th>{{=A(creator.first_name + ' ' + creator.last_name,  _href=URL(c='default',f='userinfo',args=creator.id))}}</th>
-			<th>{{=A('Image', _href=URL(c='default',f='download', args=squad.image))}}</th>
-        	<th><INPUT type="button" class="btn btn-success btn-xs" value="Approve" onclick="location.href='{{=URL(c='admin', f='approvesquadapp', args=[squad.id])}}'"/></th>
-        	<th><INPUT type="button" class="btn btn-danger btn-xs" value="Deny" onclick="location.href='{{=URL(c='admin', f='denysquadapp', args=[squad.id])}}'"/></th>
+       		<td>{{=squad.games.game_name}}</td>
+        	<td>{{=squad.squads_app.name}}</td>
+        	<td>{{=A(squad.auth_user.first_name + ' ' + squad.auth_user.last_name,  _href=URL(c='default',f='userinfo',args=squad.auth_user.id))}}</td>
+			<td>{{=A('Image', _href=URL(c='default',f='download', args=squad.squads_app.image))}}</td>
+        	<td><INPUT type="button" class="btn btn-success btn-xs" value="Approve" onclick="location.href='{{=URL(c='admin', f='approvesquadapp', args=[squad.squads_app.id])}}'"/></td>
+        	<td><INPUT type="button" class="btn btn-danger btn-xs" value="Deny" onclick="location.href='{{=URL(c='admin', f='denysquadapp', args=[squad.squads_app.id])}}'"/></td>
         	</tr>
-    		{{pass}}                
-    	{{pass}}
 	{{pass}}
+
 	</tbody>
-        </thead>
+
     </table>
 
 

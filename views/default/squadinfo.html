@@ -66,17 +66,22 @@
 
                 <p>{{=XML(squad.description,sanitize=True)}}</p>
             </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              {{if app:}}
+<div class="sqdesc"><INPUT type="button" class="btn btn-success btn-lg btn-block" value="Apply to join!" onclick="location.href='{{=URL(c='gamectrl', f='applytosquad',args=[squad.id,gpart.id])}}'"/></div>
+              {{pass}}
+
+            </div>
         </div>
 
-        <hr class="featurette-divider">
 
-        <div class="row featurette">
+        <div class="row">
+
+            <hr class="featurette-divider">
             <div class="col-md-7">
-                <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+                <h2 class="featurette-heading"><span class="text-muted"></span></h2>
 
-                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis
-                    euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,
-                    tellus ac cursus commodo.</p>
+
             </div>
             <div class="col-md-5">
 
@@ -84,9 +89,12 @@
         </div>
 
 
+        <hr class="featurette-divider">
 
 
     </div>
+
+
 </div>
 
 

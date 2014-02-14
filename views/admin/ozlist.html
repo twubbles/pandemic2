@@ -21,7 +21,7 @@
         <tr>
         	
 			<td>
-			{{=user.auth_user.first_name}} {{=user.auth_user.last_name}}</a>
+			<a href="{{=URL('default','userinfo', args=user.auth_user.id)}}">{{=user.auth_user.first_name}} {{=user.auth_user.last_name}}</a>
         	</td>
         	<td>{{=user.creature_type.name}}</td>
         	{{if user.creature_type.immortal == True:}}
@@ -30,7 +30,7 @@
             	<td class="hidden-xs">{{=user.game_part.zombie_expires_at}}</td>
         	{{pass}}
             <td><a href= "{{=URL(r=request, f='editgamepart', args=user.game_part.id)}}">  Edit </a></td>
-            <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='gamectrl', f='makeoz', args=[user.game_part.id])}}'"/></td>
+            <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='gamectrl', f='makeoz', args=user.game_part.id)}}'"/></td>
         </tr>
         
 	{{pass}}
@@ -44,7 +44,7 @@
 	</div>
 	<div class="col-xs-6 col-md-6 col-xs-offset-6">
 	{{for game in games:}}
-	<a href={{=URL('admin', 'ozlist', args=game.id)}}><h2>{{=game.game_name}}</h2></a>
+	<a href={{=URL('admin','ozlist', args=game.id)}}><h2>{{=game.game_name}}</h2></a>
 	
 	{{pass}}
 	</div>

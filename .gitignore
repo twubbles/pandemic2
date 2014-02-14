@@ -13,8 +13,10 @@ models/db.py
 sessions/
 errors/
 uploads/
+static/uploads/
 cache/
 cron/
+private/
 static/images/
 modules/fbappauth.py
 modules/fbappauth.pyc
