@@ -18,7 +18,7 @@
                    onclick="location.href='{{=URL(c='admin', f='createcure')}}'"/>
 
             <h1><b>Unused Cures</b></h1>
-            <table class="table" id="bigtable">
+            <table class="table curetable" id="bigtable">
                 <thead>
                 <tr>
 
@@ -105,14 +105,7 @@
 {{block postfooter}}
 
 
-<script src="{{=URL('static','js/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" charset="utf-8">
-			$(document).ready(function() {
-				$('#bigtable').dataTable();
-				$('#bigtable2').dataTable();
-			} );
 
-</script>
 
 
 {{end}}

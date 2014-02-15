@@ -4,7 +4,7 @@
 class GameVars:
     def __init__(self, id=False, start_at=False, end_at=False, time_per_food=False, stun_timer=0, cure_timer=0,
                  bite_shares_per_food=0,
-                 pause_starts_at=0, pause_ends_at=0, created=0, posttimeout=5, signup_start_at=0, signup_end_at=0):
+                 pause_starts_at=0, pause_ends_at=0, created=0, posttimeout=5, signup_start_at=0, signup_end_at=0, game_name=''):
         self.id = id
         self.start_at = start_at
         self.end_at = end_at
@@ -18,15 +18,25 @@ class GameVars:
         self.pause_ends_at = pause_ends_at
         self.created = created
         self.posttimeout = posttimeout
+        self.game_name = game_name
 
     def getId(self):
         return self.id
+
+    def gameStart(self):
+        return self.start_at
+
+    def starveTimer(self):
+        return self.time_per_food
 
     def stunTime(self):
         return self.stun_timer
 
     def postTimer(self):
         return self.posttimeout
+
+    def getName(self):
+        return self.game_name
 
     def isGameActive(self):
         if self.id:
@@ -78,14 +88,14 @@ current = False
 games = db(db.games).select(db.games.id, db.games.start_at, db.games.end_at, db.games.time_per_food,
                             db.games.signup_start_at, db.games.signup_end_at,
                             db.games.stun_timer, db.games.cure_timer, db.games.bite_shares_per_food,
-                            db.games.pause_starts_at,
-                            db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created, )
+                            db.games.pause_starts_at,db.games.game_name,
+                            db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,)
 if getesttime() < converttotz(games.last().end_at):
     current = games.last()
 if current:
     gameinfo = GameVars(current.id, current.start_at, current.end_at, current.time_per_food, current.stun_timer,
                         current.cure_timer,
                         current.bite_shares_per_food, current.pause_starts_at, current.pause_ends_at, current.created,
-                        current.posttimeout, current.signup_start_at, current.signup_end_at)
+                        current.posttimeout, current.signup_start_at, current.signup_end_at, current.game_name)
 else:
     gameinfo = GameVars()

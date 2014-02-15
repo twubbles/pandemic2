@@ -30,7 +30,7 @@
             	<td class="hidden-xs">{{=user.game_part.zombie_expires_at}}</td>
         	{{pass}}
             <td><a href= "{{=URL(r=request, f='editgamepart', args=user.game_part.id)}}">  Edit </a></td>
-            <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='gamectrl', f='makeoz', args=user.game_part.id)}}'"/></td>
+            <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='admin', f='makeoz', args=user.game_part.id)}}'"/></td>
         </tr>
         
 	{{pass}}

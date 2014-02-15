@@ -56,21 +56,6 @@ def pretty_date(d):
     else:
         return '{0} hours ago'.format(s/3600)
 
-# Takes an image object, size tuple, and path and returns the filename of a thumbnail of that image.
-def resize_image(image, size, path):
-    from PIL import Image
-    import os.path
-    try:
-        img = Image.open('%sstatic/images/%s' % (request.folder, image))
-        img.thumbnail(size, Image.ANTIALIAS)
-        root, ext = os.path.splitext(image)
-        filename = '%s_%s%s' %(root, path, ext)
-        img.save('%sstatic/images/%s' % (request.folder, filename))
-    except Exception, e:
-        return e
-    else:
-        return filename
-
 		
 def user_bar():
     action = '/user'
@@ -88,4 +73,14 @@ def user_bar():
     else:
         bar = [LI(A('Login', _href=URL('default', 'user', args=['login'], vars=dict(_next='/pandemic2/default/index'))), _class=" ")]
     return bar
-		
+
+
+def adminlog(string):
+	try:
+		file = open("adminlog.txt", "a")
+		file.write(str(getesttime()) + ' ' + string + "\n")
+		file.close()
+		msg = True
+	except:
+		msg = False
+	return msg

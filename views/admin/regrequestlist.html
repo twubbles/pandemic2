@@ -15,7 +15,8 @@
   <div class="panel-heading">
     <h3 class="panel-title">{{=A(req.auth_user.first_name + ' ' + req.auth_user.last_name,  _href=URL(c='default',f='userinfo',args=req.auth_user.id))}} Game: {{=req.games.game_name}}
 	<div class="pull-right">
-	<INPUT type="button" class="btn btn-success btn-xs" value="Approve" onclick="location.href='{{=URL(c='admin', f='approveregreq', args=[req.registration_request.id])}}'"/>
+        <INPUT type="button" class="btn btn-success btn-xs" value="Approve"
+               onclick="location.href='{{=URL(c='admin', f='approveregreq', args=[req.registration_request.id])}}'"/>
 	<INPUT type="button" class="btn btn-danger btn-xs" value="Deny" onclick="location.href='{{=URL(c='admin', f='denyregreq', args=[req.registration_request.id])}}'"/>
      </div>
 	 </h3>

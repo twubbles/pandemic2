@@ -30,9 +30,9 @@ def currentgame():
 
 # checks if there is an upcoming but not yet started game
 def isgameupcoming():
-    cgame = db(db.games).select(orderby=~db.games.created, limitby=(0, 1))
+    cgame = db(db.games).select(orderby=~db.games.created).last()
     if cgame:
-        if getesttime() < converttotz(cgame[0].end_at) and getesttime() < converttotz(cgame[0].start_at):
+        if getesttime() < converttotz(cgame.end_at) and getesttime() < converttotz(cgame.start_at):
             return True
         else:
             return False
@@ -79,7 +79,6 @@ def returncurrentuserapp():
 def returncurrentuserreqapp():
     if auth.is_logged_in():
         authid = auth.user.id
-        gid = getgamevars()
         regreq = db((db.registration_request.user_id == authid) & (db.registration_app.game_id == gameinfo.getId())).select()
         if regreq:
             return True
@@ -114,7 +113,7 @@ def isExpiredCure(cure):
 # Checks to see if a player has starved. NEW. Must pass user.creature_type.immortal, game_part.zombie_expires_at, and creature_type.zombie joined
 def isZombieDead(user):
     if user.creature_type.zombie:
-        if converttotz(user.game_part.zombie_expires_at) > getesttime() and user.creature_type.zombie:
+        if converttotz(user.game_part.zombie_expires_at) > getesttime() and not user.creature_type.immortal:
             return False
         elif user.creature_type.immortal:
             return False
@@ -165,13 +164,11 @@ def isover(mis):
     else:
         return False
 
-
 # takes an auth_user id and returns all the game_parts associated with it. DEPRICATED
 def gamesplayed(user):
     if user:
         gamesplayed = db(db.game_part.user_id == user).select(orderby=db.game_part.id)
         return gamesplayed
-
 
 # function to return bite_events of a zombie, given the game_part ID and game ID. If the total variable is false it will return rows of bites, otherwise just the total.
 def totalkills(user, game, total):
@@ -181,9 +178,6 @@ def totalkills(user, game, total):
             return len(bites)
         else:
             return bites
-
-
-
 
 def missionfeed(gameid):
     if gameid:

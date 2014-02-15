@@ -19,7 +19,7 @@
             {{if squads:}}
             <ul class="list-group">
                 {{ for squad in squads: }}
-                <a href="{{=URL('default','squadinfo', args=squad.id)}}">
+                <a href="{{=URL('squad','squadinfo', args=squad.id)}}">
                     <li class="list-group-item">
                         <h4 class="hvzfont centertext">{{=squad.name[0:54]}}</h4>
                     </li>

@@ -1,0 +1,204 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+
+            <h1><b>{{=squad.name}}</b></h1>
+        </div>
+
+
+        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+            <!-- START Squad member management section START-->
+
+            <div class=" col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+                {{if members:}} <!-- START of members management interface logic-->
+                <h2 class="sub-header">Members<span class="text-muted"></span></h2>
+                <div class="panel">
+                <table class='table table-striped'>
+                    <thead>
+                    <tr>
+                        <th> Name</th>
+                        <th> Title</th>
+                        <th> Status</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{for member in members:}} <!-- START of members for loop -->
+
+
+                    <tr>
+
+                        <td>
+                            {{if member.auth_user.handle:}} <!-- standard fullname or handle display logic -->
+                            {{=A(member.auth_user.handle,
+                            _href=URL(c='default',f='userinfo',args=member.auth_user.id))}}
+                            {{else:}}
+                            {{=A(member.auth_user.first_name + ' ' + member.auth_user.last_name,
+                            _href=URL(c='default',f='userinfo', args=member.auth_user.id))}}
+                            {{pass}}
+
+
+                        </td>
+
+                        <td>
+
+
+                            {{if member.game_part.squad_title:}} <!-- squad title logic, will truncate obnoxiously long titles -->
+                            {{if len(member.game_part.squad_title) > 35:}}
+                            <small>{{=member.game_part.squad_title}}</small>
+                            {{else:}}
+                            {{=member.game_part.squad_title}}
+                            {{pass}}
+                            {{elif member.game_part.squad_leader:}}
+                            <h4>Squad Leader</h4>
+                            {{else:}}
+                            Member
+                            {{pass}}
+
+
+                        </td>
+
+                        <td>
+                            <p>{{=member.creature_type.name}}</p>
+                            {{if member.creature_type.zombie and not member.creature_type.immortal:}} <!-- Logic to display starvetimer for regular zeds -->
+                            <small> Starve@ {{=pretty_date(member.game_part.zombie_expires_at)}}</small>
+                            {{pass}}
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{if not member.game_part.squad_leader:}} <!-- Only displays kick option for regular members -->
+                            <INPUT type="button" class="btn btn-danger btn-xs" value="Kick"
+                                   onclick="location.href='{{=URL(c='squad', f='kickmember', args=[member.game_part.id])}}'"/>
+                            {{pass}}
+                        </td>
+                        <td>
+
+                            <INPUT type="button" class="btn btn-info btn-xs" value="Edit Title"
+                                   onclick="location.href='{{=URL(c='squad', f='squadtitlechange', args=[member.game_part.id])}}'"/>
+
+                        </td>
+
+                        <td>
+
+                        </td>
+                    </tr>
+                    {{pass}} <!-- END of members for loop -->
+                    </tbody>
+                </table>
+                </div>
+                {{pass}} <!-- END of members management interface logic-->
+
+            </div>
+            <!-- END Squad member management section END -->
+
+
+             <!-- START Squad Posts Section START -->
+
+            <div class=" col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <h2 class="sub-header">Squad Posts<span class="text-muted">
+                <INPUT type="button" class="btn btn-primary btn-sm pull-right" value="New Post"
+                               onclick="location.href='{{=URL(c='squad', f='createsquadpost', args=[squad.id])}}'"/>
+                    </span></h2>
+
+                {{for post in posts:}} <!-- START Squad Posts for loop START -->
+                <div class="panel panel-info">
+                    <div class="panel-heading"><h3>{{=post.title}}</h3></div>
+                    <div class="panel-body">
+                        <p>{{=XML(post.description[:350],sanitize=True)}}</p>
+                    </div>
+
+                    <div class="panel-footer"><p><em>{{=prettydate(post.created)}}</em>
+                        <INPUT type="button" class="btn btn-info btn-xs pull-right" value="Edit"
+                               onclick="location.href='{{=URL(c='squad', f='editsquadpost', args=[post.id])}}'"/>
+                    </p></div>
+                </div>
+                 {{pass}} <!-- END Squad Posts for loop END -->
+            </div>
+
+            <!-- END Squad Posts Section  END-->
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="row">
+
+        <hr>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+<!-- START Squad app interface START -->
+
+            {{if squadsmemapp:}} <!-- checks for apps -->
+            <h2 class="sub-header">Applications<span class="text-muted"></span></h2>
+
+            {{for app in squadsmemapp:}}  <!-- START squadapp for loop -->
+
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{=A(app.auth_user.first_name + ' ' + app.auth_user.last_name,
+                            _href=URL(c='default',f='userinfo',args=app.auth_user.id))}}
+                            <div class="pull-right">
+                                <INPUT type="button" class="btn btn-success btn-xs" value="Approve"
+                                       onclick="location.href='{{=URL(c='squad', f='approvesquadmemberapp', args=[app.squads_member_app.id])}}'"/>
+                                <INPUT type="button" class="btn btn-danger btn-xs" value="Deny"
+                                       onclick="location.href='{{=URL(c='squad', f='denysquadmemberapp', args=[app.squads_member_app.id])}}'"/>
+                            </div>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+                                    <a href="http://facebook.com/people/@/{{=app.auth_user.registration_id}}">
+                                        <img src="{{=fbphotofull(app.auth_user.registration_id)}}"
+                                             alt="{{=app.auth_user.first_name}} {{=app.auth_user.last_name}}"
+                                             class="img-rounded img-responsive center-block">
+                                    </a>
+                                </div>
+                                <div class="margin-sm">
+
+                                    {{=XML(app.squads_member_app.description,sanitize=True)}}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <hr>
+                        <p><h4>Status: {{=app.creature_type.name}}</h4></p>
+
+                    </div>
+                </div>
+            </div>
+
+                    {{pass}} <!-- END squadapp for loop -->
+            {{pass}} <!-- END squadapp interface creation logic -->
+
+
+            <!-- END Squad app interface END -->
+        </div>
+    </div>
+</div>
+
+
+{{end}}
+
+{{block postfooter}}
+
+
+{{end}}

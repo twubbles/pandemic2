@@ -4,7 +4,7 @@ html {
   background-color: #1c3240;
   color: #e5e5e5; }
 
-input, select {
+input, select, textarea {
   color: black; }
 
 body {
@@ -13,9 +13,21 @@ body {
   color: #e5e5e5;
   font-size: 1.4em; }
 
-.container {
+.container-panel {
   padding-left: 15px;
   padding-right: 15px; }
+
+.margin-xs {
+  margin: 5px; }
+
+.margin-sm {
+  margin: 15px; }
+
+.margin-md {
+  margin: 25px; }
+
+.margin-lg {
+  margin: 35px; }
 
 .margin-bot {
   margin-bottom: 15px; }

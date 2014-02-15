@@ -16,7 +16,7 @@
             <div class="col-md-5">
 
                 {{if players:}}
-                <table class='table table-striped' id="humans">
+                <table class='table table-striped'>
                     <tr>
                         <th colspan="3" style="color:white;">
                             <h3><span class="label center-block">Members</span></h3>
@@ -68,7 +68,7 @@
             </div>
               <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
               {{if app:}}
-<div class="sqdesc"><INPUT type="button" class="btn btn-success btn-lg btn-block" value="Apply to join!" onclick="location.href='{{=URL(c='gamectrl', f='applytosquad',args=[squad.id,gpart.id])}}'"/></div>
+<div class="sqdesc"><INPUT type="button" class="btn btn-success btn-lg btn-block" value="Apply to join!" onclick="location.href='{{=URL(c='squad', f='applytosquad',args=[squad.id,gpart.game_part.id])}}'"/></div>
               {{pass}}
 
             </div>

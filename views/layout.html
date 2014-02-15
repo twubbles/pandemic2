@@ -10,7 +10,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Carme' rel='stylesheet' type='text/css'>
 	{{response.include_meta()}}
 
-	<script src="{{=URL('static','js/modernizr.custom.js')}}"></script>
+
 	
 {{
 	response.files.insert(0,URL('static','css/bootstrap.css'))
@@ -99,10 +99,7 @@
 
 {{end}}
 </footer>
-	<script src="{{=URL('static','js/jquery-1.11.0.js')}}"></script>
-	<script src="{{=URL('static','js/jquery-ui-1.10.4.custom.min.js')}}"></script>
-	<script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
-	<script src="{{=URL('static','js/prefixfree.js')}}"></script>
+	<script data-main="{{=URL('static','js/main.js')}}" src="{{=URL('static','js/require.js')}}"></script>
 	
 	
 

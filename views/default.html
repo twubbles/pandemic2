@@ -1,34 +1,34 @@
-
 {{extend 'layout.html'}}
 
 
 {{block layer01}}
 <div class="container-fluid">
-<div class="row">
+    <div class="row" id="defaultview">
 
-<hr>
-<div class="col-sm-12 col-md-12">
-{{try:}}
-    <h3>{{=session.flash}}</h3>
-    {{session.flash = ''}}
- {{except:}}
+        <hr>
+        <div class="col-sm-12 col-md-12">
+            {{try:}}
+            <h3>{{=session.flash}}</h3>
+            {{session.flash = ''}}
+            {{except:}}
 
-{{pass}}
+            {{pass}}
 
 
-{{try:}}
- {{=form}}
-{{except:}}
- {{pass}}
+            {{try:}}
+            {{=form}}
+            {{except:}}
+            {{pass}}
 
-    {{try:}}
-{{if results:}}
-    <script src='http://connect.facebook.net/en_US/all.js'></script>
-    <INPUT type="button" class="button" value="Post this to facebook!"
-onclick='postToFeed(); return false;'/>
-    <p id='msg'></p>
-<!--Quick and dirty solution to having cures posted to facebook with javascript. -->
-    <script>
+            {{try:}}
+            {{if results:}}
+            <script src='http://connect.facebook.net/en_US/all.js'></script>
+            <INPUT type="button" class="button" value="Post this to facebook!"
+                   onclick='postToFeed(); return false;'/>
+
+            <p id='msg'></p>
+            <!--Quick and dirty solution to having cures posted to facebook with javascript. -->
+            <script>
       FB.init({appId: "	148476551982686", status: true, cookie: true});
       function postToFeed() {
         var obj = {
@@ -45,37 +45,19 @@ onclick='postToFeed(); return false;'/>
         }
         FB.ui(obj, callback);
       }
-    </script>
-{{pass}}
-{{except:}}
- {{pass}}
-</div>
-</div>
+
+            </script>
+            {{pass}}
+            {{except:}}
+            {{pass}}
+        </div>
+    </div>
 </div>
 
 {{end}}
 
 
-
-
 {{block postfooter}}
-
-
-<script src="{{=URL('static','js/formfix.js')}}"></script>
-<script>
-
-if (navigator.geolocation) {
-    // Use method getCurrentPosition to get coordinates
-    navigator.geolocation.getCurrentPosition(function (position) {
-        $( "input[name='Latitude']" ).attr( "value", position.coords.latitude );
-        $( "input[name='Longitude']" ).attr( "value",  position.coords.longitude );
-        $( "input[name='Latitude']" ).attr('disabled','disabled');
-        $( "input[name='Longitude']" ).attr('disabled','disabled');
-    });
-};
-
-
-</script>
 
 
 

@@ -3,87 +3,120 @@
 
 {{block layer01}}
 
- <div class="container">
-	
-      <div class="page-header">
-  <h1><b>UMASSHvZ</b></h1>
-</div>
+<div class="container">
 
+    <div class="page-header">
+        <h1><b>UMASSHvZ</b></h1>
 
+    </div>
 
+    <div class="panel panel-info">
+        <h3 class="hidden-xs centertext">{{=globalvars}}</h3>
+        <h4 class="visible-xs centertext">{{=globalvars}}</h4>
+    </div>
+    <div class="row featurette">
 
-      <div class="row featurette">
         <div class="col-md-7">
-          			{{if missions:}}
-	<h2 class="sub-header">Missions</h2>
-		<div class="table">
-			<table class="table">
-			<thead>
-				<tr>
-                  <th>Number</th>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                </tr>
-              </thead>
-			  <tbody>
-			 {{num=0}} 
-			{{for mission in missions:}}
-			{{if isunlocked(mission) and not isover(mission):}}
-			 <tr style="background-color: #5cb85c;">
-			{{elif isover(mission):}}
-			 <tr style="background-color: #999;">
-			{{else:}}
-			<tr style="background-color: #428bca;">
-			 {{pass}}
-                  <td>Mission {{=num}}</td>
-                  <td>{{=pretty_date(mission.mission_start)}}</td>
-                  <td>{{=pretty_date(mission.mission_end)}}</td>
-                </tr>
-			   {{num+=1}}
-             {{pass}}
-              </tbody>
-            </table>
-          </div>
-		  {{pass}}
+            {{if missions:}}
+            <h2 class="sub-header">Missions</h2>
+
+            <div class="table">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{num=0}}
+                    {{for mission in missions:}}
+                    {{if isunlocked(mission) and not isover(mission):}}
+                    <tr style="background-color: #5cb85c;">
+                        {{elif isover(mission):}}
+                    <tr style="background-color: #999;">
+                        {{else:}}
+                    <tr style="background-color: #428bca;">
+                        {{pass}}
+                        <td>Mission {{=num}}</td>
+                        <td>{{=pretty_date(mission.mission_start)}}</td>
+                        <td>{{=pretty_date(mission.mission_end)}}</td>
+                    </tr>
+                    {{num+=1}}
+                    {{pass}}
+                    </tbody>
+                </table>
+            </div>
+            {{pass}}
         </div>
 
-
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
         <div class="col-md-5">
+            {{if missions:}}
+            <h2 class="sub-header">Missions</h2>
 
-	
-	
-	
+            <div class="table">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{num=0}}
+                    {{for mission in missions:}}
+                    {{if isunlocked(mission) and not isover(mission):}}
+                    <tr style="background-color: #5cb85c;">
+                        {{elif isover(mission):}}
+                    <tr style="background-color: #999;">
+                        {{else:}}
+                    <tr style="background-color: #428bca;">
+                        {{pass}}
+                        <td>Mission {{=num}}</td>
+                        <td>{{=pretty_date(mission.mission_start)}}</td>
+                        <td>{{=pretty_date(mission.mission_end)}}</td>
+                    </tr>
+                    {{num+=1}}
+                    {{pass}}
+                    </tbody>
+                </table>
+            </div>
+            {{pass}}
         </div>
-        <div class="col-md-7">
 
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-5">
+
+
+            </div>
+            <div class="col-md-7">
+
+            </div>
         </div>
-      </div>
 
-      <hr class="featurette-divider">
+        <hr class="featurette-divider">
 
-      <div class="row featurette">
-        <div class="col-md-7">
+        <div class="row featurette">
+            <div class="col-md-7">
 
 
+            </div>
+            <div class="col-md-5">
+
+            </div>
         </div>
-        <div class="col-md-5">
 
-        </div>
-      </div>
+        <hr class="featurette-divider">
 
-      <hr class="featurette-divider">
-
-
-     
 
     </div>
 
 
-
-
-{{end}}
+    {{end}}
 
 

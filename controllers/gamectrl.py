@@ -180,20 +180,21 @@ def bitecodepg():
             if bcode:
                 search = db.game_part.bitecode.like(bcode)
                 results = db((search) & (db.auth_user.id == db.game_part.user_id) & (
-                    db.creature_type.id == db.game_part.creature_type) & (
-                                 db.game_part.game_id == gameinfo.getId())).select().first()
+                    db.game_part.creature_type == db.creature_type.id) & (db.games.id == db.game_part.game_id) & (
+                                 db.games.id == gameinfo.getId())).select().first()
                 if results:
                     if results.creature_type.zombie:
                         session.flash = 'You tried to bite a zombie! ewww!'
                         return dict(form=form, results=[])
                     else:
-                        # results is changed to the text to appear in the facebook post and passed to the view.
-                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
-                                  results.auth_user.first_name + ' ' + results.auth_user.last_name
                         db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
                                              game_id=gameinfo.getId(), lat=request.args(1), lng=request.args(2))
                         db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
-                        db(db.game_part.id == human).update(zombie_expires_at=gameinfo.addFoodTimer(), creature_type=2)
+                        db(db.game_part.id == results.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),
+                                                                           creature_type=2)
+                        # results is changed to the text to appear in the facebook post and passed to the view.
+                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
+                                  results.auth_user.first_name + ' ' + results.auth_user.last_name
                         session.flash = results
                         return dict(form=form, results=results)
                 else:
@@ -218,13 +219,14 @@ def bitecodepg():
                         session.flash = 'You tried to bite a zombie! ewww!'
                         return dict(form=form, results=[])
                     else:
-                        # results is changed to the text to appear in the facebook post and passed to the view.
-                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
-                                  results.auth_user.first_name + ' ' + results.auth_user.last_name
                         db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
                                              game_id=gameinfo.getId(), lat=form.vars.Latitude, lng=form.vars.Longitude)
                         db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
-                        db(db.game_part.id == human).update(zombie_expires_at=gameinfo.addFoodTimer(), creature_type=2)
+                        db(db.game_part.id == results.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),
+                                                                           creature_type=2)
+                        # results is changed to the text to appear in the facebook post and passed to the view.
+                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
+                                  results.auth_user.first_name + ' ' + results.auth_user.last_name
                         session.flash = results
                         return dict(form=form, results=results)
                 else:
@@ -240,215 +242,6 @@ def bitecodepg():
         redirect(URL(c='default', f='index'))
 
 
-# Function for creating original zombies from the OZ pool.
-@auth.requires_membership('admins')
-def makeoz():
-    db(db.game_part.id == request.args(0)).update(creature_type=3)
-    userpart = db(db.game_part.id == request.args(0)).select()
-    response.flash = 'made them an OZ!'
-    redirect(URL(c='admin', f='ozlist', args=userpart[0].game_id))
-
-
-# This is the controller function for the squad application page.
-@auth.requires_login()
-def createsquadapp():
-    response.view = 'default.html'
-    gpart = returncurrentuserpart()
-    gid = gameinfo.getId()
-    if gid and not (gpart.game_part.squad_id or gpart.game_part.squad_apps or isZombieDead(gpart)):
-        form = SQLFORM(db.squads_app, fields=['name', 'description', 'image', ],
-                       labels={'name': 'Your Squad Name', 'image': 'MUST BE 960px x 240px'},
-                       submit_button="Submit Squad Application", )
-        form.vars.leader = gpart.game_part.id
-        form.vars.game_id = gid
-        form.vars.sigid = generatebitecode()
-        if form.process().accepted:
-            db(db.game_part.id == gpart.game_part.id).update(squad_apps=1)
-            form = "Squad Application Created!"
-            return dict(form=form)
-        return dict(form=form)
-    elif gpart.game_part.squad_apps:
-        form = "You already have a pending squad application!"
-        return dict(form=form)
-    elif gpart.game_part.squad_id:
-        form = "You are already affiliated with a squad this game!"
-    else:
-        form = "Squad application form locked."
-        return dict(form=form)
-
-
-# This is the controller for the squad hq page for squad members.
-@auth.requires_login()
-def squadhq():
-    squad = db.squads(request.args[0]) or redirect(URL(c='default', f='index'))
-    gpart = returncurrentuserpart()
-    if gpart.game_part.squad_id == request.args[0]:
-        if squad:
-            posts = db(db.squad_posts.squad_id == request.args(0)).select(orderby=~db.squad_posts.created, )
-            members = db((db.game_part.squad_id == squad.id) & (db.game_part.squad_leader == False)).select(
-                orderby=db.game_part.created)
-            leader = db.game_part(squad.leader)
-            return dict(squad=squad, posts=posts, members=members, leader=leader)
-    else:
-        redirect(URL(c='default', f='index'))
-
-
-# View squad post page.
-@auth.requires_login()
-def viewsquadpost():
-    post = db.squad_posts[request.args(0)] or redirect(URL(r=request, f='index'))
-    gpart = returncurrentuserpart()
-    if int(gpart.game_part.squad_id) == int(post.squad_id):
-        squad = db.squads(post.squad_id)
-        return dict(post=post, squad=squad)
-
-
-# This is the controller for the squad admin page for squad leaders.
-@auth.requires_login()
-def squadadmin():
-    squad = db.squads(request.args(0)) or redirect(URL(c='default', f='index'))
-    gpart = returncurrentuserpart()
-    if gpart.game_part.squad_id == request.args(0) and gpart.game_part.squad_leader:
-        if squad:
-            posts = db(db.squad_posts.squad_id == request.args(0)).select(orderby=~db.squad_posts.created, )
-            members = db((db.game_part.squad_id == squad.id) & (db.game_part.squad_leader == False)).select(
-                orderby=db.game_part.created)
-            leader = db.game_part(squad.leader)
-            squadsmemapp = db(
-                (db.squads_member_app.squad_id == squad.id) & (db.squads_member_app.reviewed == False)).select()
-            return dict(squad=squad, members=members, leader=leader, squadsmemapp=squadsmemapp, posts=posts)
-    else:
-        redirect(URL(c='default', f='index'))
-
-
-# Create a post page
-@auth.requires_login()
-def createsquadpost():
-    response.view = 'default.html'
-    request.args(0) or redirect(URL(c='default', f='index'))
-    gpart = returncurrentuserpart()
-    if gpart.game_part.squad_id == request.args(0) and gpart.game_part.squad_leader:
-        response.flash = "Create a post!"
-        form = SQLFORM(db.squad_posts, fields=['title', 'description'])
-        form.vars.sleader = gpart.game_part.id
-        form.vars.squad_id = gpart.game_part.squad_id
-        if form.process().accepted:
-            session.flash = 'Post accepted.'
-        elif form.errors:
-            session.flash = 'The post has errors, idiot!'
-        return dict(form=form)
-
-
-# Edit a post page
-@auth.requires_login()
-def editsquadpost():
-    response.view = 'default.html'
-    request.args(0) or redirect(URL(c='default', f='index'))
-    gpart = returncurrentuserpart()
-    post = db.squad_posts(request.args(0))
-    if int(post.game_part.squad_id) == int(gpart.game_part.squad_id) and gpart.game_part.squad_leader:
-        form = SQLFORM(db.squad_posts, post, showid=False, fields=['title', 'description'], deletable=True)
-        session.flash = 'Edit the post!'
-        if form.validate():
-            if form.deleted:
-                db(db.squad_posts.id == post.id).delete()
-                redirect(URL(c='gamectrl', f='squadadmin', args=gpart.game_part.squad_id))
-                session.flash = 'POST BALEETED!'
-            else:
-                post.update_record(**dict(form.vars))
-                session.flash = 'Changes saved.'
-        else:
-            session.flash = 'Edit the post!'
-        return dict(form=form)
-    else:
-        redirect(URL(c='default', f='index'))
-
-
-# This function is for the SL admin page. It rejects a member application and makes the neccesary database updates.
-@auth.requires_login()
-def denysquadmemberapp():
-    smemappid = request.args[0]
-    sq = db.squads_member_app(smemappid)
-    gpart = returncurrentuserpart()
-    sqd = db.squads(sq.squad_id)
-    if gpart.game_part.id == sqd.leader:
-        db(db.squads_member_app.id == smemappid).update(reviewed=True)
-        redirect(URL(c='gamectrl', f='squadadmin', args=gpart.game_part.squad_id))
-    else:
-        redirect(URL(c='default', f='index'))
-
-
-# This function is for the SL admin page. It approves a member application and makes the neccesary database updates.
-@auth.requires_login()
-def approvesquadmemberapp():
-    sid = request.args[0]
-    sq = db.squads_member_app(sid)
-    gpart = returncurrentuserpart()
-    sqd = db.squads(sq.squad_id)
-    if gpart.game_part.id == sqd.leader:
-        db(db.squads_member_app.id == sid).update(reviewed=True, approved=True)
-        db(db.game_part.id == sq.player_id).update(squad_id=sq.squad_id, squad_apps=1)
-        redirect(URL(c='gamectrl', f='squadadmin', args=gpart.game_part.squad_id))
-    else:
-        redirect(URL(c='default', f='index'))
-
-
-# function for people to apply to a squad
-@auth.requires_login()
-def applytosquad():
-    gpart = returncurrentuserpart()
-    if request.args[0] and not gpart.game_part.squad_apps and not gpart.game_part.squad_id:
-        squadinfo = db.squads(request.args[0])
-        form = FORM(DIV(TEXTAREA(_style="width: 100%;", _name="Application", _id="appbody")), INPUT
-        (_type="submit", _value="Apply"))
-        if form.process(session=None, formname='squadapp').accepted:
-            if not appart.squad_id:
-                squadapp = db(db.squads_member_app.player_id == gpart.game_part.id).select()
-                # checks for an existing squad application. if one exists it just updates that one instead of making a new one.
-                if squadapp:
-                    db(db.squads_member_app.player_id == gpart.game_part.id).update(squad_id=request.args[0],
-                                                                                    description=form.vars.Application)
-                else:
-                    db.squads_member_app.insert(player_id=gpart.game_part.id, squad_id=request.args[0],
-                                                description=form.vars.Application)
-            session.flash = 'Application sent! You will get an email with the decision.'
-        elif form.errors:
-            session.flash = 'form has errors'
-        else:
-            session.flash = 'Tell them why they should let you in:'
-        return dict(form=form, squadinfo=squadinfo, msg=msg)
-
-
-# function for squad leaders to change people's titles
-@auth.requires_login()
-def squadtitlechange():
-    response.view = 'default.html'
-    uid = request.args[0]
-    gpart = returncurrentuserpart()
-    if gpart.game_part.squad_leader and db.game_part(uid).squad_id == gpart.game_part.squad_id:
-        sqmember = db.game_part(uid) or redirect(URL('error'))
-        form = SQLFORM(db.game_part, sqmember, showid=False, fields=['squad_title'])
-        if form.validate():
-            sqmember.update_record(**dict(form.vars))
-            session.flash = 'Changes saved'
-        else:
-            session.flash = 'Change member title'
-        return dict(form=form)
-
-
-# kick squad member function
-@auth.requires_login()
-def kickmember():
-    uid = request.args[0]
-    mem = db.game_part(uid)
-    gpart = returncurrentuserpart()
-    # checks to make sure that the person getting kicked is in the squad of the person calling the controller and that they are the leader
-    if mem.squad_id == gpart.game_part.squad_id and gpart.game_part.squad_leader:
-        db(db.game_part.id == uid).update(squad_id=None, squad_title='', squad_apps=None)
-        db(db.squads_member_app.player_id == uid).delete()
-        redirect(URL(c='gamectrl', f='squadadmin', args=mem.squad_id))
-    else:
-        redirect(URL(c='default', f='index'))
 
 
 # human bitecode qrcode page
