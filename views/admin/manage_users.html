@@ -3,6 +3,11 @@
 {{include 'admindefault.html'}}
 {{end}}
 
+{{if auth.has_membership(auth.id_group('admins'),auth.user.id):}}
+        {{admin=True}}
+        {{else:}}
+        {{admin=False}}
+        {{pass}}
 
 
 {{block layer02}}
@@ -26,11 +31,15 @@
 			  <tbody>
 			 <tr>
 				{{for user in users:}}
-                  <td>{{=user.id}}</td>
+                  <td><a href="{{=URL('admin', 'edituser', args=[user.id])}}" class="btn btn-default btn-xs" >{{=user.id}}</a></td>
                   <td>{{=user.first_name}}</td>
                   <td>{{=user.last_name}}</td>
                   <td>{{=user.handle}}</td>
-				  <td><a href="{{=URL('admin', 'manage_user_parts', args=[user.id])}}" class="btn btn-primary btn-xs" >Game Parts</a></td>
+				  <td><a href="{{=URL('admin', 'manage_user_parts', args=[user.id])}}" class="btn btn-primary btn-xs" >Game Parts</a>
+                      {{if admin:}}
+                      <a href="{{=URL('admin', 'makemod', args=[user.id])}}" class="btn btn-warning btn-xs" >Grant Mod</a>
+                      {{pass}}
+                  </td>
                 </tr>
              {{pass}}
               </tbody>
@@ -48,4 +57,9 @@
 {{end}}
 
 {{block postfooter}}
+        <script>
+
+
+
+        </script>
 {{end}}

@@ -11,7 +11,7 @@ def roster():
         redirect(URL('index'))
     elif not request.args(0):
         players = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == gameinfo.getId()) & (
-        db.game_part.creature_type == db.creature_type.id)).select(
+            db.game_part.creature_type == db.creature_type.id)).select(
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
             db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
             cache=(cache.ram, 60), cacheable=True)
@@ -29,7 +29,7 @@ def roster():
         return dict(players=players, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal)
     elif request.args(0):
         players = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == request.args(0)) & (
-        db.game_part.creature_type == db.creature_type.id)).select(
+            db.game_part.creature_type == db.creature_type.id)).select(
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
             db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
             cache=(cache.ram, 5), cacheable=True)
@@ -45,19 +45,6 @@ def roster():
                 else:
                     zombieTotal += 1
         return dict(players=players, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal)
-
-
-#paginated posts feed
-def postfeed():
-    page = 0
-    if len(request.args):
-        page = int(request.args[0])
-    else:
-        page = 0
-    items_per_page = 3
-    limitby = (page * items_per_page, (page + 1) * items_per_page + 1)
-    posts = db(db.posts).select(orderby=~db.posts.pub_date, limitby=limitby, cache=(cache.ram, 300), cacheable=True)
-    return dict(posts=posts, page=page, items_per_page=items_per_page)
 
 
 # Landing page index.
@@ -87,7 +74,12 @@ def index():
         missions = missionfeed(currentgame())
     else:
         missions = False
-    return dict(missions=missions, globalvars=globalvars)
+    posts = db((db.auth_user.id == db.posts.author)).select(db.posts.title, db.posts.title, db.posts.description,
+                                                            db.posts.pub_date, db.auth_user.first_name,
+                                                            db.auth_user.last_name, db.auth_user.id,
+                                                            orderby=~db.posts.pub_date, limitby=(0,8), cache=(cache.ram, 300),
+                                                            cacheable=True)
+    return dict(missions=missions, globalvars=globalvars, posts=posts)
 
 
 # View post page.
@@ -116,7 +108,7 @@ def userinfo():
         count = db.bite_event.zombie_id.count()
         count.readable = True
         cparts = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == db.games.id) & (
-        db.auth_user.id == request.args(0)) & (db.game_part.creature_type == db.creature_type.id)).select(
+            db.auth_user.id == request.args(0)) & (db.game_part.creature_type == db.creature_type.id)).select(
             db.auth_user.id, db.auth_user.bio, db.auth_user.registration_id, db.auth_user.first_name,
             db.auth_user.last_name,
             db.auth_user.handle, db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at,

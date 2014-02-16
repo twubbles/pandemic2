@@ -199,3 +199,10 @@ def validategeo(form):
     else:
         form.vars.Lat = lat
         form.vars.Long = lng
+
+def validateconfirm(form):
+    if not (form.vars.Confirm == "YES"):
+        form.errors.Confirm = 'You did not confirm the action'
+    else:
+        form.vars.Confirm = form.vars.Confirm
+

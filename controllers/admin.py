@@ -274,7 +274,7 @@ def creategamepart():
     if form.process().accepted:
         session.flash = 'Game participation created'
     elif form.errors:
-        session.flash = 'The game has errors, idiot!'
+        session.flash = 'has errors'
     return dict(form=form)
 
 
@@ -288,12 +288,25 @@ def editgamepart():
         if form.deleted:
             db(db.game_part.id == part.id).delete()
             redirect(URL('games'))
-            session.flash = 'GAME BALEETED!'
+            session.flash = 'BALEETED!'
         else:
             part.update_record(**dict(form.vars))
             session.flash = 'Changes saved.'
     else:
         session.flash = 'Edit the participation'
+    return dict(form=form, )
+
+# Edit a user
+@auth.requires_membership('admins')
+def edituser():
+    response.view = 'admintemplate.html'
+    user = db.auth_user(request.args(0)) or redirect(URL('error'))
+    form = SQLFORM(db.auth_user, user, deletable=False)
+    if form.validate():
+            user.update_record(**dict(form.vars))
+            session.flash = 'Changes saved.'
+    else:
+        session.flash = 'Auth User Record! (Messing with this can screw up a lot of stuff!)'
     return dict(form=form, )
 
 
@@ -321,6 +334,24 @@ def makeoz():
     message = "You have been made an Original Zombie. You will appear as a Human until you make your first bite. Access your bite page by going to the Human bitecode page on your menu. While you are hidden, you cannot be bitten by other Zombies. Beware, you won't be hidden forever so don't wait too long before making a bite!"
     sendemail(userpart[0].registration_email, "HvZ Important Message!", message)
     redirect(URL(c='admin', f='ozlist', args=userpart[0].game_id))
+
+
+# Function for granting moderator access
+@auth.requires_membership('admins')
+def makemod():
+    response.view = 'admintemplate.html'
+    user = db.auth_user(request.args(0))
+    session.flash = 'Type YES to grant ' + user.first_name + ' ' + user.last_name + ' moderator access.'
+    form = SQLFORM.factory(Field("Confirm", default=''), submit_button="Do it", )
+    if form.process(onvalidation=validateconfirm).accepted:
+        db.auth_membership.insert(user_id=request.args(0), group_id=526)
+        session.flash = 'made ' + user.first_name + ' ' + user.last_name + ' a mod'
+        adminlog(str(auth.user.id) + " made " + str(request.args(0)) + " a mod")
+        return dict(form='')
+    else:
+        session.flash = 'Type YES to grant ' + user.first_name + ' ' + user.last_name + ' moderator access.'
+        return dict(form=form)
+    return dict(form=form)
 
 
 # controller for the the open squad applications page

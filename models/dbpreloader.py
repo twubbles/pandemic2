@@ -1,6 +1,6 @@
 # coding: utf8
 
-#  GameVars class definition
+# GameVars class definition
 class GameVars:
     def __init__(self, id=False, start_at=False, end_at=False, time_per_food=False, stun_timer=0, cure_timer=0,
                  bite_shares_per_food=0,
