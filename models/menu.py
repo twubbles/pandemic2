@@ -101,7 +101,7 @@ elif not gpart and currentgame() or isgameupcoming():
 response.menu = [
     LI(A('Game',UL(
         LI(A('Roster', _href=URL('default', 'roster')), _class=''),
-        LI(A('Forums', _href=URL('forums', 'index')), _class=''),
+        LI(A('Forums', _href=URL('default', 'index')), _class=''),
         LI(A('Squads', _href=URL('squad', 'squadlist')), _class=''),
         LI(A('Ruleset', _href=URL('default', 'rules')), _class=''),_class='dropdown-menu', _id='gamemenu'),
         _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')

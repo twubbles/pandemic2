@@ -74,7 +74,7 @@ class GameVars:
         bitecheck = db(
             (db.bite_event.human_id == player.game_part.id) & (db.bite_event.game_id == self.id)).select().last()
         if bitecheck:
-            inftimer = self.getEstNow() - self.convertToTz(bevent.created)
+            inftimer = self.getEstNow() - self.convertToTz(bitecheck.created)
             if self.cure_timer > inftimer.seconds:
                 return False
             else:

@@ -90,7 +90,7 @@ def registerrequest():
             Field("address", default='address@email.com', requires=IS_NOT_EMPTY()),
             Field("original", 'boolean', label="Original Zombie Request ", ),
             Field("appeal", 'text', requires=IS_NOT_EMPTY(), label="Appeal ",
-                  default="Reason why you should play even though you don't have a five-college email. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."),
+                  default="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."),
         )
         if form.process().accepted:
             try:
@@ -137,29 +137,27 @@ def curezombie():
                                              cure_id=results.cures.id)
                         db(db.cures.id == results.cures.id).update(used=True, cure_user=gpart.game_part.id)
                         db(db.game_part.id == gpart.game_part.id).update(creature_type=1, bitecode=generatebitecode())
-                        # results is changed to the text to appear in the facebook post and passed to the view.
-                        results = gpart.auth_user.first_name + " " + gpart.auth_user.last_name + ' used a cure and is human again!'
-                        session.flash = results
+                        session.flash = gpart.auth_user.first_name + " " + gpart.auth_user.last_name + ' used a cure and is human again!'
                         form = ''
-                        return dict(form=form, results=results)
+                        return dict(form=form)
                     elif results.cures.used and forcurrentgame:
                         session.flash = 'This code has been used already!'
-                        return dict(form=form, results=[])
+                        return dict(form=form)
                     elif expired and forcurrentgame:
                         session.flash = 'This code has expired!'
-                        return dict(form=form, results=[])
+                        return dict(form=form)
                     elif not forcurrentgame:
                         session.flash = 'This code is for an older game!'
-                        return dict(form=form, results=[])
+                        return dict(form=form)
                     elif infected:
                         session.flash = 'Your infection is irreversible!'
-                        return dict(form=form, results=[])
+                        return dict(form=form)
                 else:
                     session.flash = 'Invalid Cure code'
-                    return dict(form=form, results=[])
+                    return dict(form=form)
             else:
                 session.flash = 'Invalid Cure code'
-                return dict(form=form, results=[])
+                return dict(form=form)
         else:
 
             return dict(form=form, results=[])
@@ -170,44 +168,22 @@ def curezombie():
 # Returns the page for biting. Uses variables defined in the menu.py model statusmenu function
 @auth.requires_login()
 def bitecodepg():
-    response.view = 'default.html'
     form = ''
     gpart = returncurrentuserpart()
-    if gpart.creature_type.zombie and not isZombieDead(gpart):
+    if (gpart.creature_type.zombie or gpart.creature_type.hidden) and not isZombieDead(gpart):
         if request.args(0):
-            bcode = request.args(0)
-            bcode = bcode.replace(' ', '').upper()
-            if bcode:
-                search = db.game_part.bitecode.like(bcode)
-                results = db((search) & (db.auth_user.id == db.game_part.user_id) & (
-                    db.game_part.creature_type == db.creature_type.id) & (db.games.id == db.game_part.game_id) & (
-                                 db.games.id == gameinfo.getId())).select().first()
-                if results:
-                    if results.creature_type.zombie:
-                        session.flash = 'You tried to bite a zombie! ewww!'
-                        return dict(form=form, results=[])
-                    else:
-                        db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
-                                             game_id=gameinfo.getId(), lat=request.args(1), lng=request.args(2))
-                        db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
-                        db(db.game_part.id == results.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),
-                                                                           creature_type=2)
-                        # results is changed to the text to appear in the facebook post and passed to the view.
-                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
-                                  results.auth_user.first_name + ' ' + results.auth_user.last_name
-                        session.flash = results
-                        return dict(form=form, results=results)
-                else:
-                    session.flash = 'Invalid Bitecode'
-                    return dict(form=form, results=[])
-            else:
-                session.flash = 'Invalid Bitecode'
-                return dict(form=form, results=[])
-        form = SQLFORM.factory(Field("Bitecode", default=''), Field("Latitude", default='0', writable=True),
-                               Field("Longitude", default='0', writable=True), submit_button="Bite!", )
-        if form.process().accepted:
-            search = db.game_part.game_id == currentgame()
+            form = SQLFORM.factory(Field("Bitecode", default='request.args(0)'), Field("Lat", default='', writable=True, requires=IS_NOT_EMPTY()),
+                               Field("Long", writable=True, requires=IS_NOT_EMPTY()), submit_button="Bite!", )
+        else:
+            form = SQLFORM.factory(Field("Bitecode", default=''), Field("Lat", writable=True, requires=IS_NOT_EMPTY()),
+                               Field("Long", writable=True, requires=IS_NOT_EMPTY()), submit_button="Bite!", )
+        if gpart.creature_type.hidden:
+            session.flash = 'Note: Biting a human will reveal you!'
+        if form.process(onvalidation=validategeo).accepted:
+            search = db.game_part.game_id == gameinfo.getId()
             bcode = form.vars.Bitecode
+            lat=form.vars.Lat
+            long=form.vars.Long
             bcode = bcode.replace(' ', '').upper()
             if bcode:
                 search = db.game_part.bitecode.like(bcode)
@@ -215,19 +191,22 @@ def bitecodepg():
                     db.creature_type.id == db.game_part.creature_type) & (
                                  db.game_part.game_id == gameinfo.getId())).select().first()
                 if results:
-                    if results.creature_type.zombie:
+                    if results.creature_type.zombie or results.creature_type.hidden:
                         session.flash = 'You tried to bite a zombie! ewww!'
                         return dict(form=form, results=[])
                     else:
                         db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
-                                             game_id=gameinfo.getId(), lat=form.vars.Latitude, lng=form.vars.Longitude)
-                        db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
+                                             game_id=gameinfo.getId(), lat=lat, lng=long)
+                        if gpart.creature_type.hidden:
+                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),creature_type=3)
+                        else:
+                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
                         db(db.game_part.id == results.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),
                                                                            creature_type=2)
                         # results is changed to the text to appear in the facebook post and passed to the view.
-                        results = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
+                        session.flash = gpart.auth_user.first_name + ' ' + gpart.auth_user.last_name + ' bit ' + \
                                   results.auth_user.first_name + ' ' + results.auth_user.last_name
-                        session.flash = results
+                        results=session.flash
                         return dict(form=form, results=results)
                 else:
                     session.flash = 'Invalid Bitecode'
@@ -248,8 +227,9 @@ def bitecodepg():
 @auth.requires_login()
 def bitecodeqrcodepage():
     gpart = returncurrentuserpart()
-    gpart.creature_type.zombie
-    if not gpart.creature_type.zombie:
+    if not (gpart.creature_type.zombie or gpart.creature_type.hidden):
         return dict(gpart=gpart)
+    elif gpart.creature_type.hidden:
+        redirect(URL('gamectrl', 'bitecodepg'))
     else:
         redirect(URL(c='default', f='index'))

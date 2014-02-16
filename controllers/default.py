@@ -14,7 +14,7 @@ def roster():
         db.game_part.creature_type == db.creature_type.id)).select(
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
             db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
-            cache=(cache.ram, 5), cacheable=True)
+            cache=(cache.ram, 60), cacheable=True)
         humanTotal = 0
         zombieTotal = 0
         deadTotal = 0

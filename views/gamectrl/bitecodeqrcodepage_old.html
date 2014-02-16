@@ -27,8 +27,14 @@
 
 <script src="{{=URL('static','js/qrcode.js')}}"></script>
 <script>
-window.onload = function(){
-    var tail = "{{=gpart.game_part.bitecode}}";
+
+if (navigator.geolocation) {
+    // Use method getCurrentPosition to get coordinates
+    navigator.geolocation.getCurrentPosition(function (position) {
+    var lat = position.coords.latitude;
+    var long = position.coords.longitude;
+
+    var tail = "{{=gpart.game_part.bitecode}}/" + lat.toString() + "/" + long.toString();
 
         new QRCode(document.getElementById("qrcode"), {
         text: "http://localhost:8000/pandemic/gamectrl/bitecodepg/" + tail,
@@ -38,7 +44,7 @@ window.onload = function(){
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.L
     });
-
+    var tail2 = "{{=gpart.game_part.bitecode}}/" + lat.toString() + "/" + long.toString();
 
         new QRCode(document.getElementById("qrcode2"), {
         text: "http://localhost:8000/pandemic/gamectrl/bitecodepg/" + tail,
@@ -48,10 +54,8 @@ window.onload = function(){
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.L
     });
-
-
-    };
-
+    });
+};
 
 
 

@@ -115,7 +115,7 @@
                 <div class="panel panel-info">
                     <div class="panel-heading"><h3>{{=post.title}}</h3></div>
                     <div class="panel-body">
-                        <p>{{=XML(post.description[:350],sanitize=True)}}</p>
+                        <p>{{=XML(post.description[:350],sanitize=True,permitted_tags=['h3','h4','h5','h6','a','strong','em', 'br/', 'i','li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'kbd','img/'],allowed_attributes={'a':['href', 'title'],'img':['src', 'alt']})}}</p>
                     </div>
 
                     <div class="panel-footer"><p><em>{{=prettydate(post.created)}}</em>
@@ -172,7 +172,7 @@
                                 </div>
                                 <div class="margin-sm">
 
-                                    {{=XML(app.squads_member_app.description,sanitize=True)}}
+                                    {{=XML(app.squads_member_app.description,sanitize=True,permitted_tags=['a','strong','em', 'br/', 'p', 'cite', 'code', 'pre', 'kbd',],allowed_attributes={'a':['href', 'title']})  }}
                                 </div>
                             </div>
 

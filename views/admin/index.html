@@ -8,29 +8,33 @@
 {{block layer02}}
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+        <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Admin Panel</h1>
 
           <div class="row placeholders">
             <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
+                {{if gameinfo.getId():}}
 			 <canvas id="canvas1" height="200" width="200"></canvas>
-			 <h4>Total Population</h4>
-              <span class="text-muted">Something else</span>
+			 <h4>Total Population: {{=(humanTotal+zombieTotal+deadTotal)}}</h4>
+
+                {{else:}}
+              <canvas id="canvas1" height="200" width="200"></canvas>
+                {{pass}}
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
-			<canvas id="canvas2" height="200" width="200"></canvas>        
-			<h4>Label</h4>
-              <span class="text-muted">Something else</span>
+			<canvas id="canvas2" height="200" width="200"></canvas>
+			<h4>Bites</h4>
+
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
             	<canvas id="canvas3" height="200" width="200"></canvas>
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <h4>Cures Used</h4>
+
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
    			<canvas id="canvas4" height="200" width="200"></canvas>
               <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+
             </div>
           </div>
 
@@ -168,31 +172,44 @@
 {{end}}
 
 {{block postfooter}}
-<script src="{{=URL('static','js/chart.min.js')}}"></script>
- 
- 
+
+
+
+ <script src="{{=URL('static','js/chart.min.js')}}"></script>
  <script type="text/javascript">
 		var pieData = [
 				{
-					value: 16,
+					value: {{=int(zombieTotal)}},
 					color:"#F38630"
 				},
 				{
-					value : 236,
+					value : {{=int(deadTotal)}},
 					color : "#E0E4CC"
 				},
 				{
-					value : 216,
+					value : {{=int(humanTotal)}},
 					color : "#69D2E7"
 				}
 			
 			];
 var myPie = new Chart(document.getElementById("canvas1").getContext("2d")).Pie(pieData);
-var myPie = new Chart(document.getElementById("canvas2").getContext("2d")).Pie(pieData);
-var myPie = new Chart(document.getElementById("canvas3").getContext("2d")).Pie(pieData);
-var myPie = new Chart(document.getElementById("canvas4").getContext("2d")).Pie(pieData);
-    </script>
 
+var bite_canvas = document.getElementById("canvas2");
+var bite_context = bite_canvas.getContext("2d");
+bite_context.fillStyle = "red";
+bite_context.font = "bold 4.5em sans-serif";
+bite_context.textAlign = "center";
+bite_context.fillText("{{=biteTotal}}",90,115);
+
+var cure_canvas = document.getElementById("canvas3");
+var cure_context = cure_canvas.getContext("2d");
+cure_context.fillStyle = "lightblue";
+cure_context.font = "bold 4.5em sans-serif";
+cure_context.textAlign = "center";
+cure_context.fillText("{{=cureTotal}}",90,115);
+
+
+    </script>
 
 
 {{end}}

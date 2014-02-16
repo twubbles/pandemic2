@@ -1,0 +1,90 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+<style>
+    #map-canvas {
+    height: 500px;
+    width: 300px;
+    margin: 0px;
+    padding: 0px;
+    display:none;
+    }
+    #headtxt {
+    display:none;
+    color:white;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row" id="defaultview">
+
+        <hr>
+        <div class="col-sm-11 col-xs-11 col-md-11 col-ls-11 panel margin-sm">
+            {{try:}}
+            <h3>{{=session.flash}}</h3>
+            {{session.flash = ''}}
+            {{except:}}
+
+            {{pass}}
+
+
+            {{try:}}
+            {{=form}}
+            {{except:}}
+            {{pass}}
+            <div id="askmenu">
+            <p >Are you at the location of the bite?</p>
+            <INPUT type="button" class="button btn-primary margin-bot btn" id="a" onclick="atLoc()" value="Yes"/>
+            <INPUT type="button" class="button btn-info margin-bot btn" id="b" onclick="selectLoc()" value="No"/>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<p id="headtxt">Where did the bite occur?</p>
+<div id="map-canvas"></div>
+
+{{end}}
+
+
+{{block postfooter}}
+
+
+{{if results:}}
+<script src='http://connect.facebook.net/en_US/all.js'></script>
+<INPUT type="button" class="button" value="Post this to facebook!"
+       onclick='postToFeed(); return false;'/>
+
+<p id='msg'></p>
+<!--Quick and dirty solution to having cures posted to facebook with javascript. -->
+<script>
+      FB.init({appId: "	148476551982686", status: true, cookie: true});
+      function postToFeed() {
+        var obj = {
+          method: 'feed',
+            redirect_uri: 'http://www.umasshvz.com',
+          link: 'http://www.umasshvz.com',
+          picture: 'http://i.imgur.com/QDGEJpR.png',
+          name: 'UMASS Amherst Humans vs Zombies',
+            caption: '{{=results}}!',
+          description: 'Have you signed up yet?'
+        };
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+        FB.ui(obj, callback);
+      }
+
+
+
+</script>
+{{else:}}
+
+{{pass}}
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<p class="loadgeo"></p>
+{{end}}

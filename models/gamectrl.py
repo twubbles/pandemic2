@@ -50,7 +50,7 @@ def returncurrentuserpart():
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
             db.auth_user.registration_id,
             db.game_part.id, db.game_part.bitecode, db.game_part.zombie_expires_at, db.game_part.squad_leader,
-            db.game_part.squad_id,
+            db.game_part.squad_id, db.creature_type.hidden,
             db.game_part.banned, db.creature_type.name, db.creature_type.zombie, db.creature_type.immortal,
             db.game_part.squad_apps,
         )
@@ -184,3 +184,18 @@ def missionfeed(gameid):
         return db(db.missions.game_id == gameid).select(cache=(cache.ram, 15), cacheable=True)
     else:
         return False
+
+def validategeo(form):
+    lat = form.vars.Lat
+    lng = form.vars.Long
+    north = 42.405967152309120
+    south = 42.383401202818526
+    east = -72.513628005981450
+    west = -72.538347244262700
+    if (float(lat) > float(north)) or float(lat) < float(south):
+        form.errors.Lat = "invalid latitude"
+    elif float(lng) > float(east) or float(lng) < float(west):
+        form.errors.Long = "invalid longitude"
+    else:
+        form.vars.Lat = lat
+        form.vars.Long = lng

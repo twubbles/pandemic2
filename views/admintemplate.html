@@ -6,10 +6,11 @@
 
 {{block layer02}}
 <hr/>
-<p class="admintable"></p>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-sm-offset-3 col-md-offset-3 col-lg-offset-2">
+    <div class="row" id="defaultview">
+
+        <hr>
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 col-sm-offset-3 .col-md-push-2  panel">
             {{try:}}
             <h3>{{=session.flash}}</h3>
             {{session.flash = ''}}
@@ -17,7 +18,11 @@
 
             {{pass}}
 
+
+            {{try:}}
             {{=form}}
+            {{except:}}
+            {{pass}}
 
 
         </div>

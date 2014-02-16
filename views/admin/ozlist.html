@@ -26,11 +26,17 @@
         	<td>{{=user.creature_type.name}}</td>
         	{{if user.creature_type.immortal == True:}}
             	<td> Immortal! </td>
-        	{{else:}}
+        	{{elif user.creature_type.hidden == True:}}
+                <td class="hidden-xs">HIDDEN OZ</td>
+            {{else:}}
             	<td class="hidden-xs">{{=user.game_part.zombie_expires_at}}</td>
         	{{pass}}
             <td><a href= "{{=URL(r=request, f='editgamepart', args=user.game_part.id)}}">  Edit </a></td>
+            {{if user.creature_type.hidden == True:}}
+            <td>Already an OZ</td>
+            {{else:}}
             <td> <INPUT type="button" value="Make OZ" onclick="location.href='{{=URL(c='admin', f='makeoz', args=user.game_part.id)}}'"/></td>
+            {{pass}}
         </tr>
         
 	{{pass}}

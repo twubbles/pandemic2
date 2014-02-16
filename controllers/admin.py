@@ -3,11 +3,37 @@
 # Admin page
 @auth.requires_membership('admins' or 'mods')
 def index():
-    if gameinfo.isGameActive():
+    if gameinfo.getId():
         missions = missionfeed(gameinfo.getId())
+        players = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == gameinfo.getId()) & (
+            db.game_part.creature_type == db.creature_type.id)).select(
+            db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
+            db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
+            cache=(cache.ram, 60), cacheable=True)
+        humanTotal = 0
+        zombieTotal = 0
+        deadTotal = 0
+        for player in players:
+            if not player.creature_type.zombie:
+                humanTotal += 1
+            elif player.creature_type.zombie:
+                if isZombieDead(player):
+                    deadTotal += 1
+                else:
+                    zombieTotal += 1
+        biteTotal = db(db.bite_event.game_id == gameinfo.getId()).count()
+        cureTotal = db(db.cure_event.game_id == gameinfo.getId()).count()
+        return dict(missions=missions, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal,
+                    biteTotal=biteTotal,cureTotal=cureTotal)
     else:
         missions = False
-    return dict(missions=missions)
+        humanTotal = False
+        zombieTotal = False
+        deadTotal = False
+        biteTotal = False
+        cureTotal= False
+        return dict(missions=missions, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal,
+                    biteTotal=biteTotal)
 
 
 # admin squad management interface
@@ -101,9 +127,9 @@ def zombierewardfood():
     if form.process().accepted:
         realtime = (form.vars.Minutes * 60)
         zombies = db((db.game_part.game_id == gameinfo.getId()) & (db.creature_type.id == db.game_part.creature_type) &
-                    (db.creature_type.zombie == True)).select(
-                    db.game_part.id, db.game_part.game_id,db.creature_type.zombie,
-                    db.game_part.zombie_expires_at, db.creature_type.immortal)
+                     (db.creature_type.zombie == True)).select(
+            db.game_part.id, db.game_part.game_id, db.creature_type.zombie,
+            db.game_part.zombie_expires_at, db.creature_type.immortal)
         for zombie in zombies:
             if not (isZombieDead(zombie) or db.creature_type.immortal):
                 stime = timedelta(seconds=realtime)
@@ -124,10 +150,11 @@ def zombieraise():
                            submit_button="RAISE THE DEAD!", )
     if form.process().accepted:
         if form.vars.confirm.upper() == "I AM SURE":
-            zombies = db((db.game_part.game_id == gameinfo.getId()) & (db.creature_type.id == db.game_part.creature_type) &
-                    (db.creature_type.zombie == True)).select(
-                    db.game_part.id, db.game_part.game_id,db.creature_type.zombie,
-                    db.game_part.zombie_expires_at, db.creature_type.immortal)
+            zombies = db(
+                (db.game_part.game_id == gameinfo.getId()) & (db.creature_type.id == db.game_part.creature_type) &
+                (db.creature_type.zombie == True)).select(
+                db.game_part.id, db.game_part.game_id, db.creature_type.zombie,
+                db.game_part.zombie_expires_at, db.creature_type.immortal)
             for zombie in zombies:
                 if isZombieDead(zombie):
                     stime = timedelta(seconds=random.randrange(28800, 72000))
@@ -135,10 +162,10 @@ def zombieraise():
                     db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime)
 
             session.flash = "THE SHAMBLING DEAD HAVE ARISEN ONCE AGAIN!"
-            form=''
-        return dict(form=form,)
-    session.flash="Confirm the raising of the dead? All dead will be raised and given random amounts of food."
-    return dict(form=form,)
+            form = ''
+        return dict(form=form, )
+    session.flash = "Confirm the raising of the dead? All dead will be raised and given random amounts of food."
+    return dict(form=form, )
 
 
 # edit a cure page
@@ -228,6 +255,7 @@ def ozlist():
         users = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == request.args(0)) & (
             db.game_part.creature_type == db.creature_type.id) & (db.game_part.original_request == True)).select(
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
+            db.creature_type.hidden,
             db.creature_type.name, db.creature_type.immortal, db.game_part.zombie_expires_at, db.game_part.id
         )
         games = False
@@ -273,9 +301,11 @@ def editgamepart():
 @auth.requires_membership('admins' or 'mods')
 def regencode():
     if request.args[0] and request.args[1]:
-        gid = request.args[0]
-        db(db.game_part.id == gid).update(bitecode=generatebitecode())
-        adminlog(str(auth.user.id) + " regened code for player " + str(gid))
+        db(db.game_part.id == request.args(0)).update(bitecode=generatebitecode())
+        adminlog(str(auth.user.id) + " regened code for player " + str(request.args(0)))
+        session.flash = "Bitecode regenerated"
+        message = "Your bitecode has been regenerated. It is now: " + db.game_part(request.args(0)).bitecode
+        sendemail(db.game_part(request.args(0)).registration_email, "HvZ New Bitecode", message)
         redirect(URL(c='admin', f='manage_user_parts', args=[request.args[1]]))
     else:
         redirect(URL(c='admin', f='manage_users'))
@@ -284,10 +314,12 @@ def regencode():
 # Function for creating original zombies from the OZ pool.
 @auth.requires_membership('admins')
 def makeoz():
-    db(db.game_part.id == request.args(0)).update(creature_type=3)
+    db(db.game_part.id == request.args(0)).update(creature_type=6)
     userpart = db(db.game_part.id == request.args(0)).select()
     session.flash = 'made them an OZ!'
-    adminlog(str(auth.user.id) + " made " + str(gid) + " an OZ")
+    adminlog(str(auth.user.id) + " made " + str(request.args(0)) + " an OZ")
+    message = "You have been made an Original Zombie. You will appear as a Human until you make your first bite. Access your bite page by going to the Human bitecode page on your menu. While you are hidden, you cannot be bitten by other Zombies. Beware, you won't be hidden forever so don't wait too long before making a bite!"
+    sendemail(userpart[0].registration_email, "HvZ Important Message!", message)
     redirect(URL(c='admin', f='ozlist', args=userpart[0].game_id))
 
 

@@ -97,7 +97,9 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h3>{{=post.title}}</h3></div>
                         <div class="panel-body">
-                            <p>{{=XML(post.description,sanitize=True)}}</p>
+                            <p>{{=XML(post.description,sanitize=True,permitted_tags=['h3','h4','h5','h6','a','strong','em', 'br/', 'i',
+                                'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'kbd','img/'],
+                                allowed_attributes={'a':['href', 'title'],'img':['src', 'alt']})}}</p>
                         </div>
 
                         <div class="panel-footer"><p><em>{{=prettydate(post.created)}}</em></p></div>
@@ -108,7 +110,8 @@
             </div>
 
 
-        </div> <!-- END WRAPPER for top row -->
+        </div>
+        <!-- END WRAPPER for top row -->
 
 
     </div>
@@ -119,16 +122,17 @@
         <hr class="featurette-divider">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
-                  <div class="panel-heading"><h3>Squad Description</h3></div>
-                   <div class="panel-body">
-                <p>{{=XML(squad.description,sanitize=True)}}</p>
-                   </div>
+                <div class="panel-heading"><h3>Squad Description</h3></div>
+                <div class="panel-body">
+                    <p>{{=XML(squad.description,sanitize=True)}}</p>
+                </div>
             </div>
         </div>
         <div class="col-md-5">
 
         </div>
-    </div> <!-- END WRAPPER for bottom row -->
+    </div>
+    <!-- END WRAPPER for bottom row -->
 
 
     <hr class="featurette-divider">
