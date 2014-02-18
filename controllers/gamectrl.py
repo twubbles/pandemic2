@@ -35,16 +35,16 @@ def register():
                 authid = auth.user.id
                 regcode = generatebitecode()
                 message = "This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
-                results = sendemail(useremail, "HvZ Registration code", message)
+                sendemail(useremail, "HvZ Registration code", message)
                 db.registration_app.insert(user_id=authid, game_id=gameinfo.getId(), registration_code=regcode,
                                            original_request=form.vars.Original, created=request.now,
                                            registration_email=useremail)
-                return dict(form="Check your email and refresh this page!", results=results, fbpost=False)
+                return dict(form="", results='', fbpost=False, askemail="Check your email and refresh this page!")
             else:
                 session.flash = "invalid email or domain"
-                return dict(form=form, results=[], fbpost=False)
+                return dict(form=form, results=[], fbpost=False, askemail="Use your five college email to sign up!")
         else:
-            return dict(form=form, results=[], fbpost=False)
+            return dict(form=form, results=[], fbpost=False, askemail="Use your five college email to sign up!")
         return dict(form=form, results=[])
     elif not returncurrentuserpart() and returncurrentuserapp() and gameinfo.checkReg():
         session.flash = "Enter the code from your email"
@@ -57,7 +57,8 @@ def register():
                 search = db.registration_app.registration_code.like(ccode)
                 regapp = db(search).select().first()
                 if regapp:
-                    db.game_part.insert(user_id=regapp.user_id, game_id=regapp.game_id, bitecode=generatebitecode(),
+                    newcode = generatebitecode()
+                    db.game_part.insert(user_id=regapp.user_id, game_id=regapp.game_id, bitecode=newcode,
                                         registration_email=regapp.registration_email,
                                         original_request=regapp.original_request, creature_type=1,
                                         zombie_expires_at=request.now)
@@ -65,14 +66,20 @@ def register():
                     results = auth.user.first_name + " just registered for Humans vs Zombies!!"
                     session.flash = results
                     form=''
-                    return dict(form=form, results=results, fbpost=True)
+                    message = "You have successfully registered for " + gameinfo.getName() + "! Your bitecode is: " + str(newcode) + " write it down and give it to the zombie that bites you."
+                    message = message + " Also, you can always find it again at: http://www.umasshvz.com/pandemic/gamectrl/bitecodeqrcodepage along with a QR code that a zombie can scan with their phone to bite you instead. "
+                    message = message + " Good luck and remember to read the rules @ http://www.umasshvz.com/pandemic/default/rules "
+                    message = message + " If you have any issues/problems/questions, you can reach the admin team @ admin@umasshvz.com"
+                    message = message + "  --- UMASSHvZ --- "
+                    sendemail(regapp.registration_email, "HvZ Welcome to " + gameinfo.getName(), message)
+                    return dict(form="", results='', fbpost=True, askemail="You just registered!")
                 else:
                     results = "Code didn't work!"
                     session.flash = "Code didn't work!"
                     return dict(form=form, results=results, fbpost=False)
-        return dict(form=form, results="Enter your registration code", fbpost=False)
+        return dict(form=form, results="", fbpost=False, askemail="Enter the registration code from your email")
     elif not gameinfo.checkReg():
-        return dict(form="Registration is Closed", results="Registration is Closed", fbpost=False)
+        return dict(form="Registration is Closed", results="", fbpost=False, askemail='Registration is Closed')
 
 
 # controller for non-five-college student registration request
@@ -85,7 +92,7 @@ def registerrequest():
             Field("appeal", 'text', requires=IS_NOT_EMPTY(), label="Appeal ",
                   default="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."),
         )
-        if form.process().accepted:
+        if form.process(onvalidation=validateemail).accepted:
             try:
                 authid = auth.user.id
                 useremail = form.vars.address

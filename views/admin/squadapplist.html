@@ -3,7 +3,8 @@
 {{include 'admindefault.html'}}
 {{end}}
 
-<hr/>
+{{block layer02}}
+<hr>
 <div class="container-fluid">
 <div class="row">
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-3 col-lg-offset-2">
@@ -11,7 +12,7 @@
 
 
     {{if squadsapp:}}
-	<table>
+	<table class="table" id="bigtable">
 	<thead>
     <tr>
         <th>Game</th>
@@ -44,8 +45,8 @@
 </div>
 </div>
 </div>
+{{end}}
 
 
 {{block postfooter}}
-{{include 'adminfooter.html'}}
 {{end}}

@@ -81,7 +81,7 @@ def manage_user_parts():
                                                                      db.creature_type.name,
                                                                      db.game_part.zombie_expires_at, db.auth_user.id,
                                                                      db.creature_type.zombie, db.creature_type.immortal,
-                                                                     groupby=db.game_part.id, cache=(cache.ram, 1),
+                                                                     groupby=db.game_part.id, cache=(cache.ram, 60),
                                                                      cacheable=True)
         return dict(parts=parts)
     else:

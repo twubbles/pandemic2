@@ -203,3 +203,14 @@ def validateconfirm(form):
     else:
         form.vars.Confirm = form.vars.Confirm
 
+def validateemail(form):
+    defappeal="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."
+    if form.vars.address == 'address@email.com':
+        form.errors.address = 'You did not enter your email!'
+
+    elif form.vars.appeal == defappeal:
+        form.errors.appeal = 'You need to tell us why you should play!'
+    else:
+        form.vars.address = form.vars.address
+        form.vars.appeal = form.vars.appeal
+        form.vars.original = form.vars.original

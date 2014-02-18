@@ -64,9 +64,6 @@ def index():
         else:
             stimer = (gameinfo.starveTimer() / 60) / 60
             globalvars = 'Stun Timer: ' + str(gameinfo.stunTime()) + ' mins - Starve Timer: ' + str(stimer) + ' hrs'
-
-
-
     else:
         events = False
         globalvars = 'No upcoming game yet'
@@ -79,7 +76,7 @@ def index():
                                                             db.posts.pub_date, db.auth_user.first_name,
                                                             db.auth_user.last_name, db.auth_user.id,
                                                             orderby=~db.posts.pub_date, limitby=(0, 8),
-                                                            cache=(cache.ram, 300),
+                                                            cache=(cache.ram, 120),
                                                             cacheable=True)
     return dict(missions=missions, globalvars=globalvars, posts=posts)
 
