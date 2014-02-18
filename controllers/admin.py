@@ -423,7 +423,30 @@ def approveregreq():
     db.registration_app.insert(user_id=regreq.user_id, game_id=regreq.game_id, registration_code=regcode,
                                original_request=regreq.original_request, created=request.now,
                                registration_email=regreq.registration_email)
-    message = "The Admins have approved your registration request! This is your registration code: * " + regcode + " *. Head to http://umasshvz.com to use it."
+    message = "The Admins have approved your registration request! This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
     sendemail(regreq.registration_email, "HvZ Registration code", message)
     adminlog(str(auth.user.id) + " approved reg app for " + str(request.args[0]))
     redirect(URL(c='admin', f='regrequestlist'))
+
+# Function for removing immortality from immortal zombies
+@auth.requires_membership('admins')
+def removeimmortal():
+    response.view = 'admintemplate.html'
+    session.flash = 'Type YES to strip immortality from all immortal zombies in current game'
+    form = SQLFORM.factory(Field("Confirm", default=''), submit_button="Do it", )
+    if form.process(onvalidation=validateconfirm).accepted:
+        realtime = (64800)
+        zombies = db((db.game_part.game_id == gameinfo.getId()) & (db.creature_type.id == db.game_part.creature_type) &
+                     (db.creature_type.immortal == True)).select(
+            db.game_part.id, db.game_part.game_id, db.game_part.registration_email, db.creature_type.zombie,db.creature_type.id,
+            db.game_part.zombie_expires_at, db.creature_type.immortal)
+        for zombie in zombies:
+            stime = timedelta(seconds=realtime)
+            newtime = zombie.game_part.zombie_expires_at + stime
+            db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime, creature_type=2)
+            message = "You have LOST your Immortality and have 18 hours until you starve!"
+            sendemail(zombie.game_part.registration_email, "HvZ Immortality LOST", message)
+        session.flash = "All Immortal Zombies have been stripped of their immortality!"
+        form = ''
+        return dict(form=form)
+    return dict(form=form)

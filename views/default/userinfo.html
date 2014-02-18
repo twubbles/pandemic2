@@ -25,12 +25,12 @@
                     <p><h4>Handle: {{=T(cparts[0].auth_user.handle)}}</h4></p>
                     {{pass}}
                     {{if cparts[0].auth_user.bio:}}
-                    <p>{{=cparts[0].auth_user.bio}}</p>
+                    <p>{{=XML(cparts[0].auth_user.bio,sanitize=True)}}</p>
                     {{pass}}
 
                     <hr>
                     <div class="well">
-                        {{if currentgame():}}
+                        {{if gameinfo.getId():}}
                             <h4>Current Status: {{=cparts[0].creature_type.name}}</h4>
                             {{if cparts[0].creature_type.zombie:}}
                                 {{if not cparts[0].creature_type.immortal and not isZombieDead(cparts[0]):}}

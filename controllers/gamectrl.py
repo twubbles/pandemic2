@@ -64,6 +64,7 @@ def register():
                     db(db.registration_app.id == regapp.id).update(reviewed=True)
                     results = auth.user.first_name + " just registered for Humans vs Zombies!!"
                     session.flash = results
+                    form=''
                     return dict(form=form, results=results, fbpost=True)
                 else:
                     results = "Code didn't work!"
@@ -80,7 +81,7 @@ def registerrequest():
     if gameinfo.checkReg() and not (returncurrentuserpart() or returncurrentuserapp() or returncurrentuserreqapp()):
         form = SQLFORM.factory(
             Field("address", default='address@email.com', requires=IS_NOT_EMPTY()),
-            Field("original", 'boolean', label="Original Zombie Request ", ),
+            Field("original", 'boolean', label="OZ Request ", ),
             Field("appeal", 'text', requires=IS_NOT_EMPTY(), label="Appeal ",
                   default="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."),
         )

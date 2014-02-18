@@ -63,8 +63,8 @@ def returncurrentuserpart():
 def returncurrentuserapp():
     if auth.is_logged_in() and gameinfo:
         authid = auth.user.id
-        regreq = db((db.registration_app.user_id == authid) & (db.registration_app.game_id == gameinfo.getId())).select()
-        if regreq:
+        regapp = db((db.registration_app.user_id == authid) & (db.registration_app.game_id == gameinfo.getId())).select()
+        if regapp:
             return True
         else:
             return False
