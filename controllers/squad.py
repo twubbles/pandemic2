@@ -3,6 +3,7 @@
 
 # The public squadlist
 def squadlist():
+    gpart = returncurrentuserpart()
     if not gameinfo.getId() and not request.args(0):
         msg = 'No current or upcoming game!'
         return dict(squads=False, gid=False,msg=msg)
@@ -10,9 +11,12 @@ def squadlist():
         squads=db(db.squads.game_id==request.args(0)).select(orderby='<random>')
         msg= ''
         return dict(squads=squads, gid=request.args(0),msg=msg)
-    else:
-        if not gpart.game_part.squad_id and not gpart.game_part.squad_apps:
-            msg = A("Create Squad", _class='btn btn-success btn-lg pull-right', _href=URL(c='squad', f='createsquadapp'))
+    elif gameinfo.getId():
+        if gpart:
+            if not gpart.game_part.squad_id and not gpart.game_part.squad_apps:
+                msg = A("Create Squad", _class='btn btn-success btn-lg pull-right', _href=URL(c='squad', f='createsquadapp'))
+            else:
+                msg= ''
         else:
             msg= ''
         squads=db(db.squads.game_id==gameinfo.getId()).select(orderby='<random>')
