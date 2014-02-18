@@ -5,14 +5,6 @@ def index():
     redirect(URL(c='default', f='index'))
 
 
-# events page
-def eventfeed():
-    events = db.executesql('SELECT * FROM bite_event ORDER BY id DESC;', as_dict=True)
-    zombienames = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == currentgame())).select(
-        db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.game_part.id)
-    return dict(events=events, zombienames=zombienames)
-
-
 @auth.requires_login()
 def resetregistration():
     if not returncurrentuserpart() and returncurrentuserapp() and gameinfo.checkReg():
@@ -42,7 +34,7 @@ def register():
             if esplit[1] in emaildoms:
                 authid = auth.user.id
                 regcode = generatebitecode()
-                message = "This is your registration code: * " + regcode + " *. Head to http://leetmeatgolem.pythonanywhere.com/pandemic/gamectrl/register to use it."
+                message = "This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
                 results = sendemail(useremail, "HvZ Registration code", message)
                 db.registration_app.insert(user_id=authid, game_id=gameinfo.getId(), registration_code=regcode,
                                            original_request=form.vars.Original, created=request.now,
@@ -172,7 +164,7 @@ def bitecodepg():
     gpart = returncurrentuserpart()
     if (gpart.creature_type.zombie or gpart.creature_type.hidden) and not isZombieDead(gpart):
         if request.args(0):
-            form = SQLFORM.factory(Field("Bitecode", default='request.args(0)'), Field("Lat", default='', writable=True, requires=IS_NOT_EMPTY()),
+            form = SQLFORM.factory(Field("Bitecode", default=request.args(0)), Field("Lat", default='', writable=True, requires=IS_NOT_EMPTY()),
                                Field("Long", writable=True, requires=IS_NOT_EMPTY()), submit_button="Bite!", )
         else:
             form = SQLFORM.factory(Field("Bitecode", default=''), Field("Lat", writable=True, requires=IS_NOT_EMPTY()),

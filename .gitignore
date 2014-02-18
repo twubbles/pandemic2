@@ -8,7 +8,7 @@
 *.scss
 *.rb
 .idea/
-static/sass
+static/sass/
 models/db.py
 sessions/
 errors/
@@ -17,16 +17,12 @@ static/uploads/
 cache/
 cron/
 private/
-static/images/
 modules/fbappauth.py
 modules/fbappauth.pyc
 modules/fbappauth.py.bak
 models/mailer.py
 models/mailer.py.bak
 static/.sass-cache/
-static/fonts/
 static/images/
 databases/
 languages/
-static/js/
-static/

@@ -2,7 +2,7 @@
 
 
 <hr/>
-<div class="container-fluid">
+<div class="container-fluid" id="defaultview">
 <div class="row">
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-1 col-lg-offset-1">
 
@@ -28,8 +28,8 @@ onclick='postToFeed(); return false;'/>
       function postToFeed() {
         var obj = {
           method: 'feed',
-            redirect_uri: '127.0.0.1:8000',
-          link: 'leetmeatgolem.pythonanywhere.com',
+            redirect_uri: 'http://www.umasshvz.com',
+          link: 'http://www.umasshvz.com',
           picture: 'http://i.imgur.com/QDGEJpR.png',
           name: 'UMASS Amherst Humans vs Zombies',
             caption: '{{=results}}!',

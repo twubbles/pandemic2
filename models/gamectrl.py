@@ -7,14 +7,12 @@ response.static_version = '1.0.0'
 # Generates a 12 character bitecode in hexidecimal.
 def generatebitecode():
     import uuid
-
     return str(uuid.uuid4().hex)[:12].upper()
 
 
 # Generates a 14 character curecode in hexidecimal.
 def generatecurecode():
     import uuid
-
     return str(uuid.uuid4().hex)[:14].upper()
 
 
@@ -28,11 +26,10 @@ def currentgame():
         return False
 
 
-# checks if there is an upcoming but not yet started game
+# checks if current game is an upcoming game
 def isgameupcoming():
-    cgame = db(db.games).select(orderby=~db.games.created).last()
-    if cgame:
-        if getesttime() < converttotz(cgame.end_at) and getesttime() < converttotz(cgame.start_at):
+    if gameinfo.getId():
+        if getesttime() < converttotz(gameinfo.gameStart()):
             return True
         else:
             return False
@@ -52,7 +49,7 @@ def returncurrentuserpart():
             db.game_part.id, db.game_part.bitecode, db.game_part.zombie_expires_at, db.game_part.squad_leader,
             db.game_part.squad_id, db.creature_type.hidden,
             db.game_part.banned, db.creature_type.name, db.creature_type.zombie, db.creature_type.immortal,
-            db.game_part.squad_apps,
+            db.game_part.squad_apps,cache=(cache.ram, 5), cacheable=True
         )
         if user:
             return user[0]

@@ -1,27 +1,14 @@
 # -*- coding: utf-8 -*-
-response.static_version = '1.0.0'
+response.static_version = '2.0.0'
 
 if not request.env.web2py_runtime_gae:
-    ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL('mysql://username:password@mysqlhost:3306/databasename',pool_size=1,check_reserved=['all'])
+    db = DAL('mysql://login:password@localhost:3307/databasename',pool_size=1,check_reserved=['all'])
 else:
-    ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore')
-    ## store sessions and tickets there
+
     session.connect(request, response, db=db)
-    ## or store session in Memcache, Redis, etc.
-    ## from gluon.contrib.memdb import MEMDB
-    ## from google.appengine.api.memcache import Client
-    ## session.connect(request, response, db = MEMDB(Client()))
 
-## by default give a view/generic.extension to all actions from localhost
-## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
-## (optional) optimize handling of static files
-# response.optimize_css = 'concat,minify,inline'
-# response.optimize_js = 'concat,minify,inline'
-
-
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db)
@@ -124,7 +111,8 @@ db.define_table('creature_type',
     Field('name', length=32, required=True, requires=IS_NOT_EMPTY()),
     Field('immortal', 'boolean'),
     Field('created', 'datetime', default=request.now, writable=False),
-    migrate=False
+    Field('hidden', 'boolean'),
+    migrate=True
     )
 
 # Defines the game participation. Each is linked to an auth_user and game.
@@ -155,8 +143,10 @@ db.define_table('bite_event',
     Field('human_id', db.game_part),
     Field('game_id', db.games),
     Field('bite_shared', 'boolean'),
+    Field('lat', 'double', default=0),
+    Field('lng', 'double', default=0),
     Field('created', 'datetime', default=request.now, writable=False),
-    migrate=False
+    migrate=True
     )
 
 
@@ -167,7 +157,9 @@ db.define_table('cures',
     Field('expiration', 'datetime', required=True),
     Field('used', 'boolean'),
     Field('created', 'datetime', default=request.now, writable=False),
-    migrate=False
+    Field('admincreator', db.auth_user, writable=False),
+    Field('cure_user', db.game_part),
+    migrate=True
     )
 
 # Defines the table for cure events
@@ -197,10 +189,10 @@ db.define_table('missions',
 db.define_table('squads',
     Field('game_id', db.games),
     Field('horde','boolean', default=False),
-    Field('name', length=128, required=True),
+    Field('name', length=58, required=True),
     Field('description','text', length=2000,required=True, requires=IS_NOT_EMPTY()),
-    Field('image','upload', requires=IS_IMAGE(),required=True, uploadfolder=request.folder+'static/images'),
-    Field('thumb','upload', uploadfolder=request.folder+'uploads', compute=lambda r: resize_image(r['image'], (600,150), 'thumb')),
+    Field('image','upload'),
+    Field('thumb','upload'),
     Field('leader', db.game_part),
     Field('created', 'datetime', default=request.now, writable=False),
     Field('sigid', 'text'),
@@ -213,7 +205,7 @@ db.define_table('squads_app',
     Field('horde','boolean', default=False),
     Field('name', length=128, required=True),
     Field('description','text', length=2000, required=True, requires=IS_NOT_EMPTY()),
-    Field('image','upload', requires=IS_IMAGE(),required=True, uploadfolder=request.folder+'static/images'),
+    Field('image','upload', requires=IS_IMAGE(),required=True),
     Field('players','list:integer'),
     Field('leader', db.game_part),
     Field('reviewed','boolean', default=False),
@@ -228,9 +220,10 @@ db.define_table('squads_app',
 db.define_table('squads_member_app',
     Field('player_id', db.game_part),
     Field('squad_id', db.squads),
+    Field('description',length=512),
     Field('reviewed','boolean', default=False),
     Field('approved','boolean', default=False),
-    Field('created', 'datetime', default=request.now, writable=False),
+    Field('created', 'datetime', default=request.now, writable=True),
     migrate=False
     )
 
@@ -350,7 +343,7 @@ db.define_table('sassypost',
 #field validators
 db.missions.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
 db.game_part.squad_id.requires = IS_NULL_OR(IS_IN_DB(db, db.squads,'%(name)s',))
-db.game_part.creature_type.requires = IS_IN_DB(db, db.creature_type,'%(name)s', zero=T('choose one'))
+db.game_part.creature_type.requires = IS_IN_DB(db, db.creature_type,'%(name)s hiddenoz: %(hidden)s', zero=T('choose one'))
 db.game_part.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
 db.game_part.user_id.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
 db.squads.game_id.requires = IS_IN_DB(db, db.games,'%(game_name)s', zero=T('choose one'))
@@ -373,3 +366,6 @@ db.squads_member_app.player_id.requires = IS_IN_DB(db, db.game_part,'%(id)s',)
 db.squad_posts.squad_id.requires = IS_IN_DB(db, db.squads,'%(name)s',)
 db.squads_app.reviewer.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
 db.registration_request.reviewer.requires = IS_IN_DB(db, db.auth_user,'%(first_name)s %(last_name)s',)
+
+
+

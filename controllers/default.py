@@ -32,7 +32,7 @@ def roster():
             db.game_part.creature_type == db.creature_type.id)).select(
             db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
             db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
-            cache=(cache.ram, 5), cacheable=True)
+            cache=(cache.ram, 60), cacheable=True)
         humanTotal = 0
         zombieTotal = 0
         deadTotal = 0
@@ -51,14 +51,7 @@ def roster():
 def index():
     # This builds the globalvars variable that appears at the top of the landing page
     if gameinfo.isGameActive():
-        if not isgameupcoming():
-            stimer = (gameinfo.starveTimer() / 60) / 60
-            globalvars = 'Stun Timer: ' + str(gameinfo.stunTime()) + ' mins - Starve Timer: ' + str(stimer) + ' hrs'
-            #grabs the 4 most recent bite events
-            events = db(db.bite_event.game_id == gameinfo.getId()).select(orderby=~db.bite_event.created,
-                                                                          limitby=(0, 12), cache=(cache.ram, 5),
-                                                                          cacheable=True)
-        elif isgameupcoming():
+        if isgameupcoming():
             events = False
             count = abs(getesttime() - converttotz(gameinfo.gameStart()))
             hcount = (count.seconds / 60) / 60
@@ -67,6 +60,13 @@ def index():
             globalvars = str(hcount) + ' hours ' + str(mcount) + ' mins ' + str(scount) + ' secs '
             if count.days:
                 globalvars = str(count.days) + ' days ' + globalvars
+            globalvars = gameinfo.getName() + ' begins in ' + globalvars
+        else:
+            stimer = (gameinfo.starveTimer() / 60) / 60
+            globalvars = 'Stun Timer: ' + str(gameinfo.stunTime()) + ' mins - Starve Timer: ' + str(stimer) + ' hrs'
+
+
+
     else:
         events = False
         globalvars = 'No upcoming game yet'
@@ -74,21 +74,34 @@ def index():
         missions = missionfeed(currentgame())
     else:
         missions = False
-    posts = db((db.auth_user.id == db.posts.author)).select(db.posts.title, db.posts.title, db.posts.description,
+    posts = db((db.auth_user.id == db.posts.author)).select(db.posts.id, db.posts.title,
+                                                            db.posts.description,
                                                             db.posts.pub_date, db.auth_user.first_name,
                                                             db.auth_user.last_name, db.auth_user.id,
-                                                            orderby=~db.posts.pub_date, limitby=(0,8), cache=(cache.ram, 300),
+                                                            orderby=~db.posts.pub_date, limitby=(0, 8),
+                                                            cache=(cache.ram, 300),
                                                             cacheable=True)
     return dict(missions=missions, globalvars=globalvars, posts=posts)
 
 
 # View post page.
-def view_post():
-    post = db.posts[request.args(0)] or redirect(URL(r=request, f='index'))
-    return dict(post=post, comments=False)
+def viewpost():
+    if request.args(0):
+        pid = request.args(0)
+        post = db((db.auth_user.id == db.posts.author) & (db.posts.id == pid)).select(db.posts.id,
+                                                                                      db.posts.title,
+                                                                                      db.posts.description,
+                                                                                      db.posts.pub_date,
+                                                                                      db.auth_user.first_name,
+                                                                                      db.auth_user.last_name,
+                                                                                      db.auth_user.id)
+        return dict(post=post)
+    else:
+        redirect(URL(r=request, f='index'))
+
+        # Returns the rules doc for the game.
 
 
-# Returns the rules doc for the game. In the future I may make this a page and not a file.
 def rules():
     redirect(URL('static', 'hvzrules.pdf'))
 
@@ -116,7 +129,7 @@ def userinfo():
             db.games.game_name, left=[db.squads.on(db.squads.id == db.game_part.squad_id),
                                       db.bite_event.on(db.bite_event.zombie_id == db.game_part.id)],
             groupby=~db.game_part.game_id,
-            cache=(cache.ram, 1), cacheable=True)
+            cache=(cache.ram, 60), cacheable=True)
         return dict(cparts=cparts)
     else:
         redirect(URL(r=request, f='index'))

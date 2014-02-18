@@ -12,7 +12,7 @@
 
     <div class="panel panel-info">
         <h3 class="hidden-xs centertext">{{=globalvars}}</h3>
-        <h4 class="visible-xs centertext">{{=globalvars}}</h4>
+        <h5 class="visible-xs centertext">{{=globalvars}}</h5>
     </div>
     <div class="row featurette">
 
@@ -54,63 +54,38 @@
         </div>
 
         <div class="col-md-5">
-            {{if missions:}}
-            <h2 class="sub-header">Missions</h2>
 
-            <div class="table">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Number</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{num=0}}
-                    {{for mission in missions:}}
-                    {{if isunlocked(mission) and not isover(mission):}}
-                    <tr style="background-color: #5cb85c;">
-                        {{elif isover(mission):}}
-                    <tr style="background-color: #999;">
-                        {{else:}}
-                    <tr style="background-color: #428bca;">
-                        {{pass}}
-                        <td>Mission {{=num}}</td>
-                        <td>{{=pretty_date(mission.mission_start)}}</td>
-                        <td>{{=pretty_date(mission.mission_end)}}</td>
-                    </tr>
-                    {{num+=1}}
-                    {{pass}}
-                    </tbody>
-                </table>
-            </div>
-            {{pass}}
+            <h2 class="sub-header">Events</h2>
+
+            <p>No Events yet</p>
+
         </div>
     </div>
 </div>
 
 <hr class="featurette-divider">
 
-<div class="container" >
-    {{for post in posts:}}
-    <div class="row" id="postfeed">
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 item">
-            <div class="panel panel-primary">
-                <div class="panel-heading"> {{=post.posts.title}}</div>
-                <div class="panel-body">
-                    {{=XML(post.posts.description,sanitize=True)}}
-                    <p><em>{{=pretty_date(post.posts.pub_date)}}</em> --- {{=(post.auth_user.first_name + ' '
-                        +post.auth_user.last_name)}}</p>
-                </div>
-            </div>
-        </div>
-        {{pass}}
+<div class="container">
 
+    <div class="row" id="postfeed">
+        {{for post in posts:}}
+
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 item">
+                <div class="panel panel-default">
+                    <div class="panel-heading "><a href="{{=URL('default','viewpost', args=post.posts.id)}}"> {{=post.posts.title}}</a></div>
+                    <div class="panel-body">
+                        {{=XML(post.posts.description,sanitize=True)}}
+                        <p><em>{{=pretty_date(post.posts.pub_date)}}</em> --- {{=(post.auth_user.first_name + ' '+post.auth_user.last_name)}}</p>
+                    </div>
+                </div>
 
     </div>
+    {{pass}}
+
 
 </div>
+
+
 
 
 {{end}}

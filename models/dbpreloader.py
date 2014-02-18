@@ -85,17 +85,20 @@ class GameVars:
 
 # Checks to see if there is an active game. If there is it will create a GameVars object with the vars. If not it creates an empty GameVars object. NEW
 current = False
-games = db(db.games).select(db.games.id, db.games.start_at, db.games.end_at, db.games.time_per_food,
-                            db.games.signup_start_at, db.games.signup_end_at,
-                            db.games.stun_timer, db.games.cure_timer, db.games.bite_shares_per_food,
-                            db.games.pause_starts_at,db.games.game_name,
-                            db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,)
-if getesttime() < converttotz(games.last().end_at):
-    current = games.last()
-if current:
-    gameinfo = GameVars(current.id, current.start_at, current.end_at, current.time_per_food, current.stun_timer,
-                        current.cure_timer,
-                        current.bite_shares_per_food, current.pause_starts_at, current.pause_ends_at, current.created,
-                        current.posttimeout, current.signup_start_at, current.signup_end_at, current.game_name)
-else:
+try:
+    games = db(db.games).select(db.games.id, db.games.start_at, db.games.end_at, db.games.time_per_food,
+                                db.games.signup_start_at, db.games.signup_end_at,
+                                db.games.stun_timer, db.games.cure_timer, db.games.bite_shares_per_food,
+                                db.games.pause_starts_at,db.games.game_name,
+                                db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,cache=(cache.ram, 600), cacheable=True)
+    if getesttime() < converttotz(games.last().end_at):
+        current = games.last()
+    if current:
+        gameinfo = GameVars(current.id, current.start_at, current.end_at, current.time_per_food, current.stun_timer,
+                            current.cure_timer,
+                            current.bite_shares_per_food, current.pause_starts_at, current.pause_ends_at, current.created,
+                            current.posttimeout, current.signup_start_at, current.signup_end_at, current.game_name)
+    else:
+        gameinfo = GameVars()
+except:
     gameinfo = GameVars()
