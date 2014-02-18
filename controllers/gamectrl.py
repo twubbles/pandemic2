@@ -78,7 +78,7 @@ def register():
 # controller for non-five-college student registration request
 @auth.requires_login()
 def registerrequest():
-    if gameinfo.checkReg() and not (returncurrentuserpart() or returncurrentuserapp() or returncurrentuserreqapp()):
+    if gameinfo.checkReg() and not returncurrentuserpart() and not (returncurrentuserapp() or returncurrentuserreqapp()):
         form = SQLFORM.factory(
             Field("address", default='address@email.com', requires=IS_NOT_EMPTY()),
             Field("original", 'boolean', label="OZ Request ", ),

@@ -39,7 +39,7 @@ def isgameupcoming():
 
 # Looks up and returns the game participation info for the current user.
 def returncurrentuserpart():
-    if auth.is_logged_in() and gameinfo:
+    if auth.is_logged_in() and gameinfo.getId():
         authid = auth.user.id
         user = db((db.auth_user.id == authid) & (db.auth_user.id == db.game_part.user_id) &
                   (db.games.id == db.game_part.game_id) & (db.games.id == gameinfo.getId()) & (
@@ -61,7 +61,7 @@ def returncurrentuserpart():
 
 # Returns the game registation app info for the current user. Returns if it exists or not.
 def returncurrentuserapp():
-    if auth.is_logged_in() and gameinfo:
+    if auth.is_logged_in() and gameinfo.getId():
         authid = auth.user.id
         regapp = db((db.registration_app.user_id == authid) & (db.registration_app.game_id == gameinfo.getId())).select()
         if regapp:
@@ -76,7 +76,7 @@ def returncurrentuserapp():
 def returncurrentuserreqapp():
     if auth.is_logged_in():
         authid = auth.user.id
-        regreq = db((db.registration_request.user_id == authid) & (db.registration_app.game_id == gameinfo.getId())).select()
+        regreq = db((db.registration_request.user_id == authid) & (db.registration_request.game_id == gameinfo.getId())).select()
         if regreq:
             return True
         else:
