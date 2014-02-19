@@ -16,16 +16,6 @@ def generatecurecode():
     return str(uuid.uuid4().hex)[:14].upper()
 
 
-# Checks to see if there is an active game. If there is it returns the game ID. If not it returns False. DEPRICATED
-def currentgame():
-    games = db(db.games).select(orderby=~db.games.created, limitby=(0, 1))
-    for game in games:
-        if converttotz(game.end_at) > getesttime():
-            return game.id
-    else:
-        return False
-
-
 # checks if current game is an upcoming game
 def isgameupcoming():
     if gameinfo.getId():
@@ -85,20 +75,6 @@ def returncurrentuserreqapp():
         return False
 
 
-# returns a new starve timer based on the current time per food DEPRICATED
-def zombiebitefood(time):
-    newtime = getesttime() + timedelta(seconds=gameinfo.foodtime())
-    return newtime
-
-
-# Checks to see if a cure has expired. DEPRICATED
-def isexpired(cure):
-    if converttotz(cure.expiration) > getesttime():
-        return False
-    else:
-        return True
-
-
 # Checks to see if a cure has expired. NEW takes a joined row item as args
 def isExpiredCure(cure):
     if converttotz(cure.cures.expiration) > getesttime():
@@ -120,41 +96,14 @@ def isZombieDead(user):
         return False
 
 
-# Checks to see if a player has starved. DEPRECATED
-def isdead(user):
-    if db.creature_type(user.creature_type).zombie:
-        if converttotz(user.zombie_expires_at) > getesttime() and db.creature_type(user.creature_type).zombie:
-            return False
-        elif db.creature_type(user.creature_type).immortal:
-            return False
-        else:
-            return True
-    else:
-        return False
-
-
-# checks to see if a player's infection is past the cure_timer. Will return False if there is no bite_event. DEPRICATED
-def isinfected(user):
-    gd = gameinfo.getId()
-    bevent = db((db.bite_event.human_id == user.id) & (db.bite_event.game_id == gd)).select().last()
-    if bevent:
-        inftimer = getesttime() - converttotz(bevent.created)
-        if gameinfo.cureTime() > inftimer.seconds:
-            return False
-        else:
-            return True
-    else:
-        return False
-
-
-# Checks to see if a mission has unlocked for non-admins.
+# Checks if mission details have unlocked.
 def isunlocked(mis):
     if converttotz(mis.mission_reveal) < getesttime():
         return True
     else:
         return False
 
-
+# Checks if a mission is over.
 def isover(mis):
     if converttotz(mis.mission_end) < getesttime():
         return True
@@ -176,12 +125,15 @@ def totalkills(user, game, total):
         else:
             return bites
 
+# will return all of the missions for a game
 def missionfeed(gameid):
     if gameid:
         return db(db.missions.game_id == gameid).select(cache=(cache.ram, 15), cacheable=True)
     else:
         return False
 
+
+# form validator for the geolocation information on bitecodes. it is hardcoded for the umass amherst campus area
 def validategeo(form):
     lat = form.vars.Lat
     lng = form.vars.Long
@@ -197,12 +149,14 @@ def validategeo(form):
         form.vars.Lat = lat
         form.vars.Long = lng
 
+# form validator for prompts requiring typed confirmation of an action. requires "YES"
 def validateconfirm(form):
     if not (form.vars.Confirm == "YES"):
         form.errors.Confirm = 'You did not confirm the action'
     else:
         form.vars.Confirm = form.vars.Confirm
 
+# form validator for registration requests
 def validateemail(form):
     defappeal="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."
     if form.vars.address == 'address@email.com':
@@ -214,3 +168,31 @@ def validateemail(form):
         form.vars.address = form.vars.address
         form.vars.appeal = form.vars.appeal
         form.vars.original = form.vars.original
+
+
+# Forum access checker
+def forumAccess(gpart,forumid):
+    foruminfo = db.forum_forums(forumid)
+    if gpart and foruminfo:
+        if auth.has_membership('admins' or 'mods'):
+            return True
+        elif foruminfo.zombie and gpart.creature_type.zombie and not isZombieDead(gpart):
+            return True
+        elif foruminfo.human and not gpart.creature_type.zombie:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+# form validator for forum posts
+def forumCheck(form):
+    user = db((db.game_part.user_id == form.vars.author) & (db.game_part.game_id == gameinfo.getId())).select().last()
+    timecheck = converttotz(user.lastpost + timedelta(minutes=gameinfo.postTimer()))
+    if  timecheck > getesttime():
+        phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>').last()
+        form.errors.author = phrase.phrase
+        form.errors.body = phrase.phrase
+    else:
+        user.update_record(lastpost=request.now)

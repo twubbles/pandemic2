@@ -6,27 +6,28 @@
 <div class="container">
     <div class="row">
 
-
+          {{for post in posts:}}
         <div class="col-sm-12 col-xs-12 col-md-12 col-ls-12 ">
             <div class="page-header">
-                <h1>{{=post[0].posts.title}}</h1>
+                <h1>{{=post.posts.title}}</h1>
 
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 col-md-12 col-ls-12 ">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h5><p><em>{{=pretty_date(post[0].posts.pub_date)}}</em> --- {{=(post[0].auth_user.first_name + ' '+post[0].auth_user.last_name)}}</p></h5>
+                <h5><p><em>{{=pretty_date(post.posts.pub_date)}}</em> --- {{=(post.auth_user.first_name + ' '+post.auth_user.last_name)}}</p></h5>
                 </div>
 
                 <div class="panel-body">
                     <div class="well">
-                        {{=XML(post[0].posts.description,sanitize=True)}}
+                        {{=XML(post.posts.description,sanitize=True)}}
 
                     </div>
                 </div>
             </div>
         </div>
+        {{pass}}
     </div>
 </div>
 

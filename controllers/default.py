@@ -68,7 +68,7 @@ def index():
         events = False
         globalvars = 'No upcoming game yet'
     if gameinfo.isGameActive():
-        missions = missionfeed(currentgame())
+        missions = missionfeed(gameinfo.getId())
     else:
         missions = False
     posts = db((db.auth_user.id == db.posts.author)).select(db.posts.id, db.posts.title,
@@ -85,14 +85,10 @@ def index():
 def viewpost():
     if request.args(0):
         pid = request.args(0)
-        post = db((db.auth_user.id == db.posts.author) & (db.posts.id == pid)).select(db.posts.id,
-                                                                                      db.posts.title,
-                                                                                      db.posts.description,
-                                                                                      db.posts.pub_date,
-                                                                                      db.auth_user.first_name,
-                                                                                      db.auth_user.last_name,
-                                                                                      db.auth_user.id)
-        return dict(post=post)
+        posts = db((db.auth_user.id == db.posts.author) & (db.posts.id == pid)).select(
+                    db.posts.id,db.posts.title,db.posts.description,db.posts.pub_date,
+                    db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id,cache=(cache.ram, 120),cacheable=True)
+        return dict(posts=posts)
     else:
         redirect(URL(r=request, f='index'))
 

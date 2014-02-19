@@ -221,8 +221,6 @@ def bitecodepg():
         redirect(URL(c='default', f='index'))
 
 
-
-
 # human bitecode qrcode page
 @auth.requires_login()
 def bitecodeqrcodepage():

@@ -33,9 +33,5 @@ require.config({
 });
 require(["prefixfree", "jquery", "jqueryui","bootstrap","inittimepicker","admintable","defaultview","loadgeo", "textareacheck","postpage"], 
 function (prefixfree, $, jqueryui, bootstrap, inittimepicker, admintable, defaultview,loadgeo,textareacheck,postpage) {
-require(["jqueryui","bootstrap"],
-function (jqueryui, bootstrap) {
 
-	
-});
 });

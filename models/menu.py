@@ -86,11 +86,13 @@ if gpart and auth.is_logged_in() and not gpart.game_part.banned:
                 _class=''),_class='dropdown-menu', _id='gamemenu'),
                 _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')
                 ]
+
 # Menu if banned
 elif gpart and gpart.game_part.banned:
     response.statusmenu = [LI(A('BANNED',_href=URL('gamectrl', 'banned'), _class="",),_class='')]
 
-elif not gpart and currentgame() or isgameupcoming():
+# menu if no current gamepart and registration open
+elif not gpart and gameinfo.checkReg:
     response.statusmenu = [
         LI(A('Register',_href=URL('gamectrl', 'register'), _class="btn btn-default navbar-btn", _id='loginnavbutton'),_class=' ')
     ]
@@ -101,14 +103,14 @@ elif not gpart and currentgame() or isgameupcoming():
 response.menu = [
     LI(A('Game',UL(
         LI(A('Roster', _href=URL('default', 'roster')), _class=''),
-        LI(A('Forums', _href=URL('default', 'index')), _class=''),
+        LI(A('Forums', _href=URL('forums', 'index')), _class=''),
         LI(A('Squads', _href=URL('squad', 'squadlist')), _class=''),
         LI(A('Ruleset', _href=URL('default', 'rules')), _class=''),_class='dropdown-menu', _id='gamemenu'),
         _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')
         ]
 
 # Admin menu for logged in admins
-if auth.is_logged_in() and auth.has_membership('admins'):
+if auth.is_logged_in() and auth.has_membership('admins' or 'mods'):
     response.adminmenu = [
         LI(A('Admin',_href=URL('admin', 'index'), _class=""),_class=' ')
         ]

@@ -1,0 +1,45 @@
+{{extend 'layout.html'}}
+{{block layer01}}
+
+{{=forumnav}}
+
+{{end}}
+
+{{block layer02}}
+<div class="container-fluid" id="defaultview">
+    <div class="page-header">
+        <h2><b>{{=cata.name}}</b></h2>
+
+    </div>
+    <div class="row">
+        {{for cat in listcats:}}
+        <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 ">
+          {{if cat.game_id == gameinfo.getId():}}
+             <div class="panel panel-primary">
+           {{else:}}
+              <div class="panel panel-default">
+            {{pass}}
+                <div class="panel-heading">
+                    <a href="{{=URL('forums','viewcat', args=cat.id)}}" style="color:black;">{{=cat.name}}</a>
+                </div>
+                <div class="panel-body">
+                    {{=cat.description}}
+                </div>
+            </div>
+        </div>
+        {{pass}}
+
+    </div>
+</div>
+
+{{end}}
+
+{{block layer03}}
+
+{{end}}
+
+
+{{block postfooter}}
+
+
+{{end}}

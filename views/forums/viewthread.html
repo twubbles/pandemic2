@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+{{include 'web2py_ajax.html'}}
+
+
+
+{{block layer01}}
+
+{{=forumnav}}
+
+{{end}}
+
+
+
+{{block layer02}}
+<div class="container-fluid"  id="defaultview">
+    <div class="page-header"><h2><b>{{=threadinfo.name}}</b></h2>
+    <div class="row" >
+        <div class=" col-xs-12 col-sm-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 panel panel-primary ">
+         {{=LOAD('forums','getthreadposts.load',ajax=True,times=1000,timeout=5000,user_signature=True, args=[gpart.auth_user.id, threadinfo.id])}}
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel">
+
+
+        {{=LOAD('forums','posttothread.load',ajax=True,user_signature=True,content='Posting...', args=[gpart.auth_user.id, threadinfo.id])}}
+
+
+
+        </div>
+    </div>
+</div>
+
+{{end}}
+
+
+{{block postfooter}}
+
+    <script src="{{=URL('static','js/jquery.markitup.js')}}"></script>
+    {{end}}

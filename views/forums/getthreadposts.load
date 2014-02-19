@@ -1,0 +1,34 @@
+ 
+  <table class="table">
+                <thead>
+                <tr>
+
+                <th></th>
+                <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{for post in posts:}}
+                <tr>
+                <td>
+                {{if post.auth_user.handle:}}
+                {{=A(post.auth_user.handle,  _href=URL(c='default',f='userinfo', args=post.auth_user.id))}}
+                {{else:}}
+                {{=A(post.auth_user.first_name + ' ' + post.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=post.auth_user.id))}}
+                {{pass}}
+                {{if auth.user.id == post.auth_user.id or auth.has_membership('admins' or 'mods'):}}
+                <p> <a href="{{=URL('forums', 'editpost', args=[post.forum_posts.id])}}" class="btn btn-warning btn-xs pull-right" >Edit</a></p>
+                 {{pass}}
+
+
+
+                    {{=XML(post.forum_posts.body,sanitize=True)}}
+                    <p><em>{{=pretty_date(post.forum_posts.created)}}</em></p>
+                </td>
+                <td></td>
+                </tr>
+                {{pass}}
+                </tbody>
+
+
+            </table>

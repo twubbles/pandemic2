@@ -1,0 +1,60 @@
+{{extend 'layout.html'}}
+
+{{block layer01}}
+
+{{=forumnav}}
+
+{{end}}
+
+{{block layer02}}
+<div class="container-fluid" id="defaultview">
+    <div class="page-header"><h2><b>{{=foruminfo.name}}</b> <small>{{=foruminfo.description}}</small></h2>
+        <a href="{{=URL('forums', 'createpost', args=[foruminfo.id])}}" class="btn btn-warning btn-xs" >New Thread</a></div>
+    <div class="row">
+
+
+        <div class="col-sm-11 col-xs-11 col-md-11 col-ls-11 panel margin-sm">
+
+            <table class="table">
+                <thead>
+                <tr>
+                <th>Thread Name</th>
+                <th class="hidden-xs">Author</th>
+                <th>Created</th>
+                <th class="hidden-xs">Posts</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{for thread in threads:}}
+                <tr>
+                <td>{{=A(thread.forum_threads.name, _href=URL(c='forums',f='viewthread', args=thread.forum_threads.id))}}</td>
+
+                <td class="hidden-xs">
+                {{if thread.auth_user.handle:}}
+                {{=A(thread.auth_user.handle,  _href=URL(c='default',f='userinfo', args=thread.auth_user.id))}}
+                {{else:}}
+                {{=A(thread.auth_user.first_name + ' ' + thread.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=thread.auth_user.id))}}
+                {{pass}}
+                </td>
+                <td>
+                    {{=pretty_date(thread.forum_threads.created)}}
+
+                </td>
+                <td class="hidden-xs">{{=thread['COUNT(forum_posts.thread_id)']}}</td>
+                </tr>
+                {{pass}}
+                </tbody>
+
+
+            </table>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+{{end}}
+
+

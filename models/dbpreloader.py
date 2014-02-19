@@ -89,7 +89,7 @@ try:
                                 db.games.signup_start_at, db.games.signup_end_at,
                                 db.games.stun_timer, db.games.cure_timer, db.games.bite_shares_per_food,
                                 db.games.pause_starts_at,db.games.game_name,
-                                db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,cache=(cache.ram, 60), cacheable=True)
+                                db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,cache=(cache.ram, 300), cacheable=True)
     if getesttime() < converttotz(games.last().end_at):
         current = games.last()
     if current:

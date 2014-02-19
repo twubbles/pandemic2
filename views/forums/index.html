@@ -1,0 +1,53 @@
+{{extend 'layout.html'}}
+{{block layer01}}
+
+{{=forumnav}}
+
+{{end}}
+
+{{block layer02}}
+<div class="container-fluid" id="defaultview">
+    <div class="page-header"><h2><b>Forums</b></h2></div>
+    {{for cat in listcats:}}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="{{=URL('forums', 'index')}}">{{=cat.name}}</a>
+
+
+        </div>
+    </nav>
+    <div class="row">
+    {{for forum in listforums:}}
+    {{if cat.id==forum.cat_id:}}
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+           <a href="{{=URL('forums','viewforum', args=forum.id)}}" style="text-decoration:none;">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>{{=forum.name}}</h4></div>
+                <div class="panel-body">
+                    {{=forum.description}}
+                </div>
+            </div>
+            </a>
+
+
+            </div>
+            {{pass}}{{pass}}
+
+
+
+    </div>
+    {{pass}}
+
+</div>
+
+{{end}}
+
+
+
+
+{{block postfooter}}
+
+
+{{end}}

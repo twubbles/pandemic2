@@ -76,14 +76,14 @@ def createsquadapp():
 # This is the controller for the squad hq page for squad members.
 @auth.requires_login()
 def squadhq():
-    squad = db.squads(request.args[0]) or redirect(URL(c='default', f='index'))
+    squad = db.squads(request.args(0)) or redirect(URL(c='default', f='index'))
     gpart = returncurrentuserpart()
-    if gpart.game_part.squad_id == request.args[0]:
+    if gpart.game_part.squad_id == request.args(0):
         if squad:
             posts = db(db.squad_posts.squad_id == request.args(0)).select(orderby=~db.squad_posts.created)
             members = db(
                 (db.auth_user.id == db.game_part.user_id) & (db.game_part.creature_type == db.creature_type.id) & (
-                    db.squads.id == db.game_part.squad_id) & (db.squads.id == request.args[0])).select(
+                    db.squads.id == db.game_part.squad_id) & (db.squads.id == request.args(0))).select(
                 db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.auth_user.id,
                 db.game_part.zombie_expires_at, db.game_part.squad_leader, db.game_part.squad_title,
                 db.creature_type.name, db.creature_type.zombie, db.creature_type.immortal,
@@ -114,7 +114,7 @@ def squadadmin():
             posts = db(db.squad_posts.squad_id == request.args(0)).select(orderby=~db.squad_posts.created)
             members = db(
                 (db.auth_user.id == db.game_part.user_id) & (db.game_part.creature_type == db.creature_type.id) & (
-                    db.squads.id == db.game_part.squad_id) & (db.squads.id == request.args[0])).select(
+                    db.squads.id == db.game_part.squad_id) & (db.squads.id == request.args(0))).select(
                 db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.auth_user.id,
                 db.game_part.zombie_expires_at, db.game_part.squad_leader, db.game_part.squad_title,
                 db.creature_type.name, db.creature_type.zombie, db.creature_type.immortal, db.game_part.id,
@@ -176,7 +176,7 @@ def editsquadpost():
 # This function is for the SL admin page. It rejects a member application and makes the neccesary database updates.
 @auth.requires_login()
 def denysquadmemberapp():
-    smemappid = request.args[0]
+    smemappid = request.args(0)
     sq = db.squads_member_app(smemappid)
     gpart = returncurrentuserpart()
     sqd = db.squads(sq.squad_id)
@@ -190,7 +190,7 @@ def denysquadmemberapp():
 # This function is for the SL admin page. It approves a member application and makes the neccesary database updates.
 @auth.requires_login()
 def approvesquadmemberapp():
-    sid = request.args[0]
+    sid = request.args(0)
     sq = db.squads_member_app(sid)
     gpart = returncurrentuserpart()
     sqd = db.squads(sq.squad_id)
@@ -206,8 +206,8 @@ def approvesquadmemberapp():
 @auth.requires_login()
 def applytosquad():
     gpart = returncurrentuserpart()
-    if request.args[0] and not gpart.game_part.squad_apps and not gpart.game_part.squad_id:
-        squadinfo = db.squads(request.args[0])
+    if request.args(0) and not gpart.game_part.squad_apps and not gpart.game_part.squad_id:
+        squadinfo = db.squads(request.args(0))
         form = FORM(DIV(TEXTAREA(_style="width: 100%;", _name="Application", _id="appbody")), INPUT
         (_type="submit", _value="Apply"))
         if form.process(session=None, formname='squadapp').accepted:
@@ -215,10 +215,10 @@ def applytosquad():
                 squadapp = db((db.squads_member_app.player_id == gpart.game_part.id) & (db.squads_member_app.reviewed == False)).select()
                 # checks for an existing squad application. if one exists it just updates that one instead of making a new one.
                 if squadapp:
-                    db(db.squads_member_app.player_id == gpart.game_part.id).update(squad_id=request.args[0],
+                    db(db.squads_member_app.player_id == gpart.game_part.id).update(squad_id=request.args(0),
                                                                                     description=form.vars.Application)
                 else:
-                    db.squads_member_app.insert(player_id=gpart.game_part.id, squad_id=request.args[0],
+                    db.squads_member_app.insert(player_id=gpart.game_part.id, squad_id=request.args(0),
                                                 description=form.vars.Application)
             session.flash = 'Application sent!'
             form = ''
@@ -233,7 +233,7 @@ def applytosquad():
 @auth.requires_login()
 def squadtitlechange():
     response.view = 'default.html'
-    uid = request.args[0]
+    uid = request.args(0)
     gpart = returncurrentuserpart()
     if gpart.game_part.squad_leader and db.game_part(uid).squad_id == gpart.game_part.squad_id:
         sqmember = db.game_part(uid) or redirect(URL('error'))
@@ -250,7 +250,7 @@ def squadtitlechange():
 # kick squad member function
 @auth.requires_login()
 def kickmember():
-    uid = request.args[0]
+    uid = request.args(0)
     mem = db.game_part(uid)
     gpart = returncurrentuserpart()
     # checks to make sure that the person getting kicked is in the squad of the person calling the controller and that they are the leader
