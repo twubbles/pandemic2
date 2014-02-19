@@ -6,21 +6,28 @@ import re
 from datetime import datetime
 from datetime import timedelta
 from pytz import timezone
+import pytz
 from gluon.tools import prettydate
 
 # This model has various common functions in it.
 
-# Converts the current time, whatever zone it may be in, to EST, and returns it.
+# Converts the current time, whatever zone it may be in, to EST, and returns it. Set to convert pacific to EST
 def getesttime():
+    pactz = timezone('US/Pacific-New')
     localtz = timezone('US/Eastern')
-    now_utc = datetime.now(timezone('UTC'))
-    now_east = now_utc.astimezone(timezone('US/Eastern'))
+    now_pac = pactz.localize(datetime.now())
+    now_east = now_pac.astimezone(localtz)
+    fmt = "%Y-%m-%d %H:%M:%S"
     return now_east
 
 # Converts TZ unaware datetime objects to EST aware.    
 def converttotz(unaware):
+    pactz = timezone('US/Pacific-New')
+    pactime = pactz.localize(unaware)
     localtz = timezone('US/Eastern')
-    return localtz.localize(unaware)
+    now_east = pactime.astimezone(localtz)
+    fmt = "%Y-%m-%d %H:%M:%S"
+    return now_east
 
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
 def fbphoto(fburl):

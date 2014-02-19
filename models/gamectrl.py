@@ -186,13 +186,16 @@ def forumAccess(gpart,forumid):
         return False
 
 
+def getSassyPost():
+    phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>').last()
+    return phrase.phrase
+
 # form validator for forum posts
 def forumCheck(form):
     user = db((db.game_part.user_id == form.vars.author) & (db.game_part.game_id == gameinfo.getId())).select().last()
     timecheck = converttotz(user.lastpost + timedelta(minutes=gameinfo.postTimer()))
     if  timecheck > getesttime():
-        phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>').last()
-        form.errors.author = phrase.phrase
-        form.errors.body = phrase.phrase
+        form.errors.author = getSassyPost()
+        form.errors.body = getSassyPost()
     else:
         user.update_record(lastpost=request.now)

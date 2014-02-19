@@ -28,7 +28,7 @@
                         <td> Status</td>
                     </tr>
                     {{for player in players:}}
-                    <tr data-toggle="tooltip" data-placement="top" title="{{=prettydate(player.game_part.zombie_expires_at)}}">
+                    <tr data-toggle="tooltip" data-placement="top" title="{{=pretty_date(player.game_part.zombie_expires_at)}}">
                         <td>
                             {{if player.auth_user.handle:}}
                             {{=A(player.auth_user.handle, _href=URL(c='default',f='userinfo',args=player.auth_user.id))}}

@@ -58,7 +58,7 @@ class GameVars:
 
     # checks if registration is open and returns True or False
     def checkReg(self):
-        if self.getEstNow() > self.convertToTz(self.signup_start_at) and self.getEstNow() < self.convertToTz(self.signup_end_at):
+        if getesttime() > converttotz(self.signup_start_at) and getesttime() <  converttotz(self.signup_end_at):
             return True
         else:
             return False

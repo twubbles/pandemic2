@@ -118,7 +118,7 @@
                         <p>{{=XML(post.description[:350],sanitize=True,permitted_tags=['h3','h4','h5','h6','a','strong','em', 'br/', 'i','li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'kbd','img/'],allowed_attributes={'a':['href', 'title'],'img':['src', 'alt']})}}</p>
                     </div>
 
-                    <div class="panel-footer"><p><em>{{=prettydate(post.created)}}</em>
+                    <div class="panel-footer"><p><em>{{=pretty_date(post.created)}}</em>
                         <INPUT type="button" class="btn btn-info btn-xs pull-right" value="Edit"
                                onclick="location.href='{{=URL(c='squad', f='editsquadpost', args=[post.id])}}'"/>
                     </p></div>

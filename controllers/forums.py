@@ -2,8 +2,8 @@
 
 @auth.requires_login()
 def index():
-    listcats = db(db.forum_cats.id).select(db.forum_cats.id, db.forum_cats.name, db.forum_cats.description, db.forum_cats.game_id,cache=(cache.ram, 1), cacheable=True)
-    listforums = db(db.forum_forums.id).select(cache=(cache.ram, 1), cacheable=True)
+    listcats = db(db.forum_cats.id).select(db.forum_cats.id, db.forum_cats.name, db.forum_cats.description, db.forum_cats.game_id,orderby=~db.forum_cats.id, cache=(cache.ram, 600), cacheable=True)
+    listforums = db(db.forum_forums.id).select(cache=(cache.ram, 600), cacheable=True)
     forumnav=OL('',LI(A('Index',_href=URL(c='forums', f='index'))), _class='breadcrumb margin-sm')
     return dict(listcats=listcats,listforums=listforums, forumnav=forumnav)
 
@@ -41,7 +41,7 @@ def editpost():
                 session.flash = 'POST BALEETED!'
                 redirect(URL(c='forums', f='viewthread',args=post.thread_id,extension='html'))
             else:
-                post.update_record(**dict(form.vars, edited=request.now))
+                post.update_record(**dict(form.vars, edited=getesttime()))
                 session.flash = 'Changes saved.'
                 redirect(URL(c='forums', f='viewthread', args=post.thread_id, extension='html'))
         else:
@@ -62,14 +62,14 @@ def createpost():
         form.vars.author = gpart.auth_user.id
         if form.process(onvalidation=forumCheck).accepted:
             threadid = db.forum_threads.insert(forum_id=foruminfo.id,name=form.vars.thread,
-                                               author=form.vars.author,created=request.now,
-                                               updated=request.now,player=foruminfo.player,
+                                               author=form.vars.author,created=getesttime(),
+                                               updated=getesttime(),player=foruminfo.player,
                                                human=foruminfo.human,zombie=foruminfo.zombie
                                                 )
-            db.forum_posts.insert(thread_id=threadid,body=form.vars.postbody,author=form.vars.author,created=request.now)
+            db.forum_posts.insert(thread_id=threadid,body=form.vars.postbody,author=form.vars.author,created=getesttime())
             redirect(URL(c='forums', f='viewthread', args=threadid, extension='html'))
         elif form.errors:
-            session.flash = 'has errors'
+            session.flash = getSassyPost()
         return dict(form=form)
 
 
@@ -100,7 +100,7 @@ def posttothread():
         return dict(form=form)
     elif form.errors:
         response.js = "$('.text').markItUp(mySettings);"
-        session.flash = 'has errors'
+        session.flash = getSassyPost()
     return dict(form=form)
 
 @auth.requires_signature()

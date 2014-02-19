@@ -10,7 +10,7 @@
            			 	{{=XML(post.description,sanitize=True)}}
                 		<br/>
                     
-                    <p><em>{{=prettydate(post.created)}}</em></p>
+                    <p><em>{{=pretty_date(post.created)}}</em></p>
 				</div>
       
         <div class="content-info-body-mis"><a href= "{{=URL(r=request, f='squadhq', args=post.squad_id)}}">Back to HQ</a></div>
