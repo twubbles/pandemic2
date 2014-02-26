@@ -22,7 +22,8 @@
 
 
 
-                    {{=XML(post.forum_posts.body,sanitize=True)}}
+                 {{=XML(post.forum_posts.body,sanitize=False,permitted_tags=['a', 'b', 'blockquote', 'br/', 'i', 'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'em', 'h5', 'h4', 'h3', 'h6'],allowed_attributes={'a':['href', 'title'], 'blockquote':['type']})}}
+
                     <p><em>{{=pretty_date(post.forum_posts.created)}}</em></p>
                 </td>
                 <td></td>

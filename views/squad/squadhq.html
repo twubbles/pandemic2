@@ -97,9 +97,7 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h3>{{=post.title}}</h3></div>
                         <div class="panel-body">
-                            <p>{{=XML(post.description,sanitize=True,permitted_tags=['h3','h4','h5','h6','a','strong','em', 'br/', 'i',
-                                'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'kbd','img/'],
-                                allowed_attributes={'a':['href', 'title'],'img':['src', 'alt']})}}</p>
+                            <p>{{=XML(post.description,sanitize=False,permitted_tags=['a', 'b', 'blockquote', 'br/', 'i', 'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'iframe', 'img/'],allowed_attributes={'iframe':['width','height','scrolling','frameborder','src',''],'a':['href', 'title'],'img':['src', 'alt'], 'blockquote':['type']})}}</p>
                         </div>
 
                         <div class="panel-footer"><p><em>{{=pretty_date(post.created)}}</em></p></div>
