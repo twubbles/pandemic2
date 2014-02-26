@@ -132,6 +132,20 @@ def missionfeed(gameid):
     else:
         return False
 
+# will return the last 15 bites for a game
+def bitefeed(gameid):
+    if gameid:
+        bites = db(db.bite_event.game_id == gameid).select(db.bite_event.ALL,
+                    db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id,
+                    db.auth_user.handle,
+                    left=(db.game_part.on(db.game_part.id == db.bite_event.zombie_id),
+                    db.auth_user.on(db.auth_user.id == db.game_part.user_id)),
+                    orderby=~db.bite_event.created, limitby=(0,15),
+                    cache=(cache.ram, 5), cacheable=True)
+        return bites
+    else:
+        return False
+
 
 # form validator for the geolocation information on bitecodes. it is hardcoded for the umass amherst campus area
 def validategeo(form):

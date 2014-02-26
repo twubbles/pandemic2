@@ -304,6 +304,15 @@ def sharewithzed():
 
                 db(db.bite_share.id == biteshare.id).update(shared_with=zombie.id, is_share_used=True, shared_at=getesttime())
 
+                message = str(db.auth_user(zombie.user_id).first_name)
+                message += ' '
+                message += str(db.auth_user(zombie.user_id).last_name)
+                message += ' shared a bite with you worth '
+                message += str(timeleft)
+                message += ' hours!'
+
+                sendemail(zombie.registration_email, "HvZ - A Bite was shared with you!" , message)
+
                 results = 'You gave '
                 results += str(db.auth_user(zombie.user_id).first_name)
                 results += " "

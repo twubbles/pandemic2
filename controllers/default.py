@@ -65,7 +65,9 @@ def index():
         globalvars = 'No upcoming game yet'
     if gameinfo.isGameActive():
         missions = missionfeed(gameinfo.getId())
+        bites = bitefeed(gameinfo.getId())
     else:
+        bites = False
         missions = False
     posts = db((db.auth_user.id == db.posts.author)).select(db.posts.id, db.posts.title,
                                                             db.posts.description,
@@ -74,7 +76,7 @@ def index():
                                                             orderby=~db.posts.pub_date, limitby=(0, 8),
                                                             cache=(cache.ram, 120),
                                                             cacheable=True)
-    return dict(missions=missions, globalvars=globalvars, posts=posts)
+    return dict(missions=missions, globalvars=globalvars, posts=posts, bites=bites)
 
 
 # View post page.

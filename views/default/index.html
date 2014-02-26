@@ -54,9 +54,48 @@
 
         <div class="col-md-5">
 
-            <h2 class="sub-header">Events</h2>
 
-            <p>No Events yet</p>
+            {{if bites:}}
+           <h2 class="sub-header">Events</h2>
+
+
+
+            <div class="table">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {{for bite in bites:}}
+                        <td>
+                            {{human=db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == bite.bite_event.human_id)).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id, db.auth_user.handle).first()}}
+
+                           {{if bite.auth_user.handle:}}
+                {{=A(bite.auth_user.handle,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
+                {{else:}}
+                {{=A(bite.auth_user.first_name + ' ' + bite.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
+                {{pass}}
+                    Bit
+                                       {{if human.handle:}}
+                {{=A(human.handle,  _href=URL(c='default',f='userinfo', args=human.id))}}
+                {{else:}}
+                {{=A(human.first_name + ' ' + human.last_name,  _href=URL(c='default',f='userinfo', args=human.id))}}
+                {{pass}}
+                        </td>
+
+                        <td>{{=pretty_date(bite.bite_event.created)}}</td>
+                    </tr>
+
+                    {{pass}}
+                    </tbody>
+                </table>
+            </div>
+
+            {{pass}}
 
         </div>
     </div>

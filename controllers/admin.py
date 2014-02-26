@@ -37,7 +37,7 @@ def index():
 
 
 # admin squad management interface
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def adminsquadlist():
     response.view = 'admintemplate.html'
     grid = SQLFORM.grid(db.squads, csv=False, searchable=False, sortable=False, create=True)
@@ -53,14 +53,14 @@ def manage_types():
 
 
 # post management interface
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def manage_posts():
     grid = SQLFORM.smartgrid(db.posts, csv=False, searchable=False, sortable=False, create=True)
     return dict(form=grid)
 
 
 # admin user management interface
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def manage_users():
     users = db((db.auth_user.id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name,
                                          db.auth_user.handle, groupby=db.auth_user.id, cache=(cache.ram, 1),
@@ -89,7 +89,7 @@ def manage_user_parts():
 
 
 # sassy post management interface
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def sassy_posts():
     response.view = 'admintemplate.html'
     form = SQLFORM.grid(db.sassypost, csv=False, searchable=False, sortable=False, create=True)
@@ -97,14 +97,14 @@ def sassy_posts():
 
 
 # The mission list page
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def missionlist():
     grid = SQLFORM.smartgrid(db.missions, csv=False, searchable=False, sortable=False, create=True)
     return dict(form=grid)
 
 
 # The cure list page
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def curelist():
     unusedcures = db((db.games.id == db.cures.game_id) & (db.cures.used == False)).select(
         db.cures.id, db.cures.expiration, db.cures.used, db.cures.curecode, db.games.game_name,
@@ -173,7 +173,7 @@ def zombieraise():
 
 
 # edit a cure page
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def editcure():
     response.view = 'admintemplate.html'
     cure = db.cures(request.args(0)) or redirect(URL('error'))
@@ -193,7 +193,7 @@ def editcure():
 
 
 # Create a cure function
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def createcure():
     game = gameinfo.getId()
     if not game:
@@ -252,7 +252,7 @@ def editgame():
 
 
 # View the oz pool for a game
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def ozlist():
     if request.args(0):
         gid = request.args(0)
@@ -315,7 +315,7 @@ def edituser():
 
 
 # reset a bitecode function, arg 0 is game_part.id, arg 1 is auth_user.id
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def regencode():
     if request.args(0) and request.args(1):
         db(db.game_part.id == request.args(0)).update(bitecode=generatebitecode())
@@ -363,7 +363,7 @@ def makemod():
 
 
 # controller for the the open squad applications page
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def squadapplist():
     squadsapp = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == db.squads_app.leader) & (
         db.games.id == db.squads_app.game_id) & (db.squads_app.reviewed == "False")).select(
@@ -374,7 +374,7 @@ def squadapplist():
 
 
 # This function is for the admin squad review page. It rejects a squad application.
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def denysquadapp():
     sappid = request.args(0)
     db(db.squads_app.id == sappid).update(reviewed=True, reviewer=auth.user.id)
@@ -383,7 +383,7 @@ def denysquadapp():
 
 
 # This function is for the admin squad review page. It approves a squad application and creates it. It also makes the applicant the squad leader.
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def approvesquadapp():
     sappid = request.args(0)
     sq = db.squads_app(sappid)
@@ -397,11 +397,9 @@ def approvesquadapp():
 
 
 # controller for the the open registration requests page
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def regrequestlist():
-    regreq = db(
-        (db.registration_request.user_id == db.auth_user.id) & (db.registration_request.game_id == db.games.id) & (
-            db.registration_request.reviewed == False)).select(
+    regreq = db((db.registration_request.user_id == db.auth_user.id) & (db.registration_request.game_id == db.games.id) & (db.registration_request.reviewed == False)).select(
         db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.games.id,
         db.games.game_name,
         db.auth_user.registration_id, db.registration_request.id, db.registration_request.reviewed,
@@ -411,7 +409,7 @@ def regrequestlist():
 
 
 # This function is for the admin reg request review page. It rejects a reg request.
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def denyregreq():
     regreqid = request.args(0)
     db(db.registration_request.id == regreqid).update(reviewed=True, approved=False, reviewer=auth.user.id)
@@ -422,7 +420,7 @@ def denyregreq():
 
 
 # This function is for the admin reg request review page. It approves a reg reqest and creates a valid registration app.
-@auth.requires_membership('admins','mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def approveregreq():
     regcode = generatebitecode()
     regreqid = request.args(0)
@@ -462,7 +460,7 @@ def removeimmortal():
 
 @auth.requires_membership('admins')
 def sendlog():
-    if auth.user.id == 2:
+    if auth.user.id == 2 or auth.user.id == 488:
         import os
         logdir = os.getcwd()
         logloc = logdir + '/adminlog.txt'
@@ -476,7 +474,7 @@ def sendlog():
             oldlog = open("adminlogold.txt", "a")
             oldlog.write(str("\n" + logcontents))
             oldlog.close()
-            sendemail("jeclairm@gmail.com", "Admin log updates", logcontents)
+            sendemail("kimball@umass.edu", "Admin log updates", logcontents)
             os.remove(logloc)
         redirect(URL(c='admin', f='index'))
     else:
