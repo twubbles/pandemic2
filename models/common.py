@@ -5,29 +5,38 @@ response.static_version = '1.0.0'
 import re
 from datetime import datetime
 from datetime import timedelta
-from pytz import timezone
-import pytz
+# from pytz import timezone
+# import pytz
 from gluon.tools import prettydate
 
 # This model has various common functions in it.
 
-# Converts the current time, whatever zone it may be in, to EST, and returns it. Set to convert pacific to EST
+
+# datetime.now() tz hack
+def getEstNow():
+    pstnow  = datetime.now()
+    tzchange = timedelta(hours=3)
+    estnow = pstnow + tzchange
+    return estnow
+
+# Converts the current time, whatever zone it may be in, to EST, and returns it. Set to convert pacific to EST DEPRICATED
 def getesttime():
-    pactz = timezone('US/Pacific-New')
-    localtz = timezone('US/Eastern')
-    now_pac = pactz.localize(datetime.now())
-    now_east = now_pac.astimezone(localtz)
-    fmt = "%Y-%m-%d %H:%M:%S"
+    # pactz = timezone('US/Pacific-New')
+    # localtz = timezone('US/Eastern')
+    # now_pac = pactz.localize(datetime.now())
+    # now_east = now_pac.astimezone(localtz)
+    # fmt = "%Y-%m-%d %H:%M:%S"
+    now_east = getEstNow()
     return now_east
 
-# Converts TZ unaware datetime objects to EST aware.    
+# Converts TZ unaware datetime objects to EST aware. Set to convert pacific to EST DEPRICATED
 def converttotz(unaware):
-    pactz = timezone('US/Pacific-New')
-    pactime = pactz.localize(unaware)
-    localtz = timezone('US/Eastern')
-    now_east = pactime.astimezone(localtz)
-    fmt = "%Y-%m-%d %H:%M:%S"
-    return now_east
+    # pactz = timezone('US/Pacific-New')
+    # pactime = pactz.localize(unaware)
+    # localtz = timezone('US/Eastern')
+    # now_east = pactime.astimezone(localtz)
+    # fmt = "%Y-%m-%d %H:%M:%S"
+    return unaware
 
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
 def fbphoto(fburl):

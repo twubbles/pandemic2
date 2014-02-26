@@ -42,7 +42,9 @@ if gpart and auth.is_logged_in() and not gpart.game_part.banned:
     # Immortal Zombie Menu
     elif gpart.creature_type.zombie and gpart.creature_type.immortal:
         response.statusmenu = [
-            LI(A(gpart.creature_type.name, UL(LI(A('Bite Somebody', _href=URL('gamectrl', 'bitecodepg')), _class=''),
+            LI(A(gpart.creature_type.name, UL(
+            LI(A('Bite Somebody', _href=URL('gamectrl', 'bitecodepg')), _class=''),
+            LI(A('Share a Bite', _href=URL('gamectrl', 'biteshare')), _class=''),
             LI(A('Cure', _href=URL('gamectrl', 'curezombie')), _class=''),
             _class='dropdown-menu', _id='gamemenu'),_href="#", _class="dropdown-toggle",
             **{'_data-toggle': 'dropdown'}), _class='dropdown')
@@ -52,7 +54,9 @@ if gpart and auth.is_logged_in() and not gpart.game_part.banned:
         # Menu for zombies that are still alive
         if not deadstat:
             response.statusmenu = [
-                LI(A("Starve @ " +stime,UL(LI(A('Bite Somebody', _href=URL('gamectrl', 'bitecodepg')), _class=''),
+                LI(A("Starve @ " +stime,UL(
+                LI(A('Bite Somebody', _href=URL('gamectrl', 'bitecodepg')), _class=''),
+                LI(A('Share a Bite', _href=URL('gamectrl', 'biteshare')), _class=''),
                 LI(A('Cure', _href=URL('gamectrl', 'curezombie')), _class=''),
                 _class='dropdown-menu', _id='gamemenu'),
                 _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')
@@ -105,12 +109,18 @@ response.menu = [
         LI(A('Roster', _href=URL('default', 'roster')), _class=''),
         LI(A('Forums', _href=URL('forums', 'index')), _class=''),
         LI(A('Squads', _href=URL('squad', 'squadlist')), _class=''),
-        LI(A('Ruleset', _href=URL('default', 'rules')), _class=''),_class='dropdown-menu', _id='gamemenu'),
+        LI(A('Ruleset', _href=URL('default', 'rules')), _class=''),
+        LI(A('Dev', _href=URL('default', 'status')), _class=''),_class='dropdown-menu', _id='gamemenu'),
         _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')
         ]
 
 # Admin menu for logged in admins
-if auth.is_logged_in() and auth.has_membership('admins' or 'mods'):
+if auth.is_logged_in() and auth.has_membership('admins'):
+    response.adminmenu = [
+        LI(A('Admin',_href=URL('admin', 'index'), _class=""),_class=' ')
+        ]
+# Admin menu for logged in mods
+elif auth.is_logged_in() and auth.has_membership('mods'):
     response.adminmenu = [
         LI(A('Admin',_href=URL('admin', 'index'), _class=""),_class=' ')
         ]

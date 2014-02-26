@@ -1,0 +1,63 @@
+{{extend 'layout.html'}}
+
+
+
+{{block layer01}}
+
+<p class="admintable"></p>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-1 col-lg-9">
+
+
+<div class="">
+			<table id="bigtable" class="table">
+			<thead>
+				<tr>
+                  <th>Zombie</th>
+				  <th>Time left</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+			  <tbody>
+             {{for player in zombies:}}
+             {{if player.creature_type.zombie and not isZombieDead(player) or player.creature_type.immortal:}}
+                <tr>
+             <td>
+                    {{if player.auth_user.handle:}}
+                {{=A(player.auth_user.handle,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{else:}}
+                {{=A(player.auth_user.first_name + ' ' + player.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=player.auth_user.id))}}
+                {{pass}}
+             </td>
+                 {{if player.creature_type.immortal:}}
+                    <td> Immortal! </td>
+                {{else:}}
+                    <td>{{=pretty_date(player.game_part.zombie_expires_at)}}</td>
+                {{pass}}
+
+                    <td>
+                        <a href="{{=URL('gamectrl', 'sharewithzed', args=[player.game_part.id,biteshare.id])}}" class="btn btn-primary btn-xs" >Share your bite!</a>
+                    </td>
+             </tr>
+             {{pass}}
+             {{pass}}
+              </tbody>
+                </table>
+
+</div>
+
+
+
+
+
+</div>
+</div>
+</div>
+
+
+{{end}}
+
+{{block postfooter}}
+
+{{end}}

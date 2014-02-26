@@ -29,8 +29,9 @@
                 </tr>
               </thead>
 			  <tbody>
+              {{for user in users:}}
 			 <tr>
-				{{for user in users:}}
+
                   <td><a href="{{=URL('admin', 'edituser', args=[user.id])}}" class="btn btn-default btn-xs" >{{=user.id}}</a></td>
                   <td>{{=user.first_name}}</td>
                   <td>{{=user.last_name}}</td>

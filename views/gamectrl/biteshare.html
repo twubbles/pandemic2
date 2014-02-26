@@ -1,0 +1,81 @@
+{{extend 'layout.html'}}
+
+
+
+{{block layer01}}
+
+<p class="admintable"></p>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-1 col-lg-9">
+
+
+<div class="">
+			<table id="bigtable" class="table">
+			<thead>
+				<tr>
+                  <th>Shared with</th>
+				  <th>Bite Split @:</th>
+
+                </tr>
+              </thead>
+			  <tbody>
+
+              {{for bite in savedbites:}}
+			 <tr>
+                 {{if bite.bite_share.is_share_used:}}
+                  <td>{{=bite.auth_user.first_name}} {{=bite.auth_user.last_name}}</td>
+                 {{elif bite.bite_share.created > (getesttime() - timedelta(hours=24)):}}
+                    <td> <a href="{{=URL('gamectrl', 'shareabite', args=[bite.bite_share.id])}}" class="btn btn-primary btn-xs" >Share this bite</a>
+                    <p>
+                        {{mins = bite.bite_share.time_shared/60}}
+                        {{hours = mins /60}}
+                        {{diff = getesttime() - bite.bite_share.created}}
+                        {{newdiff = 24 - ((diff.seconds/60)/60)}}
+                        {{hoursleft = hours/24}}
+                        {{timeleft = hoursleft*newdiff}}
+
+                        Brain left: {{=timeleft}} hours</p>
+                    </td>
+
+                 {{else:}}
+                    <td></td>
+                 {{pass}}
+                  <td>{{=bite.bite_share.created}}
+                  {{if not bite.bite_share.is_share_used:}}
+                      {{if bite.bite_share.created < (getesttime() - timedelta(hours=24)):}}
+                         <p style="color:red;">ROTTED</p>
+                      {{else:}}
+                            {{diff = getesttime() - bite.bite_share.created}}
+                            {{newdiff = 24 - ((diff.seconds/60)/60)}}
+
+                           <p style="color:green;">Still good for about {{=newdiff}} hours</p>
+                      {{pass}}
+                  {{elif bite.bite_share.is_share_used:}}
+                     <p style="color:green;">Shared @ {{=bite.bite_share.shared_at}}</p>
+                  {{pass}}
+                  </td>
+
+
+
+                </tr>
+             {{pass}}
+              </tbody>
+                </table>
+
+</div>
+
+
+
+
+
+</div>
+</div>
+</div>
+
+
+{{end}}
+
+{{block postfooter}}
+
+{{end}}

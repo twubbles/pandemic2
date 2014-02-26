@@ -21,10 +21,9 @@ def register():
     if not returncurrentuserpart() and not returncurrentuserapp() and gameinfo.checkReg():
         form = SQLFORM.factory(Field("address", default='address@umass.edu'),
                                Field("Original", 'boolean', label="Original Zombie Request", ),
-                               buttons=[
-                                   TAG.button('Register', _type="submit", _class="btn btn-primary btn-lg btn-block")],
+                               buttons=[TAG.button('Register', _type="submit", _class="btn btn-primary btn-lg btn-block")],
                                _class="table-noborder")
-        if form.process().accepted:
+        if form.process(onvalidation=validateumassemail).accepted:
             useremail = form.vars.address
             emails = db(db.emails).select()
             emaildoms = []
@@ -37,7 +36,7 @@ def register():
                 message = "This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
                 sendemail(useremail, "HvZ Registration code", message)
                 db.registration_app.insert(user_id=authid, game_id=gameinfo.getId(), registration_code=regcode,
-                                           original_request=form.vars.Original, created=request.now,
+                                           original_request=form.vars.Original, created=getEstNow(),
                                            registration_email=useremail)
                 return dict(form="", results='', fbpost=False, askemail="Check your email and refresh this page!")
             else:
@@ -61,7 +60,7 @@ def register():
                     db.game_part.insert(user_id=regapp.user_id, game_id=regapp.game_id, bitecode=newcode,
                                         registration_email=regapp.registration_email,
                                         original_request=regapp.original_request, creature_type=1,
-                                        zombie_expires_at=request.now)
+                                        zombie_expires_at=getEstNow())
                     db(db.registration_app.id == regapp.id).update(reviewed=True)
                     results = auth.user.first_name + " just registered for Humans vs Zombies!!"
                     session.flash = results
@@ -98,7 +97,7 @@ def registerrequest():
                 useremail = form.vars.address
                 db.registration_request.insert(
                     user_id=authid, game_id=gameinfo.getId(), original_request=form.vars.original,
-                    registration_email=useremail, appeal=form.vars.appeal, created=request.now
+                    registration_email=useremail, appeal=form.vars.appeal, created=getEstNow()
                 )
                 message = "We have recieved your registration request and the game admins will review it promptly. A decision will be sent to you via email."
                 sendemail(useremail, "HvZ Registration Request", message)
@@ -170,37 +169,49 @@ def curezombie():
 def bitecodepg():
     form = ''
     gpart = returncurrentuserpart()
+    if request.args(0):
+        defbitecode = request.args(0)
+    else:
+        defbitecode = "enter code here"
     if (gpart.creature_type.zombie or gpart.creature_type.hidden) and not isZombieDead(gpart):
-        if request.args(0):
-            form = SQLFORM.factory(Field("Bitecode", default=request.args(0)), Field("Lat", default='', writable=True, requires=IS_NOT_EMPTY()),
-                               Field("Long", writable=True, requires=IS_NOT_EMPTY()), submit_button="Bite!", )
-        else:
-            form = SQLFORM.factory(Field("Bitecode", default=''), Field("Lat", writable=True, requires=IS_NOT_EMPTY()),
-                               Field("Long", writable=True, requires=IS_NOT_EMPTY()), submit_button="Bite!", )
-        if gpart.creature_type.hidden:
-            session.flash = 'Note: Biting a human will reveal you!'
+        form = gameinfo.buildBiteForm(defbitecode)
         if form.process(onvalidation=validategeo).accepted:
             search = db.game_part.game_id == gameinfo.getId()
             bcode = form.vars.Bitecode
             lat=form.vars.Lat
             long=form.vars.Long
+            share=form.vars.share
             bcode = bcode.replace(' ', '').upper()
             if bcode:
                 search = db.game_part.bitecode.like(bcode)
-                results = db((search) & (db.auth_user.id == db.game_part.user_id) & (
-                    db.creature_type.id == db.game_part.creature_type) & (
+                results = db((search) & (db.auth_user.id == db.game_part.user_id) & (db.creature_type.id == db.game_part.creature_type) & (
                                  db.game_part.game_id == gameinfo.getId())).select().first()
                 if results:
                     if results.creature_type.zombie or results.creature_type.hidden:
                         session.flash = 'You tried to bite a zombie! ewww!'
                         return dict(form=form, results=[])
                     else:
-                        db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
+                        if share:
+                            timetoshare = (gameinfo.starveTimer()/2)
+                            timetoadd = (gpart.game_part.zombie_expires_at + timedelta(seconds=timetoshare))
+                            if timetoadd > gameinfo.addFoodTimer():
+                                timetoadd = gameinfo.addFoodTimer()
+                            biteid = db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
                                              game_id=gameinfo.getId(), lat=lat, lng=long)
-                        if gpart.creature_type.hidden:
-                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),creature_type=3)
+                            db.bite_share.insert(game_id=gameinfo.getId(),share_id=gpart.game_part.id, time_shared=timetoshare, bite_id=biteid)
+
                         else:
-                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer())
+                            timetoadd = gameinfo.addFoodTimer()
+                            db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
+                                             game_id=gameinfo.getId(), lat=lat, lng=long)
+
+                        # checks if zombie is a hidden OZ or not and updates their status accordingly
+                        if gpart.creature_type.hidden:
+                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=timetoadd,creature_type=3)
+                        else:
+                            db(db.game_part.id == gpart.game_part.id).update(zombie_expires_at=timetoadd)
+
+                        # updates the bitten human's status and starve timer
                         db(db.game_part.id == results.game_part.id).update(zombie_expires_at=gameinfo.addFoodTimer(),
                                                                            creature_type=2)
                         # results is changed to the text to appear in the facebook post and passed to the view.
@@ -229,5 +240,81 @@ def bitecodeqrcodepage():
         return dict(gpart=gpart)
     elif gpart.creature_type.hidden:
         redirect(URL('gamectrl', 'bitecodepg'))
+    else:
+        redirect(URL(c='default', f='index'))
+
+
+
+@auth.requires_login()
+def biteshare():
+    gpart = returncurrentuserpart()
+    if gpart.creature_type.zombie and not isZombieDead(gpart):
+        savedbites = db((db.bite_share.share_id == gpart.game_part.id) & (db.bite_share.game_id == gameinfo.getId())).select(
+                        db.bite_share.ALL, db.auth_user.id, db.auth_user.first_name,db.auth_user.last_name, db.game_part.id,
+                        db.game_part.user_id,
+                        left=(db.game_part.on(db.game_part.id == db.bite_share.shared_with),db.auth_user.on(db.auth_user.id == db.game_part.user_id))
+                        )
+        return dict(form='', savedbites=savedbites, gpart=gpart)
+    else:
+        redirect(URL(c='default', f='index'))
+
+
+@auth.requires_login()
+def shareabite():
+    if request.args(0):
+        gpart = returncurrentuserpart()
+        biteshare = db.bite_share(request.args(0))
+        if gpart.creature_type.zombie and not isZombieDead(gpart):
+            if gpart.game_part.id == biteshare.share_id:
+                zombies = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == gameinfo.getId()) & (
+            db.game_part.creature_type == db.creature_type.id)& (db.creature_type.zombie == True)).select(
+            db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle, db.game_part.id,
+            db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
+            cache=(cache.ram, 60), cacheable=True)
+
+                return dict(zombies=zombies, biteshare=biteshare)
+            else:
+                redirect(URL(c='default', f='index'))
+
+
+@auth.requires_login()
+def sharewithzed():
+    if request.args(0) and request.args(1):
+        gpart = returncurrentuserpart()
+        biteshare = db.bite_share(request.args(1))
+        zombie = db.game_part(request.args(0))
+        if gpart.creature_type.zombie and not isZombieDead(gpart):
+            if (gpart.game_part.id == biteshare.share_id) and converttotz(zombie.zombie_expires_at) > getesttime() and not biteshare.is_share_used:
+
+                mins = biteshare.time_shared/60
+                hours = mins /60
+                diff = getesttime() - biteshare.created
+                newdiff = 24 - ((diff.seconds/60)/60)
+                hoursleft = hours/24
+                timeleft = hoursleft*newdiff
+
+                timetogive = ((timeleft*60)*60)
+
+                newtime =  zombie.zombie_expires_at + timedelta(seconds=timetogive)
+
+                if newtime < gameinfo.addFoodTimer():
+                    db(db.game_part.id == zombie.id).update(zombie_expires_at=newtime)
+                else:
+                    db(db.game_part.id == zombie.id).update(zombie_expires_at=gameinfo.addFoodTimer())
+
+                db(db.bite_share.id == biteshare.id).update(shared_with=zombie.id, is_share_used=True, shared_at=getesttime())
+
+                results = 'You gave '
+                results += str(db.auth_user(zombie.user_id).first_name)
+                results += " "
+                results += str(db.auth_user(zombie.user_id).last_name)
+                results += " "
+                results += str(timeleft)
+                results += " hours of brains"
+                return dict(results=results)
+            else:
+                redirect(URL(c='default', f='index'))
+        else:
+            redirect(URL(c='default', f='index'))
     else:
         redirect(URL(c='default', f='index'))

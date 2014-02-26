@@ -8,6 +8,7 @@
 {{block layer02}}
     <div class="container-fluid">
       <div class="row">
+
         <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Admin Panel</h1>
 
@@ -41,11 +42,17 @@
 
 
         </div>
+          <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
+              {{if auth.user.id == 2:}}
+             <a href="{{=URL('admin', 'sendlog',)}}" class="btn btn-primary btn-xs" >Send Log Updates</a>
+               {{pass}}
+          </div>
       </div>
     </div>
 {{end}}
 
 {{block postfooter}}
+
 
 
 

@@ -145,9 +145,7 @@ def validategeo(form):
         form.errors.Lat = "invalid latitude"
     elif float(lng) > float(east) or float(lng) < float(west):
         form.errors.Long = "invalid longitude"
-    else:
-        form.vars.Lat = lat
-        form.vars.Long = lng
+
 
 # form validator for prompts requiring typed confirmation of an action. requires "YES"
 def validateconfirm(form):
@@ -158,16 +156,14 @@ def validateconfirm(form):
 
 # form validator for registration requests
 def validateemail(form):
-    defappeal="Reason why you should play. Ex: Alumni, friend of student, visiting from another school, etc. Alums must state year of graduation. Friends of students must state the student they are friends with. Visitors must tell us what school they are from."
+    defappeal="Reason why you should play. Ex: Alumni, friend of student, "
+    defappeal += "visiting from another school, etc. Alums must state year of graduation. "
+    defappeal += "Friends of students must state the student they are friends with. "
+    defappeal += "Visitors must tell us what school they are from."
     if form.vars.address == 'address@email.com':
         form.errors.address = 'You did not enter your email!'
-
     elif form.vars.appeal == defappeal:
         form.errors.appeal = 'You need to tell us why you should play!'
-    else:
-        form.vars.address = form.vars.address
-        form.vars.appeal = form.vars.appeal
-        form.vars.original = form.vars.original
 
 
 # Forum access checker
@@ -199,3 +195,9 @@ def forumCheck(form):
         form.errors.body = getSassyPost()
     else:
         user.update_record(lastpost=request.now)
+
+# form validator for registration
+def validateumassemail(form):
+    if form.vars.address == 'address@umass.edu':
+        form.errors.address = 'You did not enter your five-college email!'
+

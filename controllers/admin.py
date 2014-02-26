@@ -1,7 +1,7 @@
 # coding: utf8
 
 # Admin page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
 def index():
     if gameinfo.getId():
         missions = missionfeed(gameinfo.getId())
@@ -37,7 +37,7 @@ def index():
 
 
 # admin squad management interface
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def adminsquadlist():
     response.view = 'admintemplate.html'
     grid = SQLFORM.grid(db.squads, csv=False, searchable=False, sortable=False, create=True)
@@ -53,14 +53,14 @@ def manage_types():
 
 
 # post management interface
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def manage_posts():
     grid = SQLFORM.smartgrid(db.posts, csv=False, searchable=False, sortable=False, create=True)
     return dict(form=grid)
 
 
 # admin user management interface
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def manage_users():
     users = db((db.auth_user.id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name,
                                          db.auth_user.handle, groupby=db.auth_user.id, cache=(cache.ram, 1),
@@ -89,7 +89,7 @@ def manage_user_parts():
 
 
 # sassy post management interface
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def sassy_posts():
     response.view = 'admintemplate.html'
     form = SQLFORM.grid(db.sassypost, csv=False, searchable=False, sortable=False, create=True)
@@ -97,14 +97,14 @@ def sassy_posts():
 
 
 # The mission list page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def missionlist():
     grid = SQLFORM.smartgrid(db.missions, csv=False, searchable=False, sortable=False, create=True)
     return dict(form=grid)
 
 
 # The cure list page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def curelist():
     unusedcures = db((db.games.id == db.cures.game_id) & (db.cures.used == False)).select(
         db.cures.id, db.cures.expiration, db.cures.used, db.cures.curecode, db.games.game_name,
@@ -134,8 +134,11 @@ def zombierewardfood():
             if not (isZombieDead(zombie) or db.creature_type.immortal):
                 stime = timedelta(seconds=realtime)
                 newtime = zombie.game_part.zombie_expires_at + stime
+                if newtime > gameinfo.addFoodTimer():
+                    newtime = gameinfo.addFoodTimer()
                 db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime)
         session.flash = "All Zombies Given " + str(realtime / 60) + " minutes of life!"
+        adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " gave all zombies " + str(realtime / 60) + " minutes of life")
         form = ''
         return dict(form=form)
     return dict(form=form)
@@ -158,10 +161,11 @@ def zombieraise():
             for zombie in zombies:
                 if isZombieDead(zombie):
                     stime = timedelta(seconds=random.randrange(28800, 72000))
-                    newtime = request.now + stime
+                    newtime = getEstNow() + stime
                     db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime)
 
             session.flash = "THE SHAMBLING DEAD HAVE ARISEN ONCE AGAIN!"
+            adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " activated the shambling dead")
             form = ''
         return dict(form=form, )
     session.flash = "Confirm the raising of the dead? All dead will be raised and given random amounts of food."
@@ -169,7 +173,7 @@ def zombieraise():
 
 
 # edit a cure page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def editcure():
     response.view = 'admintemplate.html'
     cure = db.cures(request.args(0)) or redirect(URL('error'))
@@ -189,7 +193,7 @@ def editcure():
 
 
 # Create a cure function
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def createcure():
     game = gameinfo.getId()
     if not game:
@@ -240,7 +244,7 @@ def editgame():
             session.flash = 'GAME BALEETED!'
         else:
             game.update_record(**dict(form.vars))
-            adminlog(str(auth.user.id) + " changed game " + str(form.vars))
+            adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " changed the game: " + str(form.vars))
             session.flash = 'Changes saved.'
     else:
         session.flash = 'Edit the game!'
@@ -248,7 +252,7 @@ def editgame():
 
 
 # View the oz pool for a game
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def ozlist():
     if request.args(0):
         gid = request.args(0)
@@ -311,11 +315,11 @@ def edituser():
 
 
 # reset a bitecode function, arg 0 is game_part.id, arg 1 is auth_user.id
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def regencode():
     if request.args(0) and request.args(1):
         db(db.game_part.id == request.args(0)).update(bitecode=generatebitecode())
-        adminlog(str(auth.user.id) + " regened code for player " + str(request.args(0)))
+        adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " regened code for player " + str(request.args(0)))
         session.flash = "Bitecode regenerated"
         message = "Your bitecode has been regenerated. It is now: " + db.game_part(request.args(0)).bitecode
         sendemail(db.game_part(request.args(0)).registration_email, "HvZ New Bitecode", message)
@@ -330,8 +334,12 @@ def makeoz():
     db(db.game_part.id == request.args(0)).update(creature_type=6)
     userpart = db(db.game_part.id == request.args(0)).select()
     session.flash = 'made them an OZ!'
-    adminlog(str(auth.user.id) + " made " + str(request.args(0)) + " an OZ")
-    message = "You have been made an Original Zombie. You will appear as a Human until you make your first bite. Access your bite page by going to the Human bitecode page on your menu. While you are hidden, you cannot be bitten by other Zombies. Beware, you won't be hidden forever so don't wait too long before making a bite!"
+    adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " made " + str(request.args(0)) + " an OZ")
+    message = "You have been made an Original Zombie. \n"
+    message += "You will appear as a Human on the website until you make your first bite. \n"
+    message += "Access your bite page by going to the Human bitecode page on your menu. \n"
+    message += "While you are hidden, you still have to wear a bandana like a regular zombie. \n"
+    message += "Beware, you won't be hidden forever so don't wait too long before making a bite!"
     sendemail(userpart[0].registration_email, "HvZ Important Message!", message)
     redirect(URL(c='admin', f='ozlist', args=userpart[0].game_id))
 
@@ -344,9 +352,9 @@ def makemod():
     session.flash = 'Type YES to grant ' + user.first_name + ' ' + user.last_name + ' moderator access.'
     form = SQLFORM.factory(Field("Confirm", default=''), submit_button="Do it", )
     if form.process(onvalidation=validateconfirm).accepted:
-        db.auth_membership.insert(user_id=request.args(0), group_id=526)
+        db.auth_membership.insert(user_id=request.args(0), group_id=527)
         session.flash = 'made ' + user.first_name + ' ' + user.last_name + ' a mod'
-        adminlog(str(auth.user.id) + " made " + str(request.args(0)) + " a mod")
+        adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " made " + str(request.args(0)) + " a mod")
         return dict(form='')
     else:
         session.flash = 'Type YES to grant ' + user.first_name + ' ' + user.last_name + ' moderator access.'
@@ -355,7 +363,7 @@ def makemod():
 
 
 # controller for the the open squad applications page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def squadapplist():
     squadsapp = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == db.squads_app.leader) & (
         db.games.id == db.squads_app.game_id) & (db.squads_app.reviewed == "False")).select(
@@ -366,7 +374,7 @@ def squadapplist():
 
 
 # This function is for the admin squad review page. It rejects a squad application.
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def denysquadapp():
     sappid = request.args(0)
     db(db.squads_app.id == sappid).update(reviewed=True, reviewer=auth.user.id)
@@ -375,7 +383,7 @@ def denysquadapp():
 
 
 # This function is for the admin squad review page. It approves a squad application and creates it. It also makes the applicant the squad leader.
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def approvesquadapp():
     sappid = request.args(0)
     sq = db.squads_app(sappid)
@@ -384,12 +392,12 @@ def approvesquadapp():
                                 leader=sq.leader,
                                 sigid=sq.sigid)
     db(db.game_part.id == sq.leader).update(squad_leader=True, squad_id=newsquad)
-    adminlog(str(auth.user.id) + " approved squad app for " + str(request.args(0)))
+    adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " approved squad app for " + str(request.args(0)))
     redirect(URL(c='admin', f='squadapplist'))
 
 
 # controller for the the open registration requests page
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def regrequestlist():
     regreq = db(
         (db.registration_request.user_id == db.auth_user.id) & (db.registration_request.game_id == db.games.id) & (
@@ -403,29 +411,29 @@ def regrequestlist():
 
 
 # This function is for the admin reg request review page. It rejects a reg request.
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def denyregreq():
     regreqid = request.args(0)
     db(db.registration_request.id == regreqid).update(reviewed=True, approved=False, reviewer=auth.user.id)
     message = "Unfortunately, the Admins have denied your registration request. If you believe this was in error you may appeal via e-mail @ admin@umasshvz.com"
     sendemail(regreq.registration_email, "HvZ Registration Request Denied", message)
-    adminlog(str(auth.user.id) + " denied reg app for " + str(request.args(0)))
+    adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " denied reg app for " + str(request.args(0)))
     redirect(URL(c='admin', f='regrequestlist'))
 
 
 # This function is for the admin reg request review page. It approves a reg reqest and creates a valid registration app.
-@auth.requires_membership('admins' or 'mods')
+@auth.requires_membership('admins','mods')
 def approveregreq():
     regcode = generatebitecode()
     regreqid = request.args(0)
     regreq = db.registration_request(regreqid)
     db(db.registration_request.id == regreqid).update(reviewed=True, approved=True, reviewer=auth.user.id)
     db.registration_app.insert(user_id=regreq.user_id, game_id=regreq.game_id, registration_code=regcode,
-                               original_request=regreq.original_request, created=request.now,
+                               original_request=regreq.original_request, created=getEstNow(),
                                registration_email=regreq.registration_email)
     message = "The Admins have approved your registration request! This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
     sendemail(regreq.registration_email, "HvZ Registration code", message)
-    adminlog(str(auth.user.id) + " approved reg app for " + str(request.args(0)))
+    adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " approved reg app for " + str(request.args(0)))
     redirect(URL(c='admin', f='regrequestlist'))
 
 # Function for removing immortality from immortal zombies
@@ -447,6 +455,29 @@ def removeimmortal():
             message = "You have LOST your Immortality and have 18 hours until you starve!"
             sendemail(zombie.game_part.registration_email, "HvZ Immortality LOST", message)
         session.flash = "All Immortal Zombies have been stripped of their immortality!"
+        adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " stripped immortality form all immortals")
         form = ''
         return dict(form=form)
     return dict(form=form)
+
+@auth.requires_membership('admins')
+def sendlog():
+    if auth.user.id == 2:
+        import os
+        logdir = os.getcwd()
+        logloc = logdir + '/adminlog.txt'
+        try:
+            logstatus = (os.stat(logloc).st_size!= 0)
+        except:
+            logstatus = False
+        if logstatus:
+            with open ("adminlog.txt", "r") as currentlog:
+                logcontents=currentlog.read()
+            oldlog = open("adminlogold.txt", "a")
+            oldlog.write(str("\n" + logcontents))
+            oldlog.close()
+            sendemail("jeclairm@gmail.com", "Admin log updates", logcontents)
+            os.remove(logloc)
+        redirect(URL(c='admin', f='index'))
+    else:
+        redirect(URL(c='admin', f='index'))

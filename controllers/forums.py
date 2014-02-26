@@ -32,8 +32,8 @@ def editpost():
     response.view = 'default.html'
     post = db.forum_posts(request.args(0)) or redirect(URL('index',extension='html'))
     gpart = returncurrentuserpart()
-    if auth.has_membership('admins' or 'mods') or gpart.user_id == post.author:
-        form = SQLFORM(db.forum_posts, post, deletable=True)
+    if auth.has_membership('admins') or gpart.auth_user.id == post.author:
+        form = SQLFORM(db.forum_posts, post, deletable=True, fields = ['body', 'created', 'edited'])
         session.flash = 'Edit the post!'
         if form.validate():
             if form.deleted:
@@ -106,7 +106,7 @@ def posttothread():
 @auth.requires_signature()
 def getthreadposts():
     if request.args(0) and request.args(1):
-        posts = db((db.forum_posts.thread_id == request.args(1)) & (db.auth_user.id == db.forum_posts.author)).select(orderby=db.forum_posts.created)
+        posts = db((db.forum_posts.thread_id == request.args(1)) & (db.auth_user.id == db.forum_posts.author)).select(orderby=db.forum_posts.id)
         return dict(posts=posts)
     else:
         return dict(posts='')

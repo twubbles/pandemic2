@@ -3,6 +3,8 @@ def fblogin():
     form = auth.profile()
     return dict(form=form)
 
+def status():
+    redirect(URL(c='forums', f='viewthread', args=56, extension='html'))
 
 # Default roster page. Pulls all the game_part info for the current game and also returns player counts.
 def roster():
@@ -53,14 +55,8 @@ def index():
     if gameinfo.isGameActive():
         if isgameupcoming():
             events = False
-            count = abs(getesttime() - converttotz(gameinfo.gameStart()))
-            hcount = (count.seconds / 60) / 60
-            mcount = (count.seconds / 60) - (hcount * 60)
-            scount = (count.seconds - ((hcount * 60) * 60)) - (mcount * 60)
-            globalvars = str(hcount) + ' hours ' + str(mcount) + ' mins ' + str(scount) + ' secs '
-            if count.days:
-                globalvars = str(count.days) + ' days ' + globalvars
-            globalvars = gameinfo.getName() + ' begins in ' + globalvars
+            globalvars = 'Game begins @ '
+            globalvars += pretty_date(gameinfo.gameStart())
         else:
             stimer = (gameinfo.starveTimer() / 60) / 60
             globalvars = 'Stun Timer: ' + str(gameinfo.stunTime()) + ' mins - Starve Timer: ' + str(stimer) + ' hrs'
