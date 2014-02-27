@@ -1,0 +1,182 @@
+{{extend 'layout.html'}}
+
+
+{{block layer02}}
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-12 col-md-12 col-lg-12 main">
+          <h1 class="page-header">Game Status</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
+                {{if gameinfo.getId():}}
+			 <canvas id="canvas1" height="200" width="200"></canvas>
+			 <h4>Total Population: {{=(humanTotal+zombieTotal+deadTotal)}}</h4>
+
+                {{else:}}
+              <canvas id="canvas1" height="200" width="200"></canvas>
+                {{pass}}
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
+			<canvas id="canvas2" height="200" width="200"></canvas>
+			<h4>Bites</h4>
+
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
+            	<canvas id="canvas3" height="200" width="200"></canvas>
+              <h4>Bite Shares</h4>
+
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 placeholder">
+   			<canvas id="canvas4" height="200" width="200"></canvas>
+              <h4>Cures Used</h4>
+
+            </div>
+          </div>
+
+
+
+        </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div id="statmap-canvas"></div>
+
+
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+               <hr/>
+            <div class="table-responsive">
+                <table class="table admintable" id="bigtable">
+                    <thead>
+                    <tr>
+                        <th>Bite</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {{for bite in bites:}}
+                    <tr>
+                        <td>
+                            {{human=db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == bite.bite_event.human_id)).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id, db.auth_user.handle).first()}}
+
+                           {{if bite.auth_user.handle:}}
+                {{=A(bite.auth_user.handle,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
+                {{else:}}
+                {{=A(bite.auth_user.first_name + ' ' + bite.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
+                {{pass}}
+                    Bit
+                                       {{if human.handle:}}
+                {{=A(human.handle,  _href=URL(c='default',f='userinfo', args=human.id))}}
+                {{else:}}
+                {{=A(human.first_name + ' ' + human.last_name,  _href=URL(c='default',f='userinfo', args=human.id))}}
+                {{pass}}
+                        </td>
+
+                        <td>{{=pretty_date(bite.bite_event.created)}}</td>
+                    </tr>
+
+                    {{pass}}
+                    </tbody>
+                </table>
+            </div>
+
+          </div>
+
+      </div>
+    </div>
+
+{{end}}
+
+{{block postfooter}}
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+<script src="{{=URL('static','js/markerclusterer.js')}}"></script>
+ <script src="{{=URL('static','js/chart.min.js')}}"></script>
+ <script type="text/javascript">
+
+data = {
+    "bites": [
+    {{for bite in bites:}}
+    { "latitude": {{=bite.bite_event.lat}},"longitude": {{=bite.bite_event.lng}}, "created": "{{=pretty_date(bite.bite_event.created)}}"},
+
+    {{pass}}
+
+    ]
+}
+
+      function initialize() {
+        var center = new google.maps.LatLng(42.39088182665314,-72.52500057220459);
+
+        var map = new google.maps.Map(document.getElementById('statmap-canvas'), {
+          zoom: 16,
+          center: center,
+          mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+        var image = 'http://i.imgur.com/0PUCFyB.gif';
+        var markers = [];
+        for (var i = 0; i < data.bites.length; i++) {
+          var databite = data.bites[i];
+          var latLng = new google.maps.LatLng(databite.latitude,
+              databite.longitude);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            icon: image,
+            title: databite.created
+          });
+          markers.push(marker);
+        }
+        var markerCluster = new MarkerClusterer(map, markers, {
+        gridSize: 60,
+        });
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+		var pieData = [
+				{
+					value: {{=int(zombieTotal)}},
+					color:"#F38630"
+				},
+				{
+					value : {{=int(deadTotal)}},
+					color : "#E0E4CC"
+				},
+				{
+					value : {{=int(humanTotal)}},
+					color : "#69D2E7"
+				}
+			
+			];
+var myPie = new Chart(document.getElementById("canvas1").getContext("2d")).Pie(pieData);
+
+var bite_canvas = document.getElementById("canvas2");
+var bite_context = bite_canvas.getContext("2d");
+bite_context.fillStyle = "red";
+bite_context.font = "bold 4.5em sans-serif";
+bite_context.textAlign = "center";
+bite_context.fillText("{{=biteTotal}}",90,115);
+
+var cure_canvas = document.getElementById("canvas4");
+var cure_context = cure_canvas.getContext("2d");
+cure_context.fillStyle = "lightblue";
+cure_context.font = "bold 4.5em sans-serif";
+cure_context.textAlign = "center";
+cure_context.fillText("{{=cureTotal}}",90,115);
+
+var share_canvas = document.getElementById("canvas3");
+var share_context = share_canvas.getContext("2d");
+share_context.fillStyle = "red";
+share_context.font = "bold 4.5em sans-serif";
+share_context.textAlign = "center";
+share_context.fillText("{{=shareTotal}}",90,115);
+
+
+
+</script>
+
+
+{{end}}

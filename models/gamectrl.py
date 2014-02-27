@@ -140,7 +140,7 @@ def bitefeed(gameid):
                     db.auth_user.handle,
                     left=(db.game_part.on(db.game_part.id == db.bite_event.zombie_id),
                     db.auth_user.on(db.auth_user.id == db.game_part.user_id)),
-                    orderby=~db.bite_event.created, limitby=(0,15),
+                    orderby=~db.bite_event.created, limitby=(0,10),
                     cache=(cache.ram, 5), cacheable=True)
         return bites
     else:

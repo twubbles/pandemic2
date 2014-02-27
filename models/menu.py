@@ -110,6 +110,7 @@ response.menu = [
         LI(A('Forums', _href=URL('forums', 'index')), _class=''),
         LI(A('Squads', _href=URL('squad', 'squadlist')), _class=''),
         LI(A('Ruleset', _href=URL('default', 'rules')), _class=''),
+        LI(A('Game Stats', _href=URL('gamectrl', 'gamestatus')), _class=''),
         LI(A('Dev', _href=URL('default', 'status')), _class=''),_class='dropdown-menu', _id='gamemenu'),
         _href="#", _class="dropdown-toggle", **{'_data-toggle':'dropdown'}),_class='dropdown')
         ]

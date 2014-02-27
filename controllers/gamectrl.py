@@ -244,7 +244,7 @@ def bitecodeqrcodepage():
         redirect(URL(c='default', f='index'))
 
 
-
+# displays a zombie's biteshares
 @auth.requires_login()
 def biteshare():
     gpart = returncurrentuserpart()
@@ -258,7 +258,7 @@ def biteshare():
     else:
         redirect(URL(c='default', f='index'))
 
-
+# controller to choose the zombie to share a bite with
 @auth.requires_login()
 def shareabite():
     if request.args(0):
@@ -276,7 +276,7 @@ def shareabite():
             else:
                 redirect(URL(c='default', f='index'))
 
-
+# Controller that actually shares a bite with a zombie
 @auth.requires_login()
 def sharewithzed():
     if request.args(0) and request.args(1):
@@ -327,3 +327,58 @@ def sharewithzed():
             redirect(URL(c='default', f='index'))
     else:
         redirect(URL(c='default', f='index'))
+
+
+
+# Bites and Stats page
+def gamestatus():
+    if gameinfo.getId():
+        players = db((db.auth_user.id == db.game_part.user_id) & (db.game_part.game_id == gameinfo.getId()) & (
+            db.game_part.creature_type == db.creature_type.id)).select(
+            db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.handle,
+            db.creature_type.zombie, db.creature_type.name, db.game_part.zombie_expires_at, db.creature_type.immortal,
+            cache=(cache.ram, 60), cacheable=True)
+        humanTotal = 0
+        zombieTotal = 0
+        deadTotal = 0
+        for player in players:
+            if not player.creature_type.zombie:
+                humanTotal += 1
+            elif player.creature_type.zombie:
+                if isZombieDead(player):
+                    deadTotal += 1
+                else:
+                    zombieTotal += 1
+        biteTotal = db(db.bite_event.game_id == gameinfo.getId()).count()
+        cureTotal = db(db.cure_event.game_id == gameinfo.getId()).count()
+        shareTotal = db((db.bite_share.game_id == gameinfo.getId()) & (db.bite_share.is_share_used == True)).count()
+
+        bites = db(db.bite_event.game_id == gameinfo.getId()).select(db.bite_event.id, db.bite_event.zombie_id, db.bite_event.human_id, db.bite_event.game_id, db.bite_event.created, db.bite_event.lat, db.bite_event.lng,
+                    db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id,
+                    db.auth_user.handle,
+                    left=(db.game_part.on(db.game_part.id == db.bite_event.zombie_id),
+                    db.auth_user.on(db.auth_user.id == db.game_part.user_id)),
+                    orderby=~db.bite_event.created,
+                    cache=(cache.ram, 60), cacheable=True)
+
+        return dict(humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal,
+                    biteTotal=biteTotal,cureTotal=cureTotal, shareTotal=shareTotal, bites=bites)
+    else:
+        redirect(URL(c='default', f='index'))
+
+#
+# def bitelocs():
+#     bites = db(db.bite_event.game_id == gameinfo.getId()).select(
+#                     db.bite_event.id, db.bite_event.zombie_id,db.bite_event.human_id,
+#                     db.bite_event.game_id, db.bite_event.created, db.bite_event.lat, db.bite_event.lng,
+#                     orderby=~db.bite_event.created,
+#                     cache=(cache.ram, 60), cacheable=True)
+#     bitelist=[]
+#     for bite in bites:
+#         bitelist.append(bite.id, bite.created, bite.lat, bite.lng)
+#
+#
+#     import gluon.contrib.simplejson
+#     return gluon.contrib.simplejson.dumps(bitelist)
+
+

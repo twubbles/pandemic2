@@ -61,17 +61,19 @@
 
 
             <div class="table">
-                <table class="table">
+                <table class="table-responsive table">
                     <thead>
                     <tr>
-                        <th></th>
-                        <th></th>
+                        <th>Bite</th>
+                        <th>Time</th>
                     </tr>
                     </thead>
                     <tbody>
 
                     {{for bite in bites:}}
+                    <tr>
                         <td>
+
                             {{human=db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == bite.bite_event.human_id)).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id, db.auth_user.handle).first()}}
 
                            {{if bite.auth_user.handle:}}
