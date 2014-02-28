@@ -120,7 +120,7 @@ def userinfo():
             db.games.game_name, left=[db.squads.on(db.squads.id == db.game_part.squad_id),
                                       db.bite_event.on(db.bite_event.zombie_id == db.game_part.id)],
             groupby=~db.game_part.game_id,
-            cache=(cache.ram, 60), cacheable=True)
+            cache=(cache.ram, 30), cacheable=True)
         return dict(cparts=cparts)
     else:
         redirect(URL(r=request, f='index'))

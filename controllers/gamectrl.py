@@ -287,13 +287,12 @@ def sharewithzed():
             if (gpart.game_part.id == biteshare.share_id) and converttotz(zombie.zombie_expires_at) > getesttime() and not biteshare.is_share_used:
 
                 mins = biteshare.time_shared/60
-                hours = mins /60
                 diff = getesttime() - biteshare.created
-                newdiff = 24 - ((diff.seconds/60)/60)
-                hoursleft = hours/24
-                timeleft = hoursleft*newdiff
+                newdiff = 36 - int(((diff.total_seconds()/60)/60))
+                minsleft = mins/36
+                timeleft = minsleft*newdiff
 
-                timetogive = ((timeleft*60)*60)
+                timetogive = ((timeleft*60))
 
                 newtime =  zombie.zombie_expires_at + timedelta(seconds=timetogive)
 
@@ -309,7 +308,7 @@ def sharewithzed():
                 message += str(db.auth_user(zombie.user_id).last_name)
                 message += ' shared a bite with you worth '
                 message += str(timeleft)
-                message += ' hours!'
+                message += ' minutes!'
 
                 sendemail(zombie.registration_email, "HvZ - A Bite was shared with you!" , message)
 
@@ -319,7 +318,7 @@ def sharewithzed():
                 results += str(db.auth_user(zombie.user_id).last_name)
                 results += " "
                 results += str(timeleft)
-                results += " hours of brains"
+                results += " minutes of brains"
                 return dict(results=results)
             else:
                 redirect(URL(c='default', f='index'))

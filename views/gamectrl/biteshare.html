@@ -1,76 +1,86 @@
 {{extend 'layout.html'}}
 
 
-
 {{block layer01}}
 
-<p class="admintable"></p>
+
 <div class="container-fluid">
-<div class="row">
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-1 col-lg-9">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-1 col-lg-9">
+            <h1 class="page-header">Bite Shares</h1>
 
+            <div class="panel ">
+                <table class="table table-condensed rounded">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            Bite Share Log
+                        </th>
 
-<div class="">
-			<table id="bigtable" class="table">
-			<thead>
-				<tr>
-                  <th>Shared with</th>
-				  <th>Bite Split @:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                </tr>
-              </thead>
-			  <tbody>
+                    {{for bite in savedbites:}}
+                    <tr>
+                        {{if bite.bite_share.is_share_used:}}
+                        <td colspan="2">
 
-              {{for bite in savedbites:}}
-			 <tr>
-                 {{if bite.bite_share.is_share_used:}}
-                  <td>{{=bite.auth_user.first_name}} {{=bite.auth_user.last_name}}</td>
-                 {{elif bite.bite_share.created > (getesttime() - timedelta(hours=24)):}}
-                    <td> <a href="{{=URL('gamectrl', 'shareabite', args=[bite.bite_share.id])}}" class="btn btn-primary btn-xs" >Share this bite</a>
-                    <p>
-                        {{mins = bite.bite_share.time_shared/60}}
-                        {{hours = mins /60}}
-                        {{diff = getesttime() - bite.bite_share.created}}
-                        {{newdiff = 24 - ((diff.seconds/60)/60)}}
-                        {{hoursleft = hours/24}}
-                        {{timeleft = hoursleft*newdiff}}
+                            Created {{=pretty_date(bite.bite_share.created)}}
+                            <p>Shared @ {{=bite.bite_share.shared_at}} with {{=A(bite.auth_user.first_name + ' ' + bite.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}</p>
 
-                        Brain left: {{=timeleft}} hours</p>
-                    </td>
+                        </td>
 
-                 {{else:}}
-                    <td></td>
-                 {{pass}}
-                  <td>{{=bite.bite_share.created}}
-                  {{if not bite.bite_share.is_share_used:}}
-                      {{if bite.bite_share.created < (getesttime() - timedelta(hours=24)):}}
-                         <p style="color:red;">ROTTED</p>
-                      {{else:}}
+                        {{elif bite.bite_share.created > (getesttime() - timedelta(hours=36)):}}
+                            <td colspan="2">
+
+                            <!--calculate the time remaining-->
+                            {{mins = bite.bite_share.time_shared/60}}
                             {{diff = getesttime() - bite.bite_share.created}}
-                            {{newdiff = 24 - ((diff.seconds/60)/60)}}
-
-                           <p style="color:green;">Still good for about {{=newdiff}} hours</p>
-                      {{pass}}
-                  {{elif bite.bite_share.is_share_used:}}
-                     <p style="color:green;">Shared @ {{=bite.bite_share.shared_at}}</p>
-                  {{pass}}
-                  </td>
+                            {{newdiff = 36 - int(((diff.total_seconds()/60)/60))}}
+                            {{minsleft = mins/36}}
+                            {{timeleft = minsleft*newdiff}}
 
 
+                            <!--calculate the values for the progressbar-->
+                            {{cval=float(timeleft)/float(mins)}}
+                            {{dval = cval*100}}
 
-                </tr>
-             {{pass}}
-              </tbody>
+                            Created {{=pretty_date(bite.bite_share.created)}}
+                            <p>Value of share:</p>
+                            <div class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-danger" role="progressbar"
+                                     aria-valuenow="{{=int(dval)}}"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: {{=int(dval)}}%; color:black;">
+                                    <b>{{=timeleft}} mins</b>
+                                </div>
+                            </div>
+
+                            <a href="{{=URL('gamectrl', 'shareabite', args=[bite.bite_share.id])}}"
+                                               class="btn btn-danger btn-xs">Share this bite</a>
+
+                        </td>
+                        {{elif bite.bite_share.created < (getesttime() - timedelta(hours=36)):}}
+                         <td colspan="2">
+                            Created {{=pretty_date(bite.bite_share.created)}}
+                            <p style="color:red;">ROTTED</p>
+
+
+                         </td>
+                        {{pass}}
+
+
+                    </tr>
+
+                    {{pass}}
+                    </tbody>
                 </table>
 
-</div>
+            </div>
 
 
-
-
-
-</div>
-</div>
+        </div>
+    </div>
 </div>
 
 
