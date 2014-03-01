@@ -1,4 +1,11 @@
 if ($('.loadgeo').length > 0) {
+$( "#no_table_Bitecode" ).attr("onclick","this.select();");
+$( "table" ).addClass( "roundcorners table-no-border" );
+$( ":submit" ).addClass('btn-block btn-danger');
+$( ":submit" ).hide();
+$( "#submit_record__row > .w2p_fl, .w2p_fc" ).hide();
+$( "#submit_record__row > td" ).attr("colspan","3");
+
 
 var markers = [];
 function selectLoc() {
@@ -20,6 +27,7 @@ function selectLoc() {
 	
 	$( "input[name='Lat']" ).attr( "value", e.latLng.d );
     $( "input[name='Long']" ).attr( "value",  e.latLng.e );
+	$( ":submit" ).show();
   });
   
 }
@@ -46,6 +54,7 @@ function atLoc() {
 		console.log("hello");
         $( "input[name='Lat']" ).attr( "value", position.coords.latitude );
         $( "input[name='Long']" ).attr( "value",  position.coords.longitude );
+		$( ":submit" ).show();
 
     });
 };

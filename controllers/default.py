@@ -73,7 +73,7 @@ def index():
                                                             db.posts.description,
                                                             db.posts.pub_date, db.auth_user.first_name,
                                                             db.auth_user.last_name, db.auth_user.id,
-                                                            orderby=~db.posts.pub_date, limitby=(0, 8),
+                                                            orderby=~db.posts.pub_date, limitby=(0, 15),
                                                             cache=(cache.ram, 120),
                                                             cacheable=True)
     return dict(missions=missions, globalvars=globalvars, posts=posts, bites=bites)
@@ -90,9 +90,8 @@ def viewpost():
     else:
         redirect(URL(r=request, f='index'))
 
-        # Returns the rules doc for the game.
 
-
+# Returns the rules doc for the game.
 def rules():
     redirect(URL('static', 'hvzrules.pdf'))
 
@@ -144,3 +143,13 @@ def download():
 @auth.requires_signature()
 def data():
     return dict(form=crud())
+
+
+# View post page.
+def plot_summary():
+    post = db(db.summary).select(cache=(cache.ram, 120),cacheable=True).last()
+    if post:
+        return dict(post=post)
+    else:
+        redirect(URL(r=request, f='index'))
+

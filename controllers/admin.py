@@ -58,6 +58,13 @@ def manage_posts():
     grid = SQLFORM.smartgrid(db.posts, csv=False, searchable=False, sortable=False, create=True)
     return dict(form=grid)
 
+# post management interface
+@auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))
+def manage_sum():
+    response.view = 'admintemplate.html'
+    grid = SQLFORM.smartgrid(db.summary, csv=False, searchable=False, sortable=False, create=True)
+    return dict(form=grid)
+
 
 # admin user management interface
 @auth.requires(auth.has_membership(group_id='admins') or auth.has_membership(group_id='mods'))

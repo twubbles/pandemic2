@@ -1,0 +1,40 @@
+{{extend 'layout.html'}}
+
+
+{{block layer01}}
+
+<div class="container">
+    <div class="row">
+
+
+        <div class="col-sm-12 col-xs-12 col-md-12 col-ls-12 ">
+            <div class="page-header">
+                <h1>{{=post.title}}</h1>
+
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-12 col-ls-12 ">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                <h5><p><em>{{=pretty_date(post.updated)}}</em></p></h5>
+                </div>
+
+                <div class="panel-body">
+                    <div class="well">
+                        {{=XML(post.body,sanitize=False,permitted_tags=['a', 'b', 'blockquote', 'br/', 'i', 'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'iframe', 'img/'],allowed_attributes={'iframe':['width','height','scrolling','frameborder','src',''],'a':['href', 'title'],'img':['src', 'alt'], 'blockquote':['type']})}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{end}}
+
+
+{{block postfooter}}
+
+
+{{end}}

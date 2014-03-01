@@ -77,10 +77,12 @@ class GameVars:
     # This is called by the bitecodepg controller and returns a bitecode form based on current game variables
     def buildBiteForm(self,qrargs):
         if self.bite_shares_per_food > 0:
+            maxshare = int((self.time_per_food*.85))
             form = SQLFORM.factory(Field("Bitecode", default=qrargs),
                                    Field("Lat", default='', writable=True, requires=IS_NOT_EMPTY()),
                                    Field("Long", writable=True, requires=IS_NOT_EMPTY()),
                                    Field("share", 'boolean', label="Share this bite?"),
+                                   Field("timeshared", 'integer', default=maxshare, label="Time to share"),
                                    submit_button="Bite!")
         else:
             form = SQLFORM.factory(Field("Bitecode", default=qrargs),
@@ -95,6 +97,18 @@ class GameVars:
             return True
         else:
             return False
+
+# returns the maximum amout of a share, based on the current time_per_food
+    def maxShare(self):
+        return int((self.time_per_food*.85))
+
+# returns the minimum amout of a share, based on the current time_per_food
+    def minShare(self):
+        return int((self.time_per_food*.15))
+
+# returns the total time_per_food
+    def timePerFood(self):
+        return self.time_per_food
 
 ### end GameVars class definition ###
 

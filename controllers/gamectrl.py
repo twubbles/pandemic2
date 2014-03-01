@@ -181,6 +181,7 @@ def bitecodepg():
             lat=form.vars.Lat
             long=form.vars.Long
             share=form.vars.share
+            timeshared=form.vars.timeshared
             bcode = bcode.replace(' ', '').upper()
             if bcode:
                 search = db.game_part.bitecode.like(bcode)
@@ -191,14 +192,22 @@ def bitecodepg():
                         session.flash = 'You tried to bite a zombie! ewww!'
                         return dict(form=form, results=[])
                     else:
+
+                        # check if the bite is shared
                         if share:
-                            timetoshare = (gameinfo.starveTimer()/2)
+
+                            # check if the time shared is within acceptable values
+                            if not (timeshared > gameinfo.minShare() or timeshared < gameinfo.maxShare()):
+                                session.flash = 'Invalid time to share'
+                                redirect(URL(c='default', f='index', args=bcode))
+                            else:
+                                timetoshare = gameinfo.timePerFood() - timeshared
                             timetoadd = (gpart.game_part.zombie_expires_at + timedelta(seconds=timetoshare))
                             if timetoadd > gameinfo.addFoodTimer():
                                 timetoadd = gameinfo.addFoodTimer()
                             biteid = db.bite_event.insert(zombie_id=gpart.game_part.id, human_id=results.game_part.id,
                                              game_id=gameinfo.getId(), lat=lat, lng=long)
-                            db.bite_share.insert(game_id=gameinfo.getId(),share_id=gpart.game_part.id, time_shared=timetoshare, bite_id=biteid)
+                            db.bite_share.insert(game_id=gameinfo.getId(),share_id=gpart.game_part.id, time_shared=timeshared, bite_id=biteid)
 
                         else:
                             timetoadd = gameinfo.addFoodTimer()
@@ -365,19 +374,6 @@ def gamestatus():
     else:
         redirect(URL(c='default', f='index'))
 
-#
-# def bitelocs():
-#     bites = db(db.bite_event.game_id == gameinfo.getId()).select(
-#                     db.bite_event.id, db.bite_event.zombie_id,db.bite_event.human_id,
-#                     db.bite_event.game_id, db.bite_event.created, db.bite_event.lat, db.bite_event.lng,
-#                     orderby=~db.bite_event.created,
-#                     cache=(cache.ram, 60), cacheable=True)
-#     bitelist=[]
-#     for bite in bites:
-#         bitelist.append(bite.id, bite.created, bite.lat, bite.lng)
-#
-#
-#     import gluon.contrib.simplejson
-#     return gluon.contrib.simplejson.dumps(bitelist)
+
 
 

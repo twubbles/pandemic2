@@ -3,56 +3,32 @@
 
 <hr/>
 <div class="container-fluid" id="defaultview">
-<div class="row">
-<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-1 col-lg-offset-1">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-offset-1 col-lg-offset-1">
 
-<div class="jumbotron" style="background-color:#181818;border-radius: 5px;">
-  <h1>Register here!</h1>
-  <p>{{=askemail}}</p>
+            <div class="jumbotron" style="background-color:#181818;border-radius: 5px;">
+                <h1>Register here!</h1>
+
+                <p>{{=askemail}}</p>
 
 
-{{if form:}}
-<div class='inline'>
-{{=form}}
-</div>
-{{pass}}
-{{if fbpost:}}
-    <script src='http://connect.facebook.net/en_US/all.js'></script>
-    <INPUT type="button" class="button" value="Tell people about this on facebook!"
-onclick='postToFeed(); return false;'/>
-    <p id='msg'></p>
+                {{if form:}}
+                <div class='inline'>
+                    {{=form}}
+                </div>
+                {{pass}}
 
-<!--Quick and dirty solution to having stuff posted to facebook with javascript. -->
-    <script> 
-      FB.init({appId: "	148476551982686", status: true, cookie: true});
-      function postToFeed() {
-        var obj = {
-          method: 'feed',
-            redirect_uri: 'http://www.umasshvz.com',
-          link: 'http://www.umasshvz.com',
-          picture: 'http://i.imgur.com/QDGEJpR.png',
-          name: 'UMASS Amherst Humans vs Zombies',
-            caption: '{{=results}}!',
-          description: 'Have you signed up yet?'
-        };
-        function callback(response) {
-          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
-        }
-        FB.ui(obj, callback);
-      }
-    </script>
-{{pass}}
-<h3>
-        <p>
-{{=A("Don't have a Five College email?",  _href=URL(c='gamectrl',f='registerrequest'))}}
-    </p>
-        
-{{=A("Never got your Code? Try again here.",  _href=URL(c='gamectrl',f='resetregistration'))}}
+                <h3>
+                    <p>
+                        {{=A("Don't have a Five College email?", _href=URL(c='gamectrl',f='registerrequest'))}}
+                    </p>
 
-</h3> 
-</div>
-</div>
-</div>
+                    {{=A("Never got your Code? Try again here.", _href=URL(c='gamectrl',f='resetregistration'))}}
+
+                </h3>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{block postfooter}}
@@ -65,8 +41,8 @@ $( ".web2py_breadcrumbs" ).hide();
 $( "#submit_record__row td.w2p_fl" ).remove();
 $( "#submit_record__row td.w2p_fc" ).remove();
 $( "#submit_record__row td.w2p_fw" ).attr( "colspan", "3");
-
 $( "table" ).addClass( "table table-no-border" );
+
 
 </script>
 

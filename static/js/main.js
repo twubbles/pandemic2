@@ -15,6 +15,7 @@ require.config({
 		"markitup":"jquery.markitup",
 		"postpage":"postpage",
 		"masonry":"masonry.min",
+		"biteslider":"biteslider",
     },
     "shim": {
         "bootstrap": ["jquery"],
@@ -28,10 +29,12 @@ require.config({
 		"postpage":["jquery"],
 		"postpage":["masonry"],
 		"masonry":["jquery"],
+		"biteslider": ["jquery","jqueryui"],
+		
 
     }
 });
-require(["prefixfree", "jquery", "jqueryui","bootstrap","inittimepicker","admintable","defaultview","loadgeo", "textareacheck","postpage"], 
-function (prefixfree, $, jqueryui, bootstrap, inittimepicker, admintable, defaultview,loadgeo,textareacheck,postpage) {
+require(["prefixfree", "jquery", "jqueryui","bootstrap","inittimepicker","admintable","defaultview","loadgeo", "textareacheck","postpage","biteslider"], 
+function (prefixfree, $, jqueryui, bootstrap, inittimepicker, admintable, defaultview,loadgeo,textareacheck,postpage,biteslider) {
 
 });
