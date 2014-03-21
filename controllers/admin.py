@@ -27,13 +27,13 @@ def index():
                     biteTotal=biteTotal,cureTotal=cureTotal)
     else:
         missions = False
-        humanTotal = False
-        zombieTotal = False
-        deadTotal = False
-        biteTotal = False
-        cureTotal= False
+        humanTotal = 0
+        zombieTotal = 0
+        deadTotal = 0
+        biteTotal = 0
+        cureTotal= 0
         return dict(missions=missions, humanTotal=humanTotal, zombieTotal=zombieTotal, deadTotal=deadTotal,
-                    biteTotal=biteTotal)
+                    biteTotal=biteTotal,cureTotal=cureTotal)
 
 
 # admin squad management interface

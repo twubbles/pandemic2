@@ -52,12 +52,124 @@
 
 
 {{block postfooter}}
-
+<script src="{{=URL('static','js/jquery-1.11.0.min.js')}}"></script>
+<script src="{{=URL('static','js/jquery-ui-1.10.4.custom.min.js')}}"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <p class="loadgeo"></p>
 <script>
+
+
     var $minShare = {{=gameinfo.minShare()}};
     var $maxShare = {{=gameinfo.maxShare()}};
+
+
+var $sliderdiv = $( "<div id='slider'/>" );
+var $slidertd = $( "<td colspan=3 id='slidertd'/>" );
+var $slidertr = $( "<tr id='slidertr'/>" );
+
+var $slidertotaltd = $( "<td colspan=3 id='slidertotaltd'/>" );
+var $slidertotal = $( "<span style='text-align:center;color:orange;' id='slidertotal'><b>Use the Slider to choose how much time to save in your biteshare</b></span>" );
+$( "#no_table_timeshared__row" ).hide();
+
+$('#no_table_share').change(
+function() {
+    if ($(this).is(':checked')) {
+       $( "#no_table_timeshared__row" ).show();
+       $( "#no_table_timeshared__row > td" ).hide();
+       $( '#no_table_timeshared__row' ).append( $slidertotaltd );
+       $('#slidertotaltd').append( $slidertotal );
+
+       $('#no_table_timeshared__row').after( $slidertr );
+       $('#slidertr').append( $slidertd );
+       $('#slidertd').append( $sliderdiv );
+
+        $(function() {
+        $( "#slider" ).slider({
+          min: $minShare,
+          max: $maxShare,
+          step: 3600,
+          slide: function( event, ui ) {
+        $( "#no_table_timeshared" ).val( ui.value );
+        $( "#slidertotal" ).text( ((ui.value/60)/60) + " Hours" );
+      }
+
+    });
+$( "#slider" ).css('background', 'rgb(245,0,241)');
+  });
+    }
+    else {
+        $( "#slidertr" ).empty();
+        $( "#no_table_timeshared__row" ).hide();
+        $( "#slidertotaltd").remove();
+    }
+});
+
+
+$( "#no_table_Bitecode" ).attr("onclick","this.select();");
+$( "table" ).addClass( "roundcorners table-no-border" );
+$( ":submit" ).addClass('btn-block btn-danger');
+$( ":submit" ).hide();
+$( "#submit_record__row > .w2p_fl, .w2p_fc" ).hide();
+$( "#submit_record__row > td" ).attr("colspan","3");
+
+
+var markers = [];
+function selectLoc() {
+	var elem = document.getElementById("map-canvas");
+	elem.setAttribute("style","display: block;");
+	var head = document.getElementById("headtxt");
+	head.setAttribute("style","display: block;");
+  var mapOptions = {
+    zoom: 16,
+    center: new google.maps.LatLng(42.39088182665314,-72.52500057220459 )
+  };
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  google.maps.event.addListener(map, 'click', function(e) {
+	setAllMap(null);
+	markers = [];
+    placeMarker(e.latLng, map);
+
+	$( "input[name='Lat']" ).attr( "value", e.latLng.d );
+    $( "input[name='Long']" ).attr( "value",  e.latLng.e );
+	$( ":submit" ).show();
+  });
+
+}
+
+function placeMarker(position, map) {
+  var marker = new google.maps.Marker({
+    position: position,
+    map: map
+  });
+  markers.push(marker);
+  map.panTo(position);
+}
+
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+function atLoc() {
+    if (navigator.geolocation) {
+    // Use method getCurrentPosition to get coordinates
+    navigator.geolocation.getCurrentPosition(function (position) {
+		console.log("hello");
+        $( "input[name='Lat']" ).attr( "value", position.coords.latitude );
+        $( "input[name='Long']" ).attr( "value",  position.coords.longitude );
+		$( ":submit" ).show();
+
+    });
+};
+
+}
+
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {{end}}
