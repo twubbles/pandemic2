@@ -10,4 +10,4 @@ The goal of this project right now is to build a powerful & robust HvZ engine th
 - is portable and easy to install
 
 
-Uses bootstrap 3, require.js, masonry.js, prefixfree, and googlemaps.
+It runs on the Web2py framework and uses bootstrap 3, require.js, masonry.js, prefixfree, and googlemaps.
