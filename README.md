@@ -1,5 +1,8 @@
 Pandemic is the continuation of the previous HvZ engine I built for UMASS Amherst.
 
+Current version live @ http://www.umasshvz.com
+
+
 The goal of this project right now is to build a powerful & robust HvZ engine that:
 
 - can persist through multiple games
