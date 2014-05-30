@@ -293,10 +293,10 @@ def sharewithzed():
         biteshare = db.bite_share(request.args(1))
         zombie = db.game_part(request.args(0))
         if gpart.creature_type.zombie and not isZombieDead(gpart):
-            if (gpart.game_part.id == biteshare.share_id) and converttotz(zombie.zombie_expires_at) > getesttime() and not biteshare.is_share_used:
+            if (gpart.game_part.id == biteshare.share_id) and zombie.zombie_expires_at > getEstNow() and not biteshare.is_share_used:
 
                 mins = biteshare.time_shared/60
-                diff = getesttime() - biteshare.created
+                diff = getEstNow() - biteshare.created
                 newdiff = 36 - int(((diff.total_seconds()/60)/60))
                 minsleft = mins/36
                 timeleft = minsleft*newdiff
@@ -310,7 +310,7 @@ def sharewithzed():
                 else:
                     db(db.game_part.id == zombie.id).update(zombie_expires_at=gameinfo.addFoodTimer())
 
-                db(db.bite_share.id == biteshare.id).update(shared_with=zombie.id, is_share_used=True, shared_at=getesttime())
+                db(db.bite_share.id == biteshare.id).update(shared_with=zombie.id, is_share_used=True, shared_at=getEstNow())
 
                 message = str(db.auth_user(zombie.user_id).first_name)
                 message += ' '

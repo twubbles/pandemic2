@@ -5,43 +5,23 @@ response.static_version = '1.0.0'
 import re
 from datetime import datetime
 from datetime import timedelta
-# from pytz import timezone
-# import pytz
 from gluon.tools import prettydate
 
 # This model has various common functions in it.
 
 
-# datetime.now() tz hack
+# datetime.now() tz hack to change the current time from PST to EST, use this instead of doing a datetime.now() to get the current datetime
 def getEstNow():
     pstnow  = datetime.now()
     tzchange = timedelta(hours=3)
     estnow = pstnow + tzchange
     return estnow
 
-# Converts the current time, whatever zone it may be in, to EST, and returns it. Set to convert pacific to EST DEPRICATED
-def getesttime():
-    # pactz = timezone('US/Pacific-New')
-    # localtz = timezone('US/Eastern')
-    # now_pac = pactz.localize(datetime.now())
-    # now_east = now_pac.astimezone(localtz)
-    # fmt = "%Y-%m-%d %H:%M:%S"
-    now_east = getEstNow()
-    return now_east
-
-# Converts TZ unaware datetime objects to EST aware. Set to convert pacific to EST DEPRICATED
-def converttotz(unaware):
-    # pactz = timezone('US/Pacific-New')
-    # pactime = pactz.localize(unaware)
-    # localtz = timezone('US/Eastern')
-    # now_east = pactime.astimezone(localtz)
-    # fmt = "%Y-%m-%d %H:%M:%S"
-    return unaware
-
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
 def fbphoto(fburl):
      fbid = re.findall(r'\d+',str(fburl))
      return 'http://graph.facebook.com/'+str( fbid[0])+'/picture'
+
 
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile picture.
 def fbphotofull(fburl):
@@ -51,7 +31,7 @@ def fbphotofull(fburl):
 
 # Accepts a tz unaware datetime object and returns an easier to read datetime string.
 def pretty_date(d):
-    diff = getesttime() - converttotz(d)
+    diff = getEstNow() - d
     s = diff.seconds
     if diff.days > 7 or diff.days < 0:
         return d.strftime('%I:%M %p') + ' - ' + d.strftime('%a %m/%d')
@@ -94,7 +74,7 @@ def user_bar():
 def adminlog(string):
 	try:
 		file = open("adminlog.txt", "a")
-		file.write(str(getesttime()) + ' ' + string + "\n")
+		file.write(str(getEstNow()) + ' ' + string + "\n")
 		file.close()
 		msg = True
 	except:

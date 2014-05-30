@@ -1,1 +1,682 @@
-html{background:url(pandemicbg01.jpg) no-repeat center center fixed;background-size:cover;background-color:#1c3240;color:#e5e5e5}input,select,textarea{color:black}textarea{width:100%}.roundcorners{border-radius:5px}@media (min-width: 768px){.mapcanvas{height:500px;width:90%;margin-left:auto;margin-right:auto;padding:0px;display:block}}@media (min-width: 480px) and (max-width: 768px){.mapcanvas{height:500px;width:90%;margin-left:auto;margin-right:auto;padding:0px;display:block}}@media (max-width: 480px){.mapcanvas{height:500px;width:100%;margin-left:3px;margin-right:3px;padding:0px;display:block}}body{font-family:"Carme",sans-serif;padding-top:70px;color:#e5e5e5;font-size:1.4em}.container-panel{padding-left:15px;padding-right:15px}.margin-xs{margin:5px}.margin-sm{margin:15px}.margin-md{margin:25px}.margin-lg{margin:35px}.margin-bot{margin-bottom:15px}.margin-left{margin-left:15px}.press{color:#222;text-shadow:0px 2px 3px #555}.hvzfont{font-family:"Carme",sans-serif}.hvzbigheader{font-family:Arial,sans-serif;text-shadow:1px 1px 1px rgba(255,255,255,0.6);color:#000;letter-spacing:0.1em;font-size:3em;top:7px;left:10px;position:absolute}#loginnavbutton{color:white;background-color:#479;margin:10px;padding-top:5px;padding-bottom:5px;border:1px solid #e5e5e5}.form-control{color:black}.badge-primary{background-color:#428bca}.badge-success{background-color:#5cb85c}.badge-info{background-color:#5bc0de}.badge-warning{background-color:#f0ad4e}.badge-danger{background-color:#d9534f}.badge-default{background-color:#999}.navbartext{font-size:1.3em}.carousel{width:100%;height:500px;margin-bottom:20px;transition:all 1s linear}@media (max-width: 768px){.carousel{height:300px}}.carousel-caption{z-index:10}.carousel .item{height:500px;border-radius:0.1em;transition:all 1s linear}@media (max-width: 768px){.carousel .item{height:300px}}.featurette-divider{margin:40px 0}.featurette-heading{font-weight:300;line-height:1;letter-spacing:-1px}@media (min-width: 768px){.marketing{padding-left:0;padding-right:0}.navbar-wrapper{margin-top:20px}.navbar-wrapper .container{padding-left:15px;padding-right:15px}.navbar-wrapper .navbar{padding-left:0;padding-right:0;border-radius:4px}.carousel-caption p{margin-bottom:20px;font-size:21px;line-height:1.4}.featurette-heading{font-size:50px}}@media (min-width: 992px){.featurette-heading{margin-top:120px}}.elementbox{position:relative;padding:30px 15px 20px;margin:0 -15px 15px;background-color:#fafafa;box-shadow:inset 0 3px 6px rgba(0,0,0,0.05);border-color:#e5e5e5 #eee #eee;border-style:solid;border-width:1px 0}.elementbox:after{position:absolute;top:15px;left:15px;font-size:12px;font-weight:700;color:#bbb;text-transform:uppercase;letter-spacing:1px}.elementbox+.highlight{margin:-15px -15px 15px;border-radius:0;border-width:0 0 1px}.elementbox .container{width:auto}.elementbox>p:last-child,.elementbox>ul:last-child,.elementbox>ol:last-child,.elementbox>blockquote:last-child,.elementbox>.form-control:last-child,.elementbox>.table:last-child,.elementbox>.navbar:last-child,.elementbox>.jumbotron:last-child,.elementbox>.alert:last-child,.elementbox>.panel:last-child,.elementbox>.list-group:last-child,.elementbox>.well:last-child,.elementbox>.progress:last-child,.elementbox>.table-responsive:last-child>.table{margin-bottom:0}.elementbox>p>.close{float:none}@media (min-width: 768px){.elementbox{margin-left:0;margin-right:0;background-color:#fff;border-width:1px;border-color:#ddd;border-radius:4px 4px 0 0;box-shadow:none}.elementbox+.highlight{margin-top:-16px;margin-left:0;margin-right:0;border-width:1px;border-bottom-left-radius:4px;border-bottom-right-radius:4px}}.elementbox-type .table .type-info{color:#999;vertical-align:middle}.elementbox-type .table td{padding:15px 0;border-color:#eee}.elementbox-type .table tr:first-child td{border-top:0}.elementbox-type h1,.elementbox-type h2,.elementbox-type h3,.elementbox-type h4,.elementbox-type h5,.elementbox-type h6{margin:0}.elementbox-bg-classes p{padding:15px}.elementbox>.img-circle,.elementbox>.img-rounded,.elementbox>.img-thumbnail{margin:5px}.elementbox>.table-responsive>.table{background-color:#fff}.elementbox>.btn,.elementbox>.btn-group{margin-top:5px;margin-bottom:5px}.elementbox>.btn-toolbar+.btn-toolbar{margin-top:10px}.elementbox-control-sizing select,.elementbox-control-sizing input[type=text]+input[type=text]{margin-top:10px}.elementbox-form .input-group{margin-bottom:10px}.elementbox>textarea.form-control{resize:vertical}.elementbox>.list-group{max-width:400px}.elementbox .navbar:last-child{margin-bottom:0}.ui-timepicker-div .ui-widget-header{margin-bottom:8px}.ui-timepicker-div dl{text-align:left}.ui-timepicker-div dl dt{float:left;clear:left;padding:0 0 0 5px}.ui-timepicker-div dl dd{margin:0 10px 10px 45%}.ui-timepicker-div td{font-size:90%}.ui-tpicker-grid-label{background:none;border:none;margin:0;padding:0}.ui-timepicker-rtl{direction:rtl}.ui-timepicker-rtl dl{text-align:right;padding:0 5px 0 0}.ui-timepicker-rtl dl dt{float:right;clear:right}.ui-timepicker-rtl dl dd{margin:0 45% 10px 10px}.table-no-border>thead>tr>th,.table-no-border>tbody>tr>th,.table-no-border>tfoot>tr>th,.table-no-border>thead>tr>td,.table-no-border>tbody>tr>td,.table-no-border>tfoot>tr>td{border-top:none}.container-wide{margin-left:auto;margin-right:auto}@media (min-width: 1200px){.container-wide{width:1200px}}@media (min-width: 1200px){.container-wide{width:1200px}}@media (min-width: 1400px){.container-wide{width:1400px}}.squaditem{margin-bottom:0px;background-color:#321340;border:1px solid transparent;border-radius:0px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.05);box-shadow:0 1px 1px rgba(0,0,0,0.05)}.centertext{text-align:center}.markItUp{width:100%;margin:5px 0 5px 0;border:5px solid #F5F5F5}.markItUp *{margin:0px;padding:0px;outline:none}.markItUp a:link,.markItUp a:visited{color:#000;text-decoration:none}.markItUpContainer{border:1px solid #3C769D;background:#fff url(images/bg-container.png) repeat-x top left;padding:5px 5px 2px 5px;font:11px Verdana, Arial, Helvetica, sans-serif}.markItUpEditor{font:12px 'Courier New', Courier, monospace;padding:5px 5px 5px 35px;border:3px solid #3C769D;margin-left:auto;margin-right:auto;width:100%;background:#fff url(images/bg-editor.png) no-repeat;clear:both;line-height:18px;overflow:auto}.markItUpPreviewFrame{overflow:auto;background-color:#FFFFFF;border:1px solid #3C769D;width:99.9%;height:300px;margin:5px 0}.markItUpFooter{width:100%;cursor:n-resize}.markItUpResizeHandle{overflow:hidden;width:22px;height:5px;margin-left:auto;margin-right:auto;background-image:url(images/handle.png);cursor:n-resize}.markItUpHeader ul li{list-style:none;float:left;position:relative}.markItUpHeader ul li ul{display:none}.markItUpHeader ul li:hover>ul{display:block}.markItUpHeader ul .markItUpDropMenu{background:transparent url(images/menu.png) no-repeat 115% 50%;margin-right:5px}.markItUpHeader ul .markItUpDropMenu li{margin-right:0px}.markItUpHeader ul .markItUpSeparator{margin:0 10px;width:1px;height:16px;overflow:hidden;background-color:#CCC}.markItUpHeader ul ul{display:none;position:absolute;top:18px;left:0px;background:#F5F5F5;border:1px solid #3C769D;height:inherit}.markItUpHeader ul ul .markItUpSeparator{width:auto;height:1px;margin:0px}.markItUpHeader ul ul li{float:none;border-bottom:1px solid #3C769D}.markItUpHeader ul ul .markItUpDropMenu{background:#f5f5f5 url(images/submenu.png) no-repeat 100% 50%}.markItUpHeader ul ul ul{position:absolute;top:-1px;left:150px}.markItUpHeader ul ul ul li{float:none}.markItUpHeader ul a{display:block;width:16px;height:16px;text-indent:-10000px;background-repeat:no-repeat;padding:3px;margin:0px}.markItUpHeader ul ul a{display:block;padding-left:0px;text-indent:0;width:120px;padding:5px 5px 5px 25px;background-position:2px 50%}.markItUpHeader ul ul a:hover{color:#FFF;background-color:#3C769D}.html .markItUpEditor{background-image:url(images/bg-editor-html.png)}.markdown .markItUpEditor{background-image:url(images/bg-editor-markdown.png)}.textile .markItUpEditor{background-image:url(images/bg-editor-textile.png)}.bbcode .markItUpEditor{background-image:url(images/bg-editor-bbcode.png)}.wiki .markItUpEditor,.dotclear .markItUpEditor{background-image:url(images/bg-editor-wiki.png)}.markItUp .markItUpButton1 a{background-image:url(images/h1.png)}.markItUp .markItUpButton2 a{background-image:url(images/h2.png)}.markItUp .markItUpButton3 a{background-image:url(images/h3.png)}.markItUp .markItUpButton4 a{background-image:url(images/h4.png)}.markItUp .markItUpButton5 a{background-image:url(images/h5.png)}.markItUp .markItUpButton6 a{background-image:url(images/h6.png)}.markItUp .markItUpButton7 a{background-image:url(images/paragraph.png)}.markItUp .markItUpButton8 a{background-image:url(images/bold.png)}.markItUp .markItUpButton9 a{background-image:url(images/italic.png)}.markItUp .markItUpButton10 a{background-image:url(images/stroke.png)}.markItUp .markItUpButton11 a{background-image:url(images/list-bullet.png)}.markItUp .markItUpButton12 a{background-image:url(images/list-numeric.png)}.markItUp .markItUpButton13 a{background-image:url(images/list-item.png)}.markItUp .markItUpButton14 a{background-image:url(images/picture.png)}.markItUp .markItUpButton15 a{background-image:url(images/link.png)}.markItUp .clean a{background-image:url(images/clean.png)}.markItUp .preview a{background-image:url(images/preview.png)}.navbar-light{background-color:#428bca;border-color:#E7E7E7}.navbar-light .navbar-brand{color:#fff}.navbar-light .navbar-brand:hover,.navbar-light .navbar-brand:focus{color:#333;background-color:transparent}.navbar-light .navbar-text{color:#fff}.navbar-light .navbar-nav>li>a{color:#777}.navbar-light .navbar-nav>li>a:hover,.navbar-light .navbar-nav>li>a:focus{color:#333;background-color:transparent}.navbar-light .navbar-nav>.active>a{color:#fff;background-color:transparent}.navbar-light .navbar-nav>.active>a:hover,.navbar-light .navbar-nav>.active>a:focus{color:#333;background-color:transparent}.navbar-light .navbar-nav>.disabled>a{color:#aaaaaa;background-color:transparent}.navbar-light .navbar-nav>.disabled>a:hover,.navbar-light .navbar-nav>.disabled>a:focus{color:#aaaaaa;background-color:transparent}.navbar-light .navbar-link{color:#fff}.navbar-light .navbar-link:hover{color:#333}@media (max-width: 767px){.navbar-inverse{border-radius:4px}}
+/* line 22, ../sass/pandemic.scss */
+html {
+  background: url(pandemicbg01.jpg) no-repeat center center fixed;
+  background-size: cover;
+  background-color: #1c3240;
+  color: #e5e5e5; }
+
+/* line 29, ../sass/pandemic.scss */
+input, select, textarea {
+  color: black; }
+
+/* line 33, ../sass/pandemic.scss */
+textarea {
+  width: 100%; }
+
+/* line 38, ../sass/pandemic.scss */
+.roundcorners {
+  border-radius: 5px; }
+
+@media (min-width: 768px) {
+  /* line 45, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    display: block; } }
+@media (min-width: 480px) and (max-width: 768px) {
+  /* line 59, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    display: block; } }
+@media (max-width: 480px) {
+  /* line 73, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 100%;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 0px;
+    display: block; } }
+/* line 87, ../sass/pandemic.scss */
+body {
+  font-family: "Carme", sans-serif;
+  padding-top: 100px;
+  color: #e5e5e5;
+  font-size: 1.4em; }
+
+/* line 94, ../sass/pandemic.scss */
+.container-panel {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* line 100, ../sass/pandemic.scss */
+.margin-xs {
+  margin: 5px; }
+
+/* line 104, ../sass/pandemic.scss */
+.margin-sm {
+  margin: 15px; }
+
+/* line 108, ../sass/pandemic.scss */
+.margin-md {
+  margin: 25px; }
+
+/* line 112, ../sass/pandemic.scss */
+.margin-lg {
+  margin: 35px; }
+
+/* line 117, ../sass/pandemic.scss */
+.margin-bot {
+  margin-bottom: 15px; }
+
+/* line 120, ../sass/pandemic.scss */
+.margin-left {
+  margin-left: 15px; }
+
+/* line 124, ../sass/pandemic.scss */
+.press {
+  color: #222;
+  text-shadow: 0px 2px 3px #555; }
+
+/* line 129, ../sass/pandemic.scss */
+.hvzfont {
+  font-family: "Carme", sans-serif; }
+
+/* line 134, ../sass/pandemic.scss */
+.hvzbigheader {
+  font-family: Arial, sans-serif;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+  color: #000;
+  letter-spacing: 0.1em;
+  font-size: 3em;
+  top: 7px;
+  left: 10px;
+  position: absolute; }
+
+/* line 146, ../sass/pandemic.scss */
+#loginnavbutton {
+  color: white;
+  background-color: #447799;
+  margin: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #e5e5e5; }
+
+/* line 156, ../sass/pandemic.scss */
+.form-control {
+  color: black; }
+
+/* line 160, ../sass/pandemic.scss */
+.badge-primary {
+  background-color: #428bca; }
+
+/* line 163, ../sass/pandemic.scss */
+.badge-success {
+  background-color: #5cb85c; }
+
+/* line 166, ../sass/pandemic.scss */
+.badge-info {
+  background-color: #5bc0de; }
+
+/* line 169, ../sass/pandemic.scss */
+.badge-warning {
+  background-color: #f0ad4e; }
+
+/* line 172, ../sass/pandemic.scss */
+.badge-danger {
+  background-color: #d9534f; }
+
+/* line 175, ../sass/pandemic.scss */
+.badge-default {
+  background-color: #999; }
+
+/* line 180, ../sass/pandemic.scss */
+.navbartext {
+  font-size: 1.3em; }
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+/* Carousel base class */
+/* line 193, ../sass/pandemic.scss */
+.carousel {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 20px;
+  transition: all 1s linear; }
+  @media (max-width: 768px) {
+    /* line 193, ../sass/pandemic.scss */
+    .carousel {
+      height: 300px; } }
+
+/* Since positioning the image, we need to help out the caption */
+/* line 205, ../sass/pandemic.scss */
+.carousel-caption {
+  z-index: 10; }
+
+/* Declare heights because of positioning of img element */
+/* line 211, ../sass/pandemic.scss */
+.carousel .item {
+  height: 500px;
+  border-radius: 0.1em;
+  transition: all 1s linear; }
+  @media (max-width: 768px) {
+    /* line 211, ../sass/pandemic.scss */
+    .carousel .item {
+      height: 300px; } }
+
+/* Center align the text within the three columns below the carousel */
+/* Featurettes
+------------------------- */
+/* line 226, ../sass/pandemic.scss */
+.featurette-divider {
+  margin: 40px 0;
+  /* Space out the Bootstrap <hr> more */ }
+
+/* Thin out the marketing headings */
+/* line 233, ../sass/pandemic.scss */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px; }
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+@media (min-width: 768px) {
+  /* Remove the edge padding needed for mobile */
+  /* line 244, ../sass/pandemic.scss */
+  .marketing {
+    padding-left: 0;
+    padding-right: 0; }
+
+  /* Navbar positioning foo */
+  /* line 249, ../sass/pandemic.scss */
+  .navbar-wrapper {
+    margin-top: 20px; }
+    /* line 251, ../sass/pandemic.scss */
+    .navbar-wrapper .container {
+      padding-left: 15px;
+      padding-right: 15px; }
+    /* line 255, ../sass/pandemic.scss */
+    .navbar-wrapper .navbar {
+      padding-left: 0;
+      padding-right: 0;
+      border-radius: 4px; }
+
+  /* The navbar becomes detached from the top, so we round the corners */
+  /* Bump up size of carousel content */
+  /* line 263, ../sass/pandemic.scss */
+  .carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 1.4; }
+
+  /* line 268, ../sass/pandemic.scss */
+  .featurette-heading {
+    font-size: 50px; } }
+@media (min-width: 992px) {
+  /* line 274, ../sass/pandemic.scss */
+  .featurette-heading {
+    margin-top: 120px; } }
+/* line 279, ../sass/pandemic.scss */
+.elementbox {
+  position: relative;
+  padding: 30px 15px 20px;
+  margin: 0 -15px 15px;
+  background-color: #fafafa;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
+  border-color: #e5e5e5 #eee #eee;
+  border-style: solid;
+  border-width: 1px 0; }
+  /* line 288, ../sass/pandemic.scss */
+  .elementbox:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 1px; }
+  /* line 298, ../sass/pandemic.scss */
+  .elementbox + .highlight {
+    margin: -15px -15px 15px;
+    border-radius: 0;
+    border-width: 0 0 1px; }
+  /* line 303, ../sass/pandemic.scss */
+  .elementbox .container {
+    width: auto; }
+  /* line 307, ../sass/pandemic.scss */
+  .elementbox > p:last-child, .elementbox > ul:last-child, .elementbox > ol:last-child, .elementbox > blockquote:last-child, .elementbox > .form-control:last-child, .elementbox > .table:last-child, .elementbox > .navbar:last-child, .elementbox > .jumbotron:last-child, .elementbox > .alert:last-child, .elementbox > .panel:last-child, .elementbox > .list-group:last-child, .elementbox > .well:last-child, .elementbox > .progress:last-child, .elementbox > .table-responsive:last-child > .table {
+    margin-bottom: 0; }
+  /* line 310, ../sass/pandemic.scss */
+  .elementbox > p > .close {
+    float: none; }
+
+@media (min-width: 768px) {
+  /* line 317, ../sass/pandemic.scss */
+  .elementbox {
+    margin-left: 0;
+    margin-right: 0;
+    background-color: #fff;
+    border-width: 1px;
+    border-color: #ddd;
+    border-radius: 4px 4px 0 0;
+    box-shadow: none; }
+    /* line 325, ../sass/pandemic.scss */
+    .elementbox + .highlight {
+      margin-top: -16px;
+      margin-left: 0;
+      margin-right: 0;
+      border-width: 1px;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px; } }
+/* line 338, ../sass/pandemic.scss */
+.elementbox-type .table .type-info {
+  color: #999;
+  vertical-align: middle; }
+/* line 342, ../sass/pandemic.scss */
+.elementbox-type .table td {
+  padding: 15px 0;
+  border-color: #eee; }
+/* line 346, ../sass/pandemic.scss */
+.elementbox-type .table tr:first-child td {
+  border-top: 0; }
+/* line 350, ../sass/pandemic.scss */
+.elementbox-type h1, .elementbox-type h2, .elementbox-type h3, .elementbox-type h4, .elementbox-type h5, .elementbox-type h6 {
+  margin: 0; }
+
+/* line 355, ../sass/pandemic.scss */
+.elementbox-bg-classes p {
+  padding: 15px; }
+
+/* line 360, ../sass/pandemic.scss */
+.elementbox > .img-circle, .elementbox > .img-rounded, .elementbox > .img-thumbnail {
+  margin: 5px; }
+/* line 363, ../sass/pandemic.scss */
+.elementbox > .table-responsive > .table {
+  background-color: #fff; }
+/* line 366, ../sass/pandemic.scss */
+.elementbox > .btn, .elementbox > .btn-group {
+  margin-top: 5px;
+  margin-bottom: 5px; }
+/* line 370, ../sass/pandemic.scss */
+.elementbox > .btn-toolbar + .btn-toolbar {
+  margin-top: 10px; }
+
+/* line 376, ../sass/pandemic.scss */
+.elementbox-control-sizing select, .elementbox-control-sizing input[type=text] + input[type=text] {
+  margin-top: 10px; }
+
+/* line 381, ../sass/pandemic.scss */
+.elementbox-form .input-group {
+  margin-bottom: 10px; }
+
+/* line 387, ../sass/pandemic.scss */
+.elementbox > textarea.form-control {
+  resize: vertical; }
+/* line 390, ../sass/pandemic.scss */
+.elementbox > .list-group {
+  max-width: 400px; }
+/* line 394, ../sass/pandemic.scss */
+.elementbox .navbar:last-child {
+  margin-bottom: 0; }
+
+/* datetimepicker styles */
+/* line 402, ../sass/pandemic.scss */
+.ui-timepicker-div .ui-widget-header {
+  margin-bottom: 8px; }
+/* line 405, ../sass/pandemic.scss */
+.ui-timepicker-div dl {
+  text-align: left; }
+  /* line 407, ../sass/pandemic.scss */
+  .ui-timepicker-div dl dt {
+    float: left;
+    clear: left;
+    padding: 0 0 0 5px; }
+  /* line 412, ../sass/pandemic.scss */
+  .ui-timepicker-div dl dd {
+    margin: 0 10px 10px 45%; }
+/* line 416, ../sass/pandemic.scss */
+.ui-timepicker-div td {
+  font-size: 90%; }
+
+/* line 421, ../sass/pandemic.scss */
+.ui-tpicker-grid-label {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0; }
+
+/* line 428, ../sass/pandemic.scss */
+.ui-timepicker-rtl {
+  direction: rtl; }
+  /* line 430, ../sass/pandemic.scss */
+  .ui-timepicker-rtl dl {
+    text-align: right;
+    padding: 0 5px 0 0; }
+    /* line 433, ../sass/pandemic.scss */
+    .ui-timepicker-rtl dl dt {
+      float: right;
+      clear: right; }
+    /* line 437, ../sass/pandemic.scss */
+    .ui-timepicker-rtl dl dd {
+      margin: 0 45% 10px 10px; }
+
+/* timepicker styles end */
+/* line 452, ../sass/pandemic.scss */
+.table-no-border > thead > tr > th,
+.table-no-border > tbody > tr > th,
+.table-no-border > tfoot > tr > th,
+.table-no-border > thead > tr > td,
+.table-no-border > tbody > tr > td,
+.table-no-border > tfoot > tr > td {
+  border-top: none; }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media (min-width: 320px) and (max-device-width: 480px) {
+  /* Styles */ }
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* Styles */ }
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  /* Styles */ }
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  /* Styles */ }
+/* line 486, ../sass/pandemic.scss */
+.container-wide {
+  margin-left: auto;
+  margin-right: auto; }
+  @media (min-width: 1200px) {
+    /* line 486, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1200px) {
+    /* line 486, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1400px) {
+    /* line 486, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1400px; } }
+
+/* line 501, ../sass/pandemic.scss */
+.squaditem {
+  margin-bottom: 0px;
+  background-color: #321340;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }
+
+/* line 510, ../sass/pandemic.scss */
+.centertext {
+  text-align: center; }
+
+/* line 515, ../sass/pandemic.scss */
+.navmenubutton {
+  padding-right: 0px; }
+
+/* line 521, ../sass/pandemic.scss */
+.markItUp {
+  width: 100%;
+  margin: 5px 0 5px 0;
+  border: 5px solid #F5F5F5; }
+  /* line 522, ../sass/pandemic.scss */
+  .markItUp * {
+    margin: 0px;
+    padding: 0px;
+    outline: none; }
+  /* line 528, ../sass/pandemic.scss */
+  .markItUp a:link, .markItUp a:visited {
+    color: #000;
+    text-decoration: none; }
+
+/* line 538, ../sass/pandemic.scss */
+.markItUpContainer {
+  border: 1px solid #3C769D;
+  background: white url(images/bg-container.png) repeat-x top left;
+  padding: 5px 5px 2px 5px;
+  font: 11px Verdana, Arial, Helvetica, sans-serif; }
+
+/* line 545, ../sass/pandemic.scss */
+.markItUpEditor {
+  font: 12px 'Courier New', Courier, monospace;
+  padding: 5px 5px 5px 35px;
+  border: 3px solid #3C769D;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  background: white url(images/bg-editor.png) no-repeat;
+  clear: both;
+  line-height: 18px;
+  overflow: auto; }
+
+/* line 558, ../sass/pandemic.scss */
+.markItUpPreviewFrame {
+  overflow: auto;
+  background-color: #FFFFFF;
+  border: 1px solid #3C769D;
+  width: 99.9%;
+  height: 300px;
+  margin: 5px 0; }
+
+/* line 567, ../sass/pandemic.scss */
+.markItUpFooter {
+  width: 100%;
+  cursor: n-resize; }
+
+/* line 572, ../sass/pandemic.scss */
+.markItUpResizeHandle {
+  overflow: hidden;
+  width: 22px;
+  height: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url(images/handle.png);
+  cursor: n-resize; }
+
+/* line 583, ../sass/pandemic.scss */
+.markItUpHeader ul li {
+  list-style: none;
+  float: left;
+  position: relative; }
+  /* line 587, ../sass/pandemic.scss */
+  .markItUpHeader ul li ul {
+    display: none; }
+  /* line 590, ../sass/pandemic.scss */
+  .markItUpHeader ul li:hover > ul {
+    display: block; }
+/* line 594, ../sass/pandemic.scss */
+.markItUpHeader ul .markItUpDropMenu {
+  background: transparent url(images/menu.png) no-repeat 115% 50%;
+  margin-right: 5px; }
+  /* line 597, ../sass/pandemic.scss */
+  .markItUpHeader ul .markItUpDropMenu li {
+    margin-right: 0px; }
+/* line 601, ../sass/pandemic.scss */
+.markItUpHeader ul .markItUpSeparator {
+  margin: 0 10px;
+  width: 1px;
+  height: 16px;
+  overflow: hidden;
+  background-color: #CCC; }
+/* line 608, ../sass/pandemic.scss */
+.markItUpHeader ul ul {
+  display: none;
+  position: absolute;
+  top: 18px;
+  left: 0px;
+  background: #F5F5F5;
+  border: 1px solid #3C769D;
+  height: inherit; }
+  /* line 609, ../sass/pandemic.scss */
+  .markItUpHeader ul ul .markItUpSeparator {
+    width: auto;
+    height: 1px;
+    margin: 0px; }
+  /* line 621, ../sass/pandemic.scss */
+  .markItUpHeader ul ul li {
+    float: none;
+    border-bottom: 1px solid #3C769D; }
+  /* line 625, ../sass/pandemic.scss */
+  .markItUpHeader ul ul .markItUpDropMenu {
+    background: whitesmoke url(images/submenu.png) no-repeat 100% 50%; }
+  /* line 628, ../sass/pandemic.scss */
+  .markItUpHeader ul ul ul {
+    position: absolute;
+    top: -1px;
+    left: 150px; }
+    /* line 632, ../sass/pandemic.scss */
+    .markItUpHeader ul ul ul li {
+      float: none; }
+/* line 637, ../sass/pandemic.scss */
+.markItUpHeader ul a {
+  display: block;
+  width: 16px;
+  height: 16px;
+  text-indent: -10000px;
+  background-repeat: no-repeat;
+  padding: 3px;
+  margin: 0px; }
+/* line 646, ../sass/pandemic.scss */
+.markItUpHeader ul ul a {
+  display: block;
+  padding-left: 0px;
+  text-indent: 0;
+  width: 120px;
+  padding: 5px 5px 5px 25px;
+  background-position: 2px 50%; }
+  /* line 653, ../sass/pandemic.scss */
+  .markItUpHeader ul ul a:hover {
+    color: #FFF;
+    background-color: #3C769D; }
+
+/* line 661, ../sass/pandemic.scss */
+.html .markItUpEditor {
+  background-image: url(images/bg-editor-html.png); }
+
+/* line 665, ../sass/pandemic.scss */
+.markdown .markItUpEditor {
+  background-image: url(images/bg-editor-markdown.png); }
+
+/* line 669, ../sass/pandemic.scss */
+.textile .markItUpEditor {
+  background-image: url(images/bg-editor-textile.png); }
+
+/* line 673, ../sass/pandemic.scss */
+.bbcode .markItUpEditor {
+  background-image: url(images/bg-editor-bbcode.png); }
+
+/* line 677, ../sass/pandemic.scss */
+.wiki .markItUpEditor, .dotclear .markItUpEditor {
+  background-image: url(images/bg-editor-wiki.png); }
+
+/* line 682, ../sass/pandemic.scss */
+.markItUp .markItUpButton1 a {
+  background-image: url(images/h1.png); }
+/* line 685, ../sass/pandemic.scss */
+.markItUp .markItUpButton2 a {
+  background-image: url(images/h2.png); }
+/* line 688, ../sass/pandemic.scss */
+.markItUp .markItUpButton3 a {
+  background-image: url(images/h3.png); }
+/* line 691, ../sass/pandemic.scss */
+.markItUp .markItUpButton4 a {
+  background-image: url(images/h4.png); }
+/* line 694, ../sass/pandemic.scss */
+.markItUp .markItUpButton5 a {
+  background-image: url(images/h5.png); }
+/* line 697, ../sass/pandemic.scss */
+.markItUp .markItUpButton6 a {
+  background-image: url(images/h6.png); }
+/* line 700, ../sass/pandemic.scss */
+.markItUp .markItUpButton7 a {
+  background-image: url(images/paragraph.png); }
+/* line 703, ../sass/pandemic.scss */
+.markItUp .markItUpButton8 a {
+  background-image: url(images/bold.png); }
+/* line 706, ../sass/pandemic.scss */
+.markItUp .markItUpButton9 a {
+  background-image: url(images/italic.png); }
+/* line 709, ../sass/pandemic.scss */
+.markItUp .markItUpButton10 a {
+  background-image: url(images/stroke.png); }
+/* line 712, ../sass/pandemic.scss */
+.markItUp .markItUpButton11 a {
+  background-image: url(images/list-bullet.png); }
+/* line 715, ../sass/pandemic.scss */
+.markItUp .markItUpButton12 a {
+  background-image: url(images/list-numeric.png); }
+/* line 718, ../sass/pandemic.scss */
+.markItUp .markItUpButton13 a {
+  background-image: url(images/list-item.png); }
+/* line 721, ../sass/pandemic.scss */
+.markItUp .markItUpButton14 a {
+  background-image: url(images/picture.png); }
+/* line 724, ../sass/pandemic.scss */
+.markItUp .markItUpButton15 a {
+  background-image: url(images/link.png); }
+/* line 727, ../sass/pandemic.scss */
+.markItUp .clean a {
+  background-image: url(images/clean.png); }
+/* line 730, ../sass/pandemic.scss */
+.markItUp .preview a {
+  background-image: url(images/preview.png); }
+
+/* line 736, ../sass/pandemic.scss */
+.navbar-light {
+  background-color: #428bca;
+  border-color: #E7E7E7; }
+  /* line 739, ../sass/pandemic.scss */
+  .navbar-light .navbar-brand {
+    color: #fff; }
+    /* line 741, ../sass/pandemic.scss */
+    .navbar-light .navbar-brand:hover, .navbar-light .navbar-brand:focus {
+      color: #333;
+      background-color: transparent; }
+  /* line 746, ../sass/pandemic.scss */
+  .navbar-light .navbar-text {
+    color: #fff; }
+  /* line 750, ../sass/pandemic.scss */
+  .navbar-light .navbar-nav > li > a {
+    color: #777; }
+    /* line 752, ../sass/pandemic.scss */
+    .navbar-light .navbar-nav > li > a:hover, .navbar-light .navbar-nav > li > a:focus {
+      color: #333;
+      background-color: transparent; }
+  /* line 757, ../sass/pandemic.scss */
+  .navbar-light .navbar-nav > .active > a {
+    color: #fff;
+    background-color: transparent; }
+    /* line 760, ../sass/pandemic.scss */
+    .navbar-light .navbar-nav > .active > a:hover, .navbar-light .navbar-nav > .active > a:focus {
+      color: #333;
+      background-color: transparent; }
+  /* line 765, ../sass/pandemic.scss */
+  .navbar-light .navbar-nav > .disabled > a {
+    color: #aaaaaa;
+    background-color: transparent; }
+    /* line 768, ../sass/pandemic.scss */
+    .navbar-light .navbar-nav > .disabled > a:hover, .navbar-light .navbar-nav > .disabled > a:focus {
+      color: #aaaaaa;
+      background-color: transparent; }
+  /* line 774, ../sass/pandemic.scss */
+  .navbar-light .navbar-link {
+    color: #fff; }
+    /* line 776, ../sass/pandemic.scss */
+    .navbar-light .navbar-link:hover {
+      color: #333; }
+
+@media (max-width: 767px) {
+  /* line 783, ../sass/pandemic.scss */
+  .navbar-inverse {
+    border-radius: 4px; } }

@@ -41,7 +41,7 @@ def editpost():
                 session.flash = 'POST BALEETED!'
                 redirect(URL(c='forums', f='viewthread',args=post.thread_id,extension='html'))
             else:
-                post.update_record(**dict(form.vars, edited=getesttime()))
+                post.update_record(**dict(form.vars, edited=getEstNow()))
                 session.flash = 'Changes saved.'
                 redirect(URL(c='forums', f='viewthread', args=post.thread_id, extension='html'))
         else:
@@ -62,11 +62,11 @@ def createpost():
         form.vars.author = gpart.auth_user.id
         if form.process(onvalidation=forumCheck).accepted:
             threadid = db.forum_threads.insert(forum_id=foruminfo.id,name=form.vars.thread,
-                                               author=form.vars.author,created=getesttime(),
-                                               updated=getesttime(),player=foruminfo.player,
+                                               author=form.vars.author,created=getEstNow(),
+                                               updated=getEstNow(),player=foruminfo.player,
                                                human=foruminfo.human,zombie=foruminfo.zombie
                                                 )
-            db.forum_posts.insert(thread_id=threadid,body=form.vars.postbody,author=form.vars.author,created=getesttime())
+            db.forum_posts.insert(thread_id=threadid,body=form.vars.postbody,author=form.vars.author,created=getEstNow())
             redirect(URL(c='forums', f='viewthread', args=threadid, extension='html'))
         elif form.errors:
             session.flash = getSassyPost()

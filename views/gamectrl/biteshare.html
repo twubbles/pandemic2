@@ -31,12 +31,12 @@
 
                         </td>
 
-                        {{elif bite.bite_share.created > (getesttime() - timedelta(hours=36)):}}
+                        {{elif bite.bite_share.created > (getEstNow() - timedelta(hours=36)):}}
                             <td colspan="2">
 
                             <!--calculate the time remaining-->
                             {{mins = bite.bite_share.time_shared/60}}
-                            {{diff = getesttime() - bite.bite_share.created}}
+                            {{diff = getEstNow() - bite.bite_share.created}}
                             {{newdiff = 36 - int(((diff.total_seconds()/60)/60))}}
                             {{minsleft = mins/36}}
                             {{timeleft = minsleft*newdiff}}
@@ -60,7 +60,7 @@
                                                class="btn btn-danger btn-xs">Share this bite</a>
 
                         </td>
-                        {{elif bite.bite_share.created < (getesttime() - timedelta(hours=36)):}}
+                        {{elif bite.bite_share.created < (getEstNow() - timedelta(hours=36)):}}
                          <td colspan="2">
                             Created {{=pretty_date(bite.bite_share.created)}}
                             <p style="color:red;">ROTTED</p>

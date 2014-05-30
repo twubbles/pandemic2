@@ -1,5 +1,7 @@
 # coding: utf8
 
+
+
 # GameVars class definition
 class GameVars:
     def __init__(self, id=False, start_at=False, end_at=False, time_per_food=False, stun_timer=0, cure_timer=0,
@@ -46,7 +48,7 @@ class GameVars:
 
     # checks if registration is open and returns True or False
     def checkReg(self):
-        if getesttime() > converttotz(self.signup_start_at) and getesttime() <  converttotz(self.signup_end_at):
+        if getEstNow() > self.signup_start_at and getEstNow() <  self.signup_end_at:
             return True
         else:
             return False
@@ -66,7 +68,7 @@ class GameVars:
         bitecheck = db(
             (db.bite_event.human_id == player.game_part.id) & (db.bite_event.game_id == self.id)).select().last()
         if bitecheck:
-            inftimer = getesttime() -  converttotz(bitecheck.created)
+            inftimer = getEstNow() - bitecheck.created
             if self.cure_timer > inftimer.seconds:
                 return False
             else:
@@ -121,7 +123,7 @@ try:
                                 db.games.stun_timer, db.games.cure_timer, db.games.bite_shares_per_food,
                                 db.games.pause_starts_at,db.games.game_name,
                                 db.games.pause_ends_at, db.games.created, db.games.posttimeout, orderby=db.games.created,cache=(cache.ram, 1), cacheable=True)
-    if getesttime() < converttotz(games.last().end_at):
+    if getEstNow() < games.last().end_at:
         current = games.last()
     if current:
         gameinfo = GameVars(current.id, current.start_at, current.end_at, current.time_per_food, current.stun_timer,

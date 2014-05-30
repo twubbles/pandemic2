@@ -26,3 +26,6 @@ static/.sass-cache/
 static/images/
 databases/
 languages/
+**/test
+test*
+*test

@@ -19,7 +19,7 @@ def generatecurecode():
 # checks if current game is an upcoming game
 def isgameupcoming():
     if gameinfo.getId():
-        if getesttime() < converttotz(gameinfo.gameStart()):
+        if getEstNow() < gameinfo.gameStart():
             return True
         else:
             return False
@@ -77,7 +77,7 @@ def returncurrentuserreqapp():
 
 # Checks to see if a cure has expired. NEW takes a joined row item as args
 def isExpiredCure(cure):
-    if converttotz(cure.cures.expiration) > getesttime():
+    if cure.cures.expiration > getEstNow():
         return False
     else:
         return True
@@ -86,7 +86,7 @@ def isExpiredCure(cure):
 # Checks to see if a player has starved. NEW. Must pass user.creature_type.immortal, game_part.zombie_expires_at, and creature_type.zombie joined
 def isZombieDead(user):
     if user.creature_type.zombie:
-        if converttotz(user.game_part.zombie_expires_at) > getesttime() and not user.creature_type.immortal:
+        if user.game_part.zombie_expires_at > getEstNow() and not user.creature_type.immortal:
             return False
         elif user.creature_type.immortal:
             return False
@@ -98,14 +98,14 @@ def isZombieDead(user):
 
 # Checks if mission details have unlocked.
 def isunlocked(mis):
-    if converttotz(mis.mission_reveal) < getesttime():
+    if mis.mission_reveal < getEstNow():
         return True
     else:
         return False
 
 # Checks if a mission is over.
 def isover(mis):
-    if converttotz(mis.mission_end) < getesttime():
+    if mis.mission_end < getEstNow():
         return True
     else:
         return False
@@ -200,15 +200,17 @@ def getSassyPost():
     phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>').last()
     return phrase.phrase
 
+
 # form validator for forum posts
 def forumCheck(form):
     user = db((db.game_part.user_id == form.vars.author) & (db.game_part.game_id == gameinfo.getId())).select().last()
-    timecheck = converttotz(user.lastpost + timedelta(minutes=gameinfo.postTimer()))
-    if  timecheck > getesttime():
+    timecheck = user.lastpost + timedelta(minutes=gameinfo.postTimer())
+    if  timecheck > getEstNow():
         form.errors.author = getSassyPost()
         form.errors.body = getSassyPost()
     else:
         user.update_record(lastpost=request.now)
+
 
 # form validator for registration
 def validateumassemail(form):
