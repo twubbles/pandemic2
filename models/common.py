@@ -1,21 +1,8 @@
 # coding: utf8
-response.static_version = '1.0.0'
-
-# import any modules needed here. web2py freaks out if you have imports in more than one place
-import re
-from datetime import datetime
-from datetime import timedelta
-from gluon.tools import prettydate
 
 # This model has various common functions in it.
 
-
-# datetime.now() tz hack to change the current time from PST to EST, use this instead of doing a datetime.now() to get the current datetime
-def getEstNow():
-    pstnow  = datetime.now()
-    tzchange = timedelta(hours=3)
-    estnow = pstnow + tzchange
-    return estnow
+from re import findall
 
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
 def fbphoto(fburl):
