@@ -5,10 +5,8 @@
 *.pdf
 *.py.1
 *.html.1
-*.scss
 *.rb
 .idea/
-static/sass/
 models/db.py
 sessions/
 errors/
