@@ -2,18 +2,15 @@
 
 
 {{block layer01}}
-<style>
-    #headtxt {
-    display:none;
-    color:white;
-    }
-</style>
-<div class="container-fluid">
+
+ 
+<div class="container-fluid margin-top">
+
     <div class="row" id="defaultview">
 
-        <hr>
+       
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 roundcorners">
-
+<div id="askmenu" class="panel container-panel">
             {{try:}}
             <h3>{{=session.flash}}</h3>
             {{session.flash = ''}}
@@ -27,19 +24,31 @@
             {{except:}}
             {{pass}}
 
-            <div id="askmenu" class="panel container-panel">
-                <p>Are you at the location of the bite?</p>
-                <INPUT type="button" class="button btn-primary  margin-bot btn" id="a" onclick="atLoc()" value="Yes"/>
-                <INPUT type="button" class="button btn-info margin-bot btn" id="b" onclick="selectLoc()" value="No"/>
+            
+                <h4 class="bitetext">
+					<strong>
+						Where did the bite happen?
+					</strong> 
+				</h4>
+                <INPUT type="button" class="button btn-primary btn-block margin-bot btn" id="a" onclick="atLoc()" value="At my current location"/>
+				<h4 class="bitetext">
+					<strong>
+						Or show us on the map.
+					</strong> 
+				</h4>
+			
+		
+				
+
             </div>
 
         </div>
 
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-            <p id="headtxt">Pick the spot where the bite occurred</p>
 
-            <div id="map-canvas" class="mapcanvas"></div>
+            <div id="map-canvas" class="mapcanvas margin-bot"></div>
+			
         </div>
 
 
@@ -55,8 +64,8 @@
 <script src="{{=URL('static','js/jquery-1.11.0.min.js')}}"></script>
 <script src="{{=URL('static','js/jquery-ui-1.10.4.custom.min.js')}}"></script>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-<p class="loadgeo"></p>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false?key={AIzaSyCFUgFQk4aeR8NBAXjQ60iB8T0IauM4UYs}"></script>
+
 <script>
 
 
@@ -67,9 +76,8 @@
 var $sliderdiv = $( "<div id='slider'/>" );
 var $slidertd = $( "<td colspan=3 id='slidertd'/>" );
 var $slidertr = $( "<tr id='slidertr'/>" );
-
 var $slidertotaltd = $( "<td colspan=3 id='slidertotaltd'/>" );
-var $slidertotal = $( "<span style='text-align:center;color:orange;' id='slidertotal'><b>Use the Slider to choose how much time to save in your biteshare</b></span>" );
+var $slidertotal = $( "<h4 class='bitetext' id='slidertotal'><strong id='slidertext'>Use the Slider to choose how much time to save in your biteshare</strong></h4>" );
 $( "#no_table_timeshared__row" ).hide();
 
 $('#no_table_share').change(
@@ -91,7 +99,7 @@ function() {
           step: 3600,
           slide: function( event, ui ) {
         $( "#no_table_timeshared" ).val( ui.value );
-        $( "#slidertotal" ).text( ((ui.value/60)/60) + " Hours" );
+        $( "#slidertext" ).text( "Set aside " + ((ui.value/60)/60) + " Hours of brains" );
       }
 
     });
@@ -114,45 +122,55 @@ $( "#submit_record__row > .w2p_fl, .w2p_fc" ).hide();
 $( "#submit_record__row > td" ).attr("colspan","3");
 
 
-var markers = [];
-function selectLoc() {
-	var elem = document.getElementById("map-canvas");
-	elem.setAttribute("style","display: block;");
-	var head = document.getElementById("headtxt");
-	head.setAttribute("style","display: block;");
-  var mapOptions = {
-    zoom: 16,
-    center: new google.maps.LatLng(42.39088182665314,-72.52500057220459 )
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-
-  google.maps.event.addListener(map, 'click', function(e) {
-	setAllMap(null);
-	markers = [];
-    placeMarker(e.latLng, map);
-
-	$( "input[name='Lat']" ).attr( "value", e.latLng.d );
-    $( "input[name='Long']" ).attr( "value",  e.latLng.e );
-	$( ":submit" ).show();
-  });
-
-}
-
-function placeMarker(position, map) {
-  var marker = new google.maps.Marker({
-    position: position,
-    map: map
-  });
-  markers.push(marker);
-  map.panTo(position);
-}
-
-function setAllMap(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
+var map;
+var marker = null;	
+var styles = [
+  {
+    "featureType": "poi",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+    "stylers": [
+      { "invert_lightness": true },
+      { "visibility": "on" },
+      { "weight": 2 },
+      { "hue": "#00a1ff" }
+    ]
   }
+];
+function initialize() {
+
+	var mapOptions = {
+		styles: styles,
+		zoom: 16,
+		center: new google.maps.LatLng(42.39088182665314,-72.52500057220459 ),
+		scrollwheel: false,
+		mapTypeControl: false,
+		panControl: false,
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.DEFAULT,
+			position: google.maps.ControlPosition.TOP_RIGHT
+		},
+		scaleControl: true,
+		streetViewControl: false,
+	};
+
+	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	google.maps.event.addListener(map, 'click', function(e) {
+		
+		$( "input[name='Lat']" ).attr( "value", e.latLng.lat() );
+		$( "input[name='Long']" ).attr( "value",  e.latLng.lng() );
+		$( ":submit" ).show();
+			
+		if (marker) { marker.setMap(null); }
+		 marker = new google.maps.Marker({ position: e.latLng, map: map});
+	});
+
 }
+
+
 
 function atLoc() {
     if (navigator.geolocation) {
@@ -162,10 +180,8 @@ function atLoc() {
         $( "input[name='Lat']" ).attr( "value", position.coords.latitude );
         $( "input[name='Long']" ).attr( "value",  position.coords.longitude );
 		$( ":submit" ).show();
-
     });
 };
-
 }
 
 

@@ -45,7 +45,7 @@ textarea{
 .mapcanvas {
 
     height: 500px;
-    width: 90%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     padding: 0px;
@@ -59,7 +59,7 @@ textarea{
 .mapcanvas {
 
     height: 500px;
-    width: 90%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     padding: 0px;
@@ -113,6 +113,9 @@ body {
  margin:35px;
 }
 
+.margin-top {
+    margin-top: 15px;
+}
 
 .margin-bot {
     margin-bottom: 15px;
@@ -152,6 +155,13 @@ body {
 	border: 1px solid $lightgrey;
 
 }
+
+.bitetext {
+	padding:5px;
+	text-align:center;
+	color:orange;
+ }
+
 
 .form-control {
 color: black;

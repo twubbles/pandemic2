@@ -38,16 +38,8 @@
 
 
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2 class="page-header">Bitemap</h2>
-
-            <div id="statmap-canvas" class="mapcanvas"></div>
-
-
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <hr/>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            
             <div class="table-responsive">
                 <table class="table admintable" id="bigtable">
                     <thead>
@@ -89,6 +81,16 @@
             </div>
 
         </div>
+		
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            
+
+            <div id="statmap-canvas" class="mapcanvas"></div>
+
+
+        </div>
+
+        
 
     </div>
 </div>
@@ -96,7 +98,7 @@
 {{end}}
 
 {{block postfooter}}
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false?key={AIzaSyCFUgFQk4aeR8NBAXjQ60iB8T0IauM4UYs}"></script>
 
 <script src="{{=URL('static','js/markerclusterer.js')}}"></script>
 <script src="{{=URL('static','js/chart.min.js')}}"></script>
@@ -112,13 +114,39 @@ data = {
     ]
 }
 
+
+
       function initialize() {
-        var center = new google.maps.LatLng(42.39088182665314,-72.52500057220459);
+		var styles = [
+					  {
+						"featureType": "poi",
+						"stylers": [
+						  { "visibility": "off" }
+						]
+					  },{
+						"stylers": [
+						  { "invert_lightness": true },
+						  { "visibility": "on" },
+						  { "weight": 2 },
+						  { "hue": "#00a1ff" }
+						]
+					  }
+					];
 
         var map = new google.maps.Map(document.getElementById('statmap-canvas'), {
-          zoom: 16,
-          center: center,
-          mapTypeId: google.maps.MapTypeId.SATELLITE
+			styles: styles,
+			zoom: 16,
+			center: new google.maps.LatLng(42.39088182665314,-72.52500057220459),
+			scrollwheel: false,
+			mapTypeControl: false,
+			panControl: false,
+			zoomControl: true,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.DEFAULT,
+				position: google.maps.ControlPosition.TOP_RIGHT
+			},
+			scaleControl: true,
+			streetViewControl: false,
         });
         var image = 'http://i.imgur.com/0PUCFyB.gif';
         var markers = [];
@@ -180,6 +208,20 @@ share_context.textAlign = "center";
 share_context.fillText("{{=shareTotal}}",90,115);
 
 
+var cb = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+};
+
+var href = window.location.href;
+
+if (href.search("maps.google") > 0) {
+    var childs = document.getElementById("statmap-canvas").childNodes;
+    for (var i=0, l=childs.length; i<l; i++) {
+        childs[i].addEventListener("mousewheel", cb, false);
+    }
+}
 
 
 </script>

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # model for engine initialization
 
 # This populates the creature type table with the basic types required

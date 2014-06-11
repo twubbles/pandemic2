@@ -1,4 +1,15 @@
+# -*- coding: utf-8 -*-
+
 # This model has various common functions in it.
+# it is also the first model to load so put any global imports here
+
+# this reloads the modules on change for development purposes and should be removed in production
+from gluon.custom_import import track_changes; track_changes(True)
+
+# import the timezone hack module
+from fixtime import getEstNow
+
+
 
 
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
