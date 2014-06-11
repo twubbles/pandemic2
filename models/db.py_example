@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 response.static_version = '2.0.0'
 
-if not request.env.web2py_runtime_gae:
-    db = DAL('mysql://login:password@localhost:3307/databasename',pool_size=1,check_reserved=['all'])
-else:
-    db = DAL('google:datastore')
-
-    session.connect(request, response, db=db)
-
+db = DAL('mysql://umasshvzdb:recashysen123@mysql.umasshvz.com/umasshvz',pool_size=1,check_reserved=['all'])
+session.connect(request, response, db=db)
 response.generic_patterns = ['*'] if request.is_local else []
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate

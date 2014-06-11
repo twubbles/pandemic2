@@ -1,7 +1,3 @@
-# coding: utf8
-
-response.static_version = '1.0.0'
-
 # This model has functions which relate to to games, game participations, and user status in the game.
 
 # Generates a 12 character bitecode in hexidecimal.

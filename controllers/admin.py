@@ -145,6 +145,7 @@ def zombierewardfood():
                     newtime = gameinfo.addFoodTimer()
                 db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime)
         session.flash = "All Zombies Given " + str(realtime / 60) + " minutes of life!"
+        from admintools import adminlog
         adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " gave all zombies " + str(realtime / 60) + " minutes of life")
         form = ''
         return dict(form=form)
@@ -172,6 +173,7 @@ def zombieraise():
                     db(db.game_part.id == zombie.game_part.id).update(zombie_expires_at=newtime)
 
             session.flash = "THE SHAMBLING DEAD HAVE ARISEN ONCE AGAIN!"
+            from admintools import adminlog
             adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " activated the shambling dead")
             form = ''
         return dict(form=form, )
@@ -186,6 +188,7 @@ def editcure():
     cure = db.cures(request.args(0)) or redirect(URL('error'))
     form = SQLFORM(db.cures, cure, deletable=True)
     if form.validate():
+        from admintools import adminlog
         adminlog(str(auth.user.id) + " changed cure " + str(form.vars))
         if form.deleted:
             db(db.cures.id == cure.id).delete()
@@ -212,6 +215,7 @@ def createcure():
                                admincreator=authid, expiration=gameinfo.addFoodTimer())
 
         session.msg = 'Cure code created!'
+        from admintools import adminlog
         adminlog(str(authid) + " created cure " + str(cure))
         redirect(URL(c='admin', f='curelist'))
 
@@ -251,6 +255,7 @@ def editgame():
             session.flash = 'GAME BALEETED!'
         else:
             game.update_record(**dict(form.vars))
+            from admintools import adminlog
             adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " changed the game: " + str(form.vars))
             session.flash = 'Changes saved.'
     else:
@@ -326,6 +331,7 @@ def edituser():
 def regencode():
     if request.args(0) and request.args(1):
         db(db.game_part.id == request.args(0)).update(bitecode=generatebitecode())
+        from admintools import adminlog
         adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " regened code for player " + str(request.args(0)))
         session.flash = "Bitecode regenerated"
         message = "Your bitecode has been regenerated. It is now: " + db.game_part(request.args(0)).bitecode
@@ -341,6 +347,7 @@ def makeoz():
     db(db.game_part.id == request.args(0)).update(creature_type=6)
     userpart = db(db.game_part.id == request.args(0)).select()
     session.flash = 'made them an OZ!'
+    from admintools import adminlog
     adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " made " + str(request.args(0)) + " an OZ")
     message = "You have been made an Original Zombie. \n"
     message += "You will appear as a Human on the website until you make your first bite. \n"
@@ -361,6 +368,7 @@ def makemod():
     if form.process(onvalidation=validateconfirm).accepted:
         db.auth_membership.insert(user_id=request.args(0), group_id=527)
         session.flash = 'made ' + user.first_name + ' ' + user.last_name + ' a mod'
+        from admintools import adminlog
         adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " made " + str(request.args(0)) + " a mod")
         return dict(form='')
     else:
@@ -385,6 +393,7 @@ def squadapplist():
 def denysquadapp():
     sappid = request.args(0)
     db(db.squads_app.id == sappid).update(reviewed=True, reviewer=auth.user.id)
+    from admintools import adminlog
     adminlog(str(auth.user.id) + " denied squad app for " + str(request.args(0)))
     redirect(URL(c='admin', f='squadapplist'))
 
@@ -399,6 +408,7 @@ def approvesquadapp():
                                 leader=sq.leader,
                                 sigid=sq.sigid)
     db(db.game_part.id == sq.leader).update(squad_leader=True, squad_id=newsquad)
+    from admintools import adminlog
     adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " approved squad app for " + str(request.args(0)))
     redirect(URL(c='admin', f='squadapplist'))
 
@@ -422,6 +432,7 @@ def denyregreq():
     db(db.registration_request.id == regreqid).update(reviewed=True, approved=False, reviewer=auth.user.id)
     message = "Unfortunately, the Admins have denied your registration request. If you believe this was in error you may appeal via e-mail @ admin@umasshvz.com"
     sendemail(regreq.registration_email, "HvZ Registration Request Denied", message)
+    from admintools import adminlog
     adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " denied reg app for " + str(request.args(0)))
     redirect(URL(c='admin', f='regrequestlist'))
 
@@ -438,6 +449,7 @@ def approveregreq():
                                registration_email=regreq.registration_email)
     message = "The Admins have approved your registration request! This is your registration code: * " + regcode + " *. Head to http://www.umasshvz.com/pandemic/gamectrl/register to use it."
     sendemail(regreq.registration_email, "HvZ Registration code", message)
+    from admintools import adminlog
     adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " approved reg app for " + str(request.args(0)))
     redirect(URL(c='admin', f='regrequestlist'))
 
@@ -460,13 +472,19 @@ def removeimmortal():
             message = "You have LOST your Immortality and have 18 hours until you starve!"
             sendemail(zombie.game_part.registration_email, "HvZ Immortality LOST", message)
         session.flash = "All Immortal Zombies have been stripped of their immortality!"
+        from admintools import adminlog
         adminlog(str(auth.user.first_name) + " " + str(auth.user.last_name) + " (" + str(auth.user.id) + ")" + " stripped immortality form all immortals")
         form = ''
         return dict(form=form)
     return dict(form=form)
 
+# This controller emails the adminlog to the head admin, moves the contents
+# of the adminlog.txt to the adminlogold.txt, and wipes adminlog.txt.
+# This is currently hardcoded to only work if run by specific auth_user(s)
+
 @auth.requires_membership('admins')
 def sendlog():
+    from admintools import adminlog
     if auth.user.id == 2 or auth.user.id == 488:
         import os
         logdir = os.getcwd()

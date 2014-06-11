@@ -52,7 +52,7 @@ def roster():
 # Landing page index.
 def index():
     # This builds the globalvars variable that appears at the top of the landing page
-    if gameinfo.isGameActive():
+    if gameinfo.isGameActive:
         if isgameupcoming():
             events = False
             globalvars = 'Game begins @ '
@@ -63,7 +63,7 @@ def index():
     else:
         events = False
         globalvars = 'No upcoming game yet'
-    if gameinfo.isGameActive():
+    if gameinfo.isGameActive:
         missions = missionfeed(gameinfo.getId())
         bites = bitefeed(gameinfo.getId())
     else:

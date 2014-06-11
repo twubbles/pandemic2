@@ -3,7 +3,6 @@
 # this reloads the modules on change for development purposes and should be removed in production
 from gluon.custom_import import track_changes; track_changes(True)
 
-from fixtime import *
+# import the timezone hack module
+from fixtime import getEstNow
 
-def getEstNow():
-    return getNow()

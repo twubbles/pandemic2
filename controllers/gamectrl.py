@@ -201,7 +201,7 @@ def bitecodepg():
                                 session.flash = 'Invalid time to share'
                                 redirect(URL(c='default', f='index', args=bcode))
                             else:
-                                timetoshare = gameinfo.timePerFood() - timeshared
+                                timetoshare = gameinfo.timePerFood - timeshared
                             timetoadd = (gpart.game_part.zombie_expires_at + timedelta(seconds=timetoshare))
                             if timetoadd > gameinfo.addFoodTimer():
                                 timetoadd = gameinfo.addFoodTimer()

@@ -1,0 +1,24 @@
+# this model imports the web2py Mail class, initializes it,
+# and creates a global function to send email
+
+from gluon.tools import Mail
+
+mail = Mail()
+mail.settings.server = 'your.emailhost.com:587'
+mail.settings.sender = 'theserver@yourdomain.com'
+mail.settings.login = 'theserver@yourdomain.com:yourpassword'
+
+def sendemail(recipient, subject, message):
+    mail.send(to=[recipient],subject=subject,essage=message)
+    # uncomment everything below and comment the line above when testing
+    # try:
+    #     string = recipient + "\n" + subject + "\n" + message + "\n"
+    #     file = open("mailerlog.txt", "a")
+    #     file.write(str(getEstNow()) + '\n' + string + "\n")
+    #     file.close()
+    #     msg = True
+    # except:
+    #     msg = False
+    # return msg
+
+

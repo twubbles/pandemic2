@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-response.static_version = '1.0.0'
 
 authstat = auth.is_logged_in()
 # The logo/header

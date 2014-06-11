@@ -1,7 +1,10 @@
-# datetime.now() tz hack to change the current time from PST to EST, use this instead of doing a datetime.now() to get the current datetime
-from datetime import *
+# fix for hosting on a server in different timezone
+# set the hours to the difference between timezones
 
-def getNow():
+from datetime import datetime
+from datetime import timedelta
+
+def getEstNow():
     pstnow  = datetime.now()
     tzchange = timedelta(hours=3)
     estnow = pstnow + tzchange
