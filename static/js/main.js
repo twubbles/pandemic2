@@ -12,7 +12,6 @@ require.config({
 		"admintable":"admintable",
 		"textareacheck":"textareacheck",
 		"markitup":"jquery.markitup",
-		"postpage":"postpage",
 		"masonry":"masonry.min",
 
     },
@@ -31,7 +30,7 @@ require.config({
 
     }
 });
-require(["prefixfree", "jquery", "jqueryui","bootstrap","inittimepicker","admintable","defaultview","loadgeo", "textareacheck","postpage"], 
-function (prefixfree, $, jqueryui, bootstrap, inittimepicker, admintable, defaultview,textareacheck,postpage) {
+require(["prefixfree", "jquery", "jqueryui","bootstrap","inittimepicker","admintable","defaultview", "textareacheck"],
+function (prefixfree, $, jqueryui, bootstrap, inittimepicker, admintable, defaultview,textareacheck) {
 
 });

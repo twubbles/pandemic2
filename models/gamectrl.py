@@ -196,7 +196,7 @@ def forumAccess(gpart,forumid):
 
 
 def getSassyPost():
-    phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>').last()
+    phrase = db(db.sassypost).select(db.sassypost.phrase, orderby='<random>',limitby=(0,1))[0]
     return phrase.phrase
 
 

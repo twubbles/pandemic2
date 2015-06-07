@@ -1,136 +1,74 @@
 {{extend 'layout.html'}}
 
 
+{{block head}}
+
+{{end}}
+
 {{block layer01}}
 
-<div class="container">
 
-    <div class="page-header">
-        <h1><b>UMASSHvZ</b><small class="pull-right"><a href="{{=URL('default', 'plot_summary',)}}" class="btn btn-info" >Plot Summary</a></small></h1>
-    </div>
+<div class="container-fluid">
 
-    <div class="panel panel-info">
-        <h3 class="hidden-xs centertext">{{=globalvars}}</h3>
-        <h5 class="visible-xs centertext">{{=globalvars}}</h5>
-    </div>
-    <div class="row featurette">
 
-        <div class="col-md-7">
-            {{if missions:}}
-            <h2 class="sub-header">Missions</h2>
+    <div class="row" id="indexlayout">
 
-            <div class="table">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Number</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{num=0}}
-                    {{for mission in missions:}}
-
-                    {{if isunlocked(mission) and not isover(mission):}}
-                    <tr style="background-color: #5cb85c;">
-                        {{elif isover(mission):}}
-                    <tr style="background-color: #999;">
-                        {{else:}}
-                    <tr style="background-color: #428bca;">
-                        {{pass}}
-                        <td><a href="{{=URL('default','viewmission', args=mission.id)}}" style="color:black;">Mission
-                            {{=num}}</a></td>
-                        <td>{{=pretty_date(mission.mission_start)}}</td>
-                        <td>{{=pretty_date(mission.mission_end)}}</td>
-                    </tr>
-                    {{num+=1}}
-                    {{pass}}
-                    </tbody>
-                </table>
-            </div>
-            {{pass}}
+        <div class="alert alert-info item centertext" id="gameticker">
+            {{=LOAD('info','gameticker.load',ajax=True,times=2,timeout=60000, content="",target='gameticker')}}
         </div>
 
-        <div class="col-md-5">
-
-
-            {{if bites:}}
-           <h2 class="sub-header">Events</h2>
-
-
-
-            <div class="table">
-                <table class="table-responsive table">
-                    <thead>
-                    <tr>
-                        <th>Bite</th>
-                        <th>Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    {{for bite in bites:}}
-                    <tr>
-                        <td>
-
-                            {{human=db((db.auth_user.id == db.game_part.user_id) & (db.game_part.id == bite.bite_event.human_id)).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id, db.auth_user.handle).first()}}
-
-                           {{if bite.auth_user.handle:}}
-                {{=A(bite.auth_user.handle,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
-                {{else:}}
-                {{=A(bite.auth_user.first_name + ' ' + bite.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=bite.auth_user.id))}}
-                {{pass}}
-                    Bit
-                                       {{if human.handle:}}
-                {{=A(human.handle,  _href=URL(c='default',f='userinfo', args=human.id))}}
-                {{else:}}
-                {{=A(human.first_name + ' ' + human.last_name,  _href=URL(c='default',f='userinfo', args=human.id))}}
-                {{pass}}
-                        </td>
-
-                        <td>{{=pretty_date(bite.bite_event.created)}}</td>
-                    </tr>
-
-                    {{pass}}
-                    </tbody>
-                </table>
-            </div>
-
-            {{pass}}
-
+        <div class="col-xs-6 col-md-3 item">
+            <a href="#" class="thumbnail">
+                <img data-src="holder.js/100%x180" alt="...">
+            </a>
         </div>
+        <div class="col-xs-6 col-md-3 item">
+            <a href="#" class="thumbnail">
+                <img data-src="holder.js/100%x180" alt="...">
+            </a>
+        </div>
+
+        <div class="col-xs-6 col-md-3 item">
+            <a href="#" class="thumbnail">
+                <img data-src="holder.js/100%x180" alt="...">
+            </a>
+        </div>
+        <div class="col-xs-6 col-md-3 item">
+            <a href="#" class="thumbnail">
+                <img data-src="holder.js/100%x180" alt="...">
+            </a>
+        </div>
+
+
+        <!--This div is the column guide for isotope-->
+        <div style="display:none;" class="col-xs-1 col-sm-1 col-md-1 col-lg-1 masonry-col "></div>
+        <!--end of the row container-->
     </div>
-</div>
 
-<hr class="featurette-divider">
-
-<div class="container">
-    {{if posts:}}
-    <div class="row" id="postfeed">
-        {{for post in posts:}}
-
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 item">
-                <div class="panel panel-default">
-                    <div class="panel-heading "><a href="{{=URL('default','viewpost', args=post.posts.id)}}"> {{=post.posts.title}}</a></div>
-                    <div class="panel-body">
-                        {{=XML(post.posts.description,sanitize=True)}}
-                        <p><em>{{=pretty_date(post.posts.pub_date)}}</em> --- {{=(post.auth_user.first_name + ' '+post.auth_user.last_name)}}</p>
-                    </div>
-                </div>
-
-    </div>
-    {{pass}}
-    {{pass}}
 
 </div>
-
-
 
 
 {{end}}
 
 {{block postfooter}}
 
+<script>
+
+
+var iso = new Isotope( '#indexlayout', {
+packery: {
+columnWidth: '.masonry-col',
+rowHeight: 50
+
+
+},
+itemSelector: '.item',
+
+});
+
+
+</script>
 
 {{end}}
+

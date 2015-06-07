@@ -1,35 +1,37 @@
- 
-  <table class="table">
-                <thead>
-                <tr>
+<table class="table">
+    <thead>
+    <tr>
 
-                <th></th>
-                <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {{for post in posts:}}
-                <tr>
-                <td>
-                {{if post.auth_user.handle:}}
-                {{=A(post.auth_user.handle,  _href=URL(c='default',f='userinfo', extension='html', args=post.auth_user.id))}}
-                {{else:}}
-                {{=A(post.auth_user.first_name + ' ' + post.auth_user.last_name,  _href=URL(c='default',f='userinfo', args=post.auth_user.id))}}
-                {{pass}}
-                {{if auth.user.id == post.auth_user.id or auth.has_membership('admins' or 'mods'):}}
-                <p> <a href="{{=URL('forums', 'editpost', extension='html', args=[post.forum_posts.id])}}" class="btn btn-warning btn-xs pull-right" >Edit</a></p>
-                 {{pass}}
-
-
-
-                 {{=XML(post.forum_posts.body,sanitize=False,permitted_tags=['a', 'b', 'blockquote', 'br/', 'i', 'li','ol', 'ul', 'p', 'cite', 'code', 'pre', 'em', 'h5', 'h4', 'h3', 'h6'],allowed_attributes={'a':['href', 'title'], 'blockquote':['type']})}}
-
-                    <p><em>{{=pretty_date(post.forum_posts.created)}}</em></p>
-                </td>
-                <td></td>
-                </tr>
-                {{pass}}
-                </tbody>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{for post in posts:}}
+    <tr>
+        <td>
+            {{if post.auth_user.handle:}}
+            {{=A(post.auth_user.handle, _href=URL(c='default',f='userinfo', extension='html', args=post.auth_user.id))}}
+            {{else:}}
+            {{=A(post.auth_user.first_name + ' ' + post.auth_user.last_name, _href=URL(c='default',f='userinfo',
+            args=post.auth_user.id))}}
+            {{pass}}
+            {{if auth.user.id == post.auth_user.id or auth.has_membership('admins' or 'mods'):}}
+            <p><a href="{{=URL('forums', 'editpost', extension='html', args=[post.forum_posts.id])}}"
+                  class="btn btn-warning btn-xs pull-right">Edit</a></p>
+            {{pass}}
 
 
-            </table>
+            {{=XML(post.forum_posts.body,sanitize=False,permitted_tags=['a', 'b', 'blockquote', 'br/', 'i', 'li','ol',
+            'ul', 'p', 'cite', 'code', 'pre', 'em', 'h5', 'h4', 'h3', 'h6'],allowed_attributes={'a':['href', 'title'],
+            'blockquote':['type']})}}
+
+            <p><em>{{=pretty_date(post.forum_posts.created)}}</em></p>
+        </td>
+        <td></td>
+    </tr>
+    {{pass}}
+    </tbody>
+
+
+</table>

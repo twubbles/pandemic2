@@ -10,8 +10,6 @@ from gluon.custom_import import track_changes; track_changes(True)
 from fixtime import getEstNow
 
 
-
-
 # Takes a user's facebook URL as input, splices the FB user ID, and plugs it into the FB graph API to retrive the profile thumb.
 def fbphoto(fburl):
     from re import findall
@@ -50,6 +48,7 @@ def pretty_date(d):
         return '{0} hours ago'.format(s / 3600)
 
 
+# Constructs the user button for the top left corner
 def user_bar():
     action = '/user'
     if auth.user:
@@ -69,3 +68,52 @@ def user_bar():
     return bar
 
 
+def breadcrumbs(arg_title=None):
+    # make links pretty by capitalizing and using 'home' instead of 'default'
+    pretty = lambda s: s.replace('default', 'Home').replace('_', ' ').capitalize()
+    menus = [LI(A(T('UMASSHvZ'), _href=URL(r=request, c='default', f='index')))]
+    if request.controller != 'default':
+        # add link to current controller
+        menus.append(LI(A(T(pretty(request.controller)), _href=URL(r=request, c=request.controller, f='index'))))
+        if request.function == 'index':
+            # are at root of controller
+            menus[-1] = LI(A(T(pretty(request.controller)), _href=URL(r=request, c=request.controller, f=request.function)))
+        else:
+            # are at function within controller
+            menus.append(LI(A(T(pretty(request.function)), _href=URL(r=request, c=request.controller, f=request.function))))
+        # you can set a title putting using breadcrumbs('My Detail Title')
+        if request.args and arg_title:
+            menus.append(LI(A(T(arg_title)),
+                         _href=URL(r=request, c=request.controller, f=request.function, args=[request.args])))
+    else:
+        #menus.append(A(pretty(request.controller), _href=URL(r=request, c=request.controller, f='index')))
+        if request.function == 'index':
+            # are at root of controller
+            #menus[-1] = pretty(request.controller)
+            pass
+            #menus.append(A(pretty(request.controller), _href=URL(r=request, c=request.controller, f=request.function)))
+        else:
+            # are at function within controller
+            menus.append(LI(A(T(pretty(request.function)), _href=URL(r=request, c=request.controller, f=request.function))))
+        # you can set a title putting using breadcrumbs('My Detail Title')
+        if request.args and arg_title:
+            menus.append(LI(A(T(arg_title), _href=URL(r=request, f=request.function, args=[request.args]))))
+
+    return OL(XML('  '.join(str(m.xml().replace(' data-w2p_disable_with="default"', '')) for m in menus)), _id="breadcrumbs")
+
+
+# takes saturation and variance as args and returns an rgb color value for css
+def randomcolors(s, v):
+    import random
+    import colorsys
+    num = random.randint(0, 359)
+    num /= 360.0
+    gratio = 0.618033988749895
+    num += gratio
+    num %= 1
+    rgb = colorsys.hsv_to_rgb(num, s, v)
+    r = str(int(255 * rgb[0]))
+    g = str(int(255 * rgb[1]))
+    b = str(int(255 * rgb[2]))
+    colorcode = "rgb(" + r + ", " + g + ", " + b + ")"
+    return colorcode

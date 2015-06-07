@@ -15,3 +15,4 @@
 #     db.creature_type.insert(cid=5, zombie=True, name="Immortal Zombie", immortal=True,hidden=False)
 #     db.creature_type.insert(cid=6, zombie=False, name="Human", immortal=False,hidden=True)
 
+

@@ -1,129 +1,185 @@
 <!DOCTYPE html>
 <head>
-<title>{{=response.title or request.application}}</title>
+    <title>{{=response.title or request.application}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="application-name" content="{{=request.application}}" />
+    <meta name="application-name" content="{{=request.application}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<link rel="image_src" href="http://i.imgur.com/QDGEJpR.png" />
+    <link rel="image_src" href="http://i.imgur.com/QDGEJpR.png"/>
     <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
-	{{response.include_meta()}}
+    {{response.include_meta()}}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    {{
+    response.files.insert(0,URL('static','css/site.min.css'))
+    response.files.insert(1,URL('static','css/jquery-ui-1.10.4.custom.min.css'))
+    response.files.insert(2,URL('static','js/site.min.js'))
+    response.files.insert(3,URL('static','js/jquery.sidr.js'))
+    response.files.insert(4,URL('static','js/isotope.pkgd.js'))
+    response.files.insert(5,URL('static','js/packery.js'))
+    response.files.insert(6,URL('static','css/pandemic.css'))
 
-    <style>
-        @font-face {
-  font-family: 'Carme';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Carme Regular'), local('Carme'), url({{=URL('static','fonts/carme.woff')}}) format('woff');
-}
+    }}
 
+    {{response.include_files()}}
+    <!--<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>-->
 
+    {{include 'web2py_ajax.html'}}
 
-    </style>
-
-
-{{
-	response.files.insert(0,URL('static','css/bootstrap.css'))
-	response.files.insert(1,URL('static','css/pandemic.css'))
-	response.files.insert(2,URL('static','css/jquery-ui-1.10.4.custom.min.css'))
-	response.files.insert(3,URL('static','css/dashboard.css'))
-}}
-{{response.include_files()}}
+    {{block head}}
+    {{end}}
 
 </head>
+
 <body>
-    <header>
-		
-		
-  <nav class="navbar navbar-default navbar-fixed-top navbartext " role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{{=URL('default', 'index')}}">UMASSHvZ</a>
+
+<header>
+
+
+    <div id="sidemenu">
+
+
+        <ul>
+            <li>
+                <a style="background-color: #4A89DC;" href="#"><span class="glyphicon glyphicon-home"></span></a>
+            </li>
+            <li><a style="background-color: #3BAFDA;" href="#"><span class="glyphicon glyphicon-list-alt"></span></a>
+            </li>
+            <li><a style="background-color: #8CC152;" href="#"><span class="glyphicon glyphicon-list"></span></a></li>
+            <li><a style="background-color: #967ADC;" href="#"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a style="background-color: #4A89DC;" href="#"><span class="glyphicon glyphicon-calendar"></span></a>
+            </li>
+        </ul>
+
+
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="main-navbar-collapse-1">
-	  
-      <ul class="nav navbar-nav">
-		{{if response.adminmenu:}}
-			{{=response.adminmenu[0]}}
-		{{pass}}
-		{{if response.menu:}}
-          	   {{=response.menu[0]}}
-		{{pass}}
-		{{if auth.is_logged_in():}}
-            		{{if response.squadmenu:}}   
-            			{{=response.squadmenu[0]}} 
-            		{{pass}}
-            		{{if response.statusmenu:}}   
-            			{{=response.statusmenu[0]}}  						
-            		{{else:}}
-            		{{pass}}
-            		
-         {{pass}}
-      </ul>
-	  <ul class="nav navbar-nav">
-	  </ul>
-	  
-      <ul class="nav navbar-nav navbar-right " style="margin-right: 0px;">
-		 {{if auth.is_logged_in():}}
-			{{=user_bar()[0]}}
-		{{else:}}
-		<li><a id="loginnavbutton" href="/pandemic/default/user/login?_next=/pandemic/default/index" class="btn btn-default navbar-btn" >Login</a></li>
-		{{pass}}
-	  </ul>  
-		{{block menuitem}}
-		{{end}}
-	  
-	  
-	</div><!-- /.navbar-collapse -->
+    <div id="mobile-header">
+        <a id="sidemenu-button" class="responsive-menu-button">
+            <span class="glyphicon glyphicon-th-large"></span>
+        </a>
+
+        <ul>
+
+            <li>
+                <a class="responsive-button" href="{{=URL('default', 'index')}}">
+                    <object style="pointer-events: none;" width="41" height="41" type="image/svg+xml"
+                            data="{{=URL('static','images/white-simplehvzlogo.svg')}}"></object>
+                </a>
+            </li>
+
+            <li>
+                <a class="responsive-button">
+                    <span class="glyphicon glyphicon-qrcode"></span>
+                </a>
+            </li>
 
 
-  </div><!-- /.container-fluid -->
+        </ul>
 
-      {{block navitem}}
-	  {{end}}
-</nav>
+    </div>
 
 
+    <div id="navigation">
+        <nav class="navbar navbar-inverse navbar-fixed-top navbartext " role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+
+                    <a class="navbar-brand" href="{{=URL('default', 'index')}}">UMASSHvZ</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="main-navbar-collapse-1">
+
+                    <ul class="nav navbar-nav">
+                        {{if response.adminmenu:}}
+                        {{=response.adminmenu[0]}}
+                        {{pass}}
+                        {{if response.menu:}}
+                        {{=response.menu[0]}}
+                        {{pass}}
+                        {{if auth.is_logged_in():}}
+                        {{if response.squadmenu:}}
+                        {{=response.squadmenu[0]}}
+                        {{pass}}
+                        {{if response.statusmenu:}}
+                        {{=response.statusmenu[0]}}
+                        {{else:}}
+                        {{pass}}
+
+                        {{pass}}
+                    </ul>
+                    <ul class="nav navbar-nav">
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right " style="margin-right: 0px;">
+
+                        <!--<li><a id="right-menu" href="#right-menu" class="btn btn-info btn-block">Right Menu</a></li>-->
+
+                        {{if auth.is_logged_in():}}
+                        {{=user_bar()[0]}}
+                        {{else:}}
+                        <li><a id="loginnavbutton" href="/pandemic/default/user/login?_next=/pandemic/default/index"
+                               class="btn btn-default navbar-btn">Login</a></li>
+                        {{pass}}
+                    </ul>
+                    {{block menuitem}}
+                    {{end}}
+
+
+                </div>
+                <!-- /.navbar-collapse -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+            {{block navitem}}
+            {{end}}
+
+        </nav>
+    </div>
 
 
 </header>
-		{{include}}	
-        {{block layer01}}
-		{{end}}
-        {{block layer02}}
-		{{end}}
-		{{block layer03}}
-		{{end}}
-		{{block layer04}}
-		{{end}}
-
-<footer>	
-{{block footer}}
 
 
-
-
+{{include}}
+{{block layer01}}
 {{end}}
-<hr/>
+{{block layer02}}
+{{end}}
+{{block layer03}}
+{{end}}
+{{block layer04}}
+{{end}}
+
+<footer>
+
+
+    {{block footer}}
+    {{end}}
+
+    <script>
+$(document).ready(function() {
+    $('#sidemenu-button').sidr({
+      name: 'mobile-menu',
+      side: 'left',
+      source: '#sidemenu'
+    });
+});
+
+
+
+    </script>
 </footer>
 
 
-
-	<script data-main="{{=URL('static','js/main.js')}}" src="{{=URL('static','js/require.js')}}"></script>
-
-
 {{block postfooter}}
-
 {{end}}
+
+<script data-main="{{=URL('static','js/main.js')}}" src="{{=URL('static','js/require.js')}}"></script>
+
 
 </body>
 </html>

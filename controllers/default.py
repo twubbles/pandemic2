@@ -53,17 +53,6 @@ def roster():
 def index():
     # This builds the globalvars variable that appears at the top of the landing page
     if gameinfo.isGameActive:
-        if isgameupcoming():
-            events = False
-            globalvars = 'Game begins @ '
-            globalvars += pretty_date(gameinfo.gameStart())
-        else:
-            stimer = (gameinfo.starveTimer() / 60) / 60
-            globalvars = 'Stun Timer: ' + str(gameinfo.stunTime()) + ' mins - Starve Timer: ' + str(stimer) + ' hrs'
-    else:
-        events = False
-        globalvars = 'No upcoming game yet'
-    if gameinfo.isGameActive:
         missions = missionfeed(gameinfo.getId())
         bites = bitefeed(gameinfo.getId())
     else:
@@ -76,7 +65,7 @@ def index():
                                                             orderby=~db.posts.pub_date, limitby=(0, 15),
                                                             cache=(cache.ram, 120),
                                                             cacheable=True)
-    return dict(missions=missions, globalvars=globalvars, posts=posts, bites=bites)
+    return dict(missions=missions, posts=posts, bites=bites)
 
 
 # View post page.

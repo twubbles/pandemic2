@@ -1,6 +1,5 @@
-
 # def sendlog():
-#     import os
+# import os
 #     logdir = os.getcwd()
 #     logloc = logdir + '/adminlog.txt'
 #     try:
@@ -15,3 +14,5 @@
 #         oldlog.close()
 #         sendemail("jeclairm@gmail.com", "Admin log updates", logcontents)
 #         os.remove(logloc)
+
+

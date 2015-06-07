@@ -1,30 +1,27 @@
 @import "compass/css3";
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+
 
 
 
 $hvzfont: 'Carme', sans-serif;
 $arial: Arial, sans-serif;
-$paleblue: #66B2E5;
-$lightblue: #71C6FF;
-$paleblue: #66B2E5;
-$mildblue: #447799;
-$darkblue: #39637F;
-$deepblue: #1C3240;
-$lightgrey: #e5e5e5;
-$grey: #4c4c4c;
-$nupurple: #B244E5;
-$nupurpledark: #63267F;
-$nupurpledarker: #321340;
-$nupurplelight: #C64BFF;
-$nupurplelighter: #9538BF;
 
 
-html {
-	background: url(pandemicbg01.jpg) no-repeat center center fixed; 
-	background-size: cover;
-	background-color: $deepblue;
-	color: $lightgrey;
+$monsterrat: 'Montserrat', sans-serif;
+$aqua: #4FC1E9;
+$lightaqua: #46b9e1;
+$darkaqua: #3BAFDA;
+
+$grass: #A0D468;
+$darkgrass: #8CC152;
+
+body {
+    padding-top:70px;
+
+
 }
+
 
 input, select, textarea{
 color: black;
@@ -84,17 +81,16 @@ textarea{
 }
 
 
-body {
-	font-family: $hvzfont;
-	padding-top: 100px;
-	color: $lightgrey;
-	font-size:1.4em;
-}
+
 
 .container-panel {
   padding-left: 15px;
   padding-right: 15px;
-  
+}
+
+.container-full {
+  margin: 0 auto;
+  width: 100%;
 }
 
 .margin-xs {
@@ -148,11 +144,11 @@ body {
 
 #loginnavbutton {
 	color: white;
-	background-color: $mildblue;
+	background-color: $aqua;
 	margin:10px;
 	padding-top:5px;
 	padding-bottom:5px;
-	border: 1px solid $lightgrey;
+	border: 1px solid white;
 
 }
 
@@ -195,216 +191,6 @@ font-size: 1.3em;
 
 
 
-/* CUSTOMIZE THE CAROUSEL
--------------------------------------------------- */
-
-/* Carousel base class */
-
-.carousel {
-	width:100%;
-	height: 500px;
-	margin-bottom: 20px;
-	transition: all 1s linear;
-	@media (max-width: 768px) {
-	height: 300px;
-	}
-}
-
-/* Since positioning the image, we need to help out the caption */
-
-.carousel-caption {
-  z-index: 10;
-}
-
-/* Declare heights because of positioning of img element */
-
-.carousel .item {
-	height: 500px;
-	border-radius: 0.1em;
-	transition: all 1s linear;
-	@media (max-width: 768px) {
-		height: 300px;
-	}
-	
-}
-
-/* Center align the text within the three columns below the carousel */
-
-/* Featurettes
-------------------------- */
-
-.featurette-divider {
-  margin: 40px 0;
-  /* Space out the Bootstrap <hr> more */
-}
-
-/* Thin out the marketing headings */
-
-.featurette-heading {
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-/* RESPONSIVE CSS
--------------------------------------------------- */
-
-@media (min-width: 768px) {
-  /* Remove the edge padding needed for mobile */
-  .marketing {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  /* Navbar positioning foo */
-  .navbar-wrapper {
-    margin-top: 20px;
-    .container {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-    .navbar {
-      padding-left: 0;
-      padding-right: 0;
-      border-radius: 4px;
-    }
-  }
-  /* The navbar becomes detached from the top, so we round the corners */
-  /* Bump up size of carousel content */
-  .carousel-caption p {
-    margin-bottom: 20px;
-    font-size: 21px;
-    line-height: 1.4;
-  }
-  .featurette-heading {
-    font-size: 50px;
-  }
-}
-
-@media (min-width: 992px) {
-  .featurette-heading {
-    margin-top: 120px;
-  }
-}
-
-.elementbox {
-  position: relative;
-  padding: 30px 15px 20px;
-  margin: 0 -15px 15px;
-  background-color: #fafafa;
-  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
-  border-color: #e5e5e5 #eee #eee;
-  border-style: solid;
-  border-width: 1px 0;
-  &:after {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #bbb;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  + .highlight {
-    margin: -15px -15px 15px;
-    border-radius: 0;
-    border-width: 0 0 1px;
-  }
-  .container {
-    width: auto;
-  }
-  > {
-    p:last-child, ul:last-child, ol:last-child, blockquote:last-child, .form-control:last-child, .table:last-child, .navbar:last-child, .jumbotron:last-child, .alert:last-child, .panel:last-child, .list-group:last-child, .well:last-child, .progress:last-child, .table-responsive:last-child > .table {
-      margin-bottom: 0;
-    }
-    p > .close {
-      float: none;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .elementbox {
-    margin-left: 0;
-    margin-right: 0;
-    background-color: #fff;
-    border-width: 1px;
-    border-color: #ddd;
-    border-radius: 4px 4px 0 0;
-    box-shadow: none;
-    + .highlight {
-      margin-top: -16px;
-      margin-left: 0;
-      margin-right: 0;
-      border-width: 1px;
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
-    }
-  }
-}
-
-.elementbox-type {
-  .table {
-    .type-info {
-      color: #999;
-      vertical-align: middle;
-    }
-    td {
-      padding: 15px 0;
-      border-color: #eee;
-    }
-    tr:first-child td {
-      border-top: 0;
-    }
-  }
-  h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-  }
-}
-
-.elementbox-bg-classes p {
-  padding: 15px;
-}
-
-.elementbox > {
-  .img-circle, .img-rounded, .img-thumbnail {
-    margin: 5px;
-  }
-  .table-responsive > .table {
-    background-color: #fff;
-  }
-  .btn, .btn-group {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  .btn-toolbar + .btn-toolbar {
-    margin-top: 10px;
-  }
-}
-
-.elementbox-control-sizing {
-  select, input[type=text] + input[type=text] {
-    margin-top: 10px;
-  }
-}
-
-.elementbox-form .input-group {
-  margin-bottom: 10px;
-}
-
-.elementbox {
-  > {
-    textarea.form-control {
-      resize: vertical;
-    }
-    .list-group {
-      max-width: 400px;
-    }
-  }
-  .navbar:last-child {
-    margin-bottom: 0;
-  }
-}
 
 /* datetimepicker styles */
 
@@ -510,7 +296,7 @@ and (orientation : portrait) {
 
 .squaditem {
     margin-bottom: 0px;
-    background-color: $nupurpledarker;
+    background-color: black;
     border: 1px solid transparent;
     border-radius: 0px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -743,55 +529,418 @@ and (orientation : portrait) {
 }
 
 
-.navbar-light {
-  background-color: #428bca;
-  border-color: #E7E7E7;
-  .navbar-brand {
-    color: #fff;
-    &:hover, &:focus {
-      color: #333;
-      background-color: transparent;
-    }
-  }
-  .navbar-text {
-    color: #fff;
-  }
-  .navbar-nav > {
-    li > a {
-      color: #777;
-      &:hover, &:focus {
-        color: #333;
-        background-color: transparent;
-      }
-    }
-    .active > a {
-      color: #fff;
-      background-color: transparent;
-      &:hover, &:focus {
-        color: #333;
-        background-color: transparent;
-      }
-    }
-    .disabled > a {
-      color: #aaaaaa;
-      background-color: transparent;
-      &:hover, &:focus {
-        color: #aaaaaa;
-        background-color: transparent;
-      }
-    }
-  }
-  .navbar-link {
-    color: #fff;
-    &:hover {
-      color: #333;
-    }
-  }
+
+/* comviewer component styles */
+
+div.comviewer {
+
+    width:600px;
+    height:550px;
+    background: $aqua;
+
+    div#comnavbar {
+        background-color: $darkaqua;
+		width: 100px;
+		height:100%;
+		padding:0px;
+		}
+
+		ul#comnavlist {
+            padding:0px;
+			list-style: none;
+		}
+
+		ul#comnavlist li {
+
+			width:100px;
+			height:100px;
+		}
+
+		ul#comnavlist li a {
+			text-decoration: none;
+			width:100px;
+			height:100px;
+			padding:0px;
+			font-size:25px;
+			font-family:arial;
+			text-align:center;
+			line-height:100px;
+			border:none;
+			background-color: $darkaqua;
+			display:block;
+			color:#fff;
+		}
+
+		ul#comnavlist li a:hover {
+
+			background-color: $aqua;
+		}
+
+
 }
+
+
+
+/* sidr menu component styles */
+
+
+#mobile-header {
+    height:50px;
+    display: none;
+    background: #333;
+    color: #fff;
+
+    padding-top:0px;
+    ul {
+        margin:0px;
+        list-style:none;
+        padding-top:5px;
+
+        li {
+            float:right;
+            height:45px;
+            width:45px;
+            display:inline-block;
+
+        }
+    }
+
+}
+
+
+.responsive-button {
+    span {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        vertical-align: baseline;
+    }
+    font-size:38px;
+    color: #fff;
+    background-color: transparent;
+    :hover {
+        color: $aqua;
+        cursor: pointer;
+        cursor: hand;
+    }
+}
+
+
+
+
+#sidemenu-button {
+    margin-left:5px;
+    float:left;
+    text-decoration: none;
+    font-size:40px;
+    color: #fff;
+    background-color: transparent;
+    :hover {
+        color: $aqua;
+        cursor: pointer;
+        cursor: hand;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+}
+
+.responsive-menu-button {
+    color: #fff;
+    background-color: transparent;
+    span {
+        font-size:38px;
+        color: #fff;
+    }
+    span:hover {
+            color: $aqua;
+        }
+    :hover {
+
+        cursor: pointer;
+        cursor: hand;
+    }
+}
+
+
 
 @media (max-width: 767px) {
-  .navbar-inverse  {
-    border-radius: 4px;
+  #navigation {
+    display: none;
+  }
 
+  #mobile-header {
+    display: block;
+    position: absolute;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 200;
   }
 }
+
+#mobile-header {
+    display: none;
+}
+@media (max-width: 767px){
+    #mobile-header {
+        display: block;
+    }
+}
+
+
+
+div#sidemenu {
+    display:none;
+    width:100%;
+    height:100%;
+
+    div#sidemenubar {
+        background-color: $darkaqua;
+		width:75px;
+		height:100%;
+		padding:0px;
+		}
+
+		ul#sidemenulist {
+            padding:0px;
+			list-style: none;
+		}
+
+		ul#sidemenulist li {
+
+			width:75px;
+			height:75px;
+		}
+
+		ul#sidemenulist li a {
+			text-decoration: none;
+			width:75px;
+			height:75px;
+			padding:0px;
+			font-size:15px;
+			font-family:arial;
+			text-align:center;
+			line-height:75px;
+			border:none;
+			background-color: $darkaqua;
+			display:block;
+			color:#fff;
+		}
+
+		ul#sidemenulist li a:hover {
+
+			background-color: $aqua;
+		}
+
+
+}
+
+
+.sidr {
+  /* Default Settings */
+  display: none;
+  position: absolute;
+  position: fixed;
+  top: 0;
+  height: 100%;
+  z-index: 999999;
+  width: 75px;
+  overflow-x: none;
+  overflow-y: auto;
+  /* Theme Settings */
+  font-family: $monsterrat;
+  font-size: 20px;
+  background: #333333;
+  color: white;
+}
+
+.sidr .sidr-inner {
+  padding: 0 0 15px;
+}
+
+.sidr .sidr-inner > p {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.sidr.right {
+  left: auto;
+  right: -75px;
+}
+
+.sidr.left {
+  left: -75px;
+  right: auto;
+}
+
+.sidr h1, .sidr h2, .sidr h3, .sidr h4, .sidr h5, .sidr h6 {
+  font-size: 11px;
+  font-weight: normal;
+  padding: 0 15px;
+  margin: 0 0 5px;
+  color: white;
+  line-height: 24px;
+}
+
+.sidr p {
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.sidr p a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sidr > p {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.sidr ul {
+  display: block;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+.sidr ul li {
+  display: inline-block;
+  margin: 0;
+  line-height: 32px;
+  width:75px;
+
+}
+
+.sidr ul li:hover, .sidr ul li.active, .sidr ul li.sidr-class-active {
+  border-top: none;
+  line-height: 32px;
+}
+
+
+
+.sidr ul li a {
+    text-decoration: none;
+    width:75px;
+    height:75px;
+    padding:0px;
+    font-size:40px;
+    font-family:arial;
+    text-align:center;
+    line-height:82px;
+    display:block;
+    color:#fff;
+}
+
+.sidr ul li ul {
+  border-bottom: none;
+  margin: 0;
+}
+
+.sidr ul li ul li {
+  line-height: 25px;
+  font-size: 13px;
+}
+
+.sidr ul li ul li:last-child {
+  border-bottom: none;
+}
+
+.sidr ul li ul li:hover, .sidr ul li ul li.active, .sidr ul li ul li.sidr-class-active {
+  border-top: none;
+  line-height: 25px;
+}
+
+
+.sidr ul li ul li a {
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 25px;
+}
+
+.sidr form {
+  margin: 0 15px;
+}
+
+.sidr label {
+  font-size: 13px;
+}
+
+
+.sidr input[type="text"],
+.sidr input[type="password"],
+.sidr input[type="date"],
+.sidr input[type="datetime"],
+.sidr input[type="email"],
+.sidr input[type="number"],
+.sidr input[type="search"],
+.sidr input[type="tel"],
+.sidr input[type="time"],
+.sidr input[type="url"],
+.sidr textarea, .sidr select {
+  width: 100%;
+  font-size: 13px;
+  padding: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 0 10px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  clear: both;
+}
+
+.sidr input[type=checkbox] {
+  width: auto;
+  display: inline;
+  clear: none;
+}
+
+.sidr input[type=button],
+.sidr input[type=submit] {
+  color: #333333;
+  background: white;
+}
+
+.sidr input[type=button]:hover,
+.sidr input[type=submit]:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+
+/* stuff for testing the layout  */
+
+.item {
+  margin-bottom: 10px;
+  margin-top: 10px;
+
+}
+
+@media (max-width: 700px){
+    .item-content {
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .item {
+    padding-left:0px;
+    padding-right:0px;
+    }
+}
+
+.item-content {
+    padding:5px;
+
+}
+
+#indexlayout {
+    margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+

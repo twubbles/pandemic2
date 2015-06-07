@@ -27,3 +27,6 @@ languages/
 **/test
 test*
 *test
+static/bootflat/
+static/css/images
+static/sass

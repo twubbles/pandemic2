@@ -1,1 +1,813 @@
-html{background:url(pandemicbg01.jpg) no-repeat center center fixed;background-size:cover;background-color:#1c3240;color:#e5e5e5}input,select,textarea{color:black}textarea{width:100%}.roundcorners{border-radius:5px}@media (min-width: 768px){.mapcanvas{height:500px;width:100%;margin-left:auto;margin-right:auto;padding:0px;display:block}}@media (min-width: 480px) and (max-width: 768px){.mapcanvas{height:500px;width:100%;margin-left:auto;margin-right:auto;padding:0px;display:block}}@media (max-width: 480px){.mapcanvas{height:500px;width:100%;margin-left:3px;margin-right:3px;padding:0px;display:block}}body{font-family:"Carme",sans-serif;padding-top:100px;color:#e5e5e5;font-size:1.4em}.container-panel{padding-left:15px;padding-right:15px}.margin-xs{margin:5px}.margin-sm{margin:15px}.margin-md{margin:25px}.margin-lg{margin:35px}.margin-top{margin-top:15px}.margin-bot{margin-bottom:15px}.margin-left{margin-left:15px}.press{color:#222;text-shadow:0px 2px 3px #555}.hvzfont{font-family:"Carme",sans-serif}.hvzbigheader{font-family:Arial,sans-serif;text-shadow:1px 1px 1px rgba(255,255,255,0.6);color:#000;letter-spacing:0.1em;font-size:3em;top:7px;left:10px;position:absolute}#loginnavbutton{color:white;background-color:#479;margin:10px;padding-top:5px;padding-bottom:5px;border:1px solid #e5e5e5}.bitetext{padding:5px;text-align:center;color:orange}.form-control{color:black}.badge-primary{background-color:#428bca}.badge-success{background-color:#5cb85c}.badge-info{background-color:#5bc0de}.badge-warning{background-color:#f0ad4e}.badge-danger{background-color:#d9534f}.badge-default{background-color:#999}.navbartext{font-size:1.3em}.carousel{width:100%;height:500px;margin-bottom:20px;transition:all 1s linear}@media (max-width: 768px){.carousel{height:300px}}.carousel-caption{z-index:10}.carousel .item{height:500px;border-radius:0.1em;transition:all 1s linear}@media (max-width: 768px){.carousel .item{height:300px}}.featurette-divider{margin:40px 0}.featurette-heading{font-weight:300;line-height:1;letter-spacing:-1px}@media (min-width: 768px){.marketing{padding-left:0;padding-right:0}.navbar-wrapper{margin-top:20px}.navbar-wrapper .container{padding-left:15px;padding-right:15px}.navbar-wrapper .navbar{padding-left:0;padding-right:0;border-radius:4px}.carousel-caption p{margin-bottom:20px;font-size:21px;line-height:1.4}.featurette-heading{font-size:50px}}@media (min-width: 992px){.featurette-heading{margin-top:120px}}.elementbox{position:relative;padding:30px 15px 20px;margin:0 -15px 15px;background-color:#fafafa;box-shadow:inset 0 3px 6px rgba(0,0,0,0.05);border-color:#e5e5e5 #eee #eee;border-style:solid;border-width:1px 0}.elementbox:after{position:absolute;top:15px;left:15px;font-size:12px;font-weight:700;color:#bbb;text-transform:uppercase;letter-spacing:1px}.elementbox+.highlight{margin:-15px -15px 15px;border-radius:0;border-width:0 0 1px}.elementbox .container{width:auto}.elementbox>p:last-child,.elementbox>ul:last-child,.elementbox>ol:last-child,.elementbox>blockquote:last-child,.elementbox>.form-control:last-child,.elementbox>.table:last-child,.elementbox>.navbar:last-child,.elementbox>.jumbotron:last-child,.elementbox>.alert:last-child,.elementbox>.panel:last-child,.elementbox>.list-group:last-child,.elementbox>.well:last-child,.elementbox>.progress:last-child,.elementbox>.table-responsive:last-child>.table{margin-bottom:0}.elementbox>p>.close{float:none}@media (min-width: 768px){.elementbox{margin-left:0;margin-right:0;background-color:#fff;border-width:1px;border-color:#ddd;border-radius:4px 4px 0 0;box-shadow:none}.elementbox+.highlight{margin-top:-16px;margin-left:0;margin-right:0;border-width:1px;border-bottom-left-radius:4px;border-bottom-right-radius:4px}}.elementbox-type .table .type-info{color:#999;vertical-align:middle}.elementbox-type .table td{padding:15px 0;border-color:#eee}.elementbox-type .table tr:first-child td{border-top:0}.elementbox-type h1,.elementbox-type h2,.elementbox-type h3,.elementbox-type h4,.elementbox-type h5,.elementbox-type h6{margin:0}.elementbox-bg-classes p{padding:15px}.elementbox>.img-circle,.elementbox>.img-rounded,.elementbox>.img-thumbnail{margin:5px}.elementbox>.table-responsive>.table{background-color:#fff}.elementbox>.btn,.elementbox>.btn-group{margin-top:5px;margin-bottom:5px}.elementbox>.btn-toolbar+.btn-toolbar{margin-top:10px}.elementbox-control-sizing select,.elementbox-control-sizing input[type=text]+input[type=text]{margin-top:10px}.elementbox-form .input-group{margin-bottom:10px}.elementbox>textarea.form-control{resize:vertical}.elementbox>.list-group{max-width:400px}.elementbox .navbar:last-child{margin-bottom:0}.ui-timepicker-div .ui-widget-header{margin-bottom:8px}.ui-timepicker-div dl{text-align:left}.ui-timepicker-div dl dt{float:left;clear:left;padding:0 0 0 5px}.ui-timepicker-div dl dd{margin:0 10px 10px 45%}.ui-timepicker-div td{font-size:90%}.ui-tpicker-grid-label{background:none;border:none;margin:0;padding:0}.ui-timepicker-rtl{direction:rtl}.ui-timepicker-rtl dl{text-align:right;padding:0 5px 0 0}.ui-timepicker-rtl dl dt{float:right;clear:right}.ui-timepicker-rtl dl dd{margin:0 45% 10px 10px}.table-no-border>thead>tr>th,.table-no-border>tbody>tr>th,.table-no-border>tfoot>tr>th,.table-no-border>thead>tr>td,.table-no-border>tbody>tr>td,.table-no-border>tfoot>tr>td{border-top:none}.container-wide{margin-left:auto;margin-right:auto}@media (min-width: 1200px){.container-wide{width:1200px}}@media (min-width: 1200px){.container-wide{width:1200px}}@media (min-width: 1400px){.container-wide{width:1400px}}.squaditem{margin-bottom:0px;background-color:#321340;border:1px solid transparent;border-radius:0px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.05);box-shadow:0 1px 1px rgba(0,0,0,0.05)}.centertext{text-align:center}.navmenubutton{padding-right:0px}.markItUp{width:100%;margin:5px 0 5px 0;border:5px solid #F5F5F5}.markItUp *{margin:0px;padding:0px;outline:none}.markItUp a:link,.markItUp a:visited{color:#000;text-decoration:none}.markItUpContainer{border:1px solid #3C769D;background:#fff url(images/bg-container.png) repeat-x top left;padding:5px 5px 2px 5px;font:11px Verdana, Arial, Helvetica, sans-serif}.markItUpEditor{font:12px 'Courier New', Courier, monospace;padding:5px 5px 5px 35px;border:3px solid #3C769D;margin-left:auto;margin-right:auto;width:100%;background:#fff url(images/bg-editor.png) no-repeat;clear:both;line-height:18px;overflow:auto}.markItUpPreviewFrame{overflow:auto;background-color:#FFFFFF;border:1px solid #3C769D;width:99.9%;height:300px;margin:5px 0}.markItUpFooter{width:100%;cursor:n-resize}.markItUpResizeHandle{overflow:hidden;width:22px;height:5px;margin-left:auto;margin-right:auto;background-image:url(images/handle.png);cursor:n-resize}.markItUpHeader ul li{list-style:none;float:left;position:relative}.markItUpHeader ul li ul{display:none}.markItUpHeader ul li:hover>ul{display:block}.markItUpHeader ul .markItUpDropMenu{background:transparent url(images/menu.png) no-repeat 115% 50%;margin-right:5px}.markItUpHeader ul .markItUpDropMenu li{margin-right:0px}.markItUpHeader ul .markItUpSeparator{margin:0 10px;width:1px;height:16px;overflow:hidden;background-color:#CCC}.markItUpHeader ul ul{display:none;position:absolute;top:18px;left:0px;background:#F5F5F5;border:1px solid #3C769D;height:inherit}.markItUpHeader ul ul .markItUpSeparator{width:auto;height:1px;margin:0px}.markItUpHeader ul ul li{float:none;border-bottom:1px solid #3C769D}.markItUpHeader ul ul .markItUpDropMenu{background:#f5f5f5 url(images/submenu.png) no-repeat 100% 50%}.markItUpHeader ul ul ul{position:absolute;top:-1px;left:150px}.markItUpHeader ul ul ul li{float:none}.markItUpHeader ul a{display:block;width:16px;height:16px;text-indent:-10000px;background-repeat:no-repeat;padding:3px;margin:0px}.markItUpHeader ul ul a{display:block;padding-left:0px;text-indent:0;width:120px;padding:5px 5px 5px 25px;background-position:2px 50%}.markItUpHeader ul ul a:hover{color:#FFF;background-color:#3C769D}.html .markItUpEditor{background-image:url(images/bg-editor-html.png)}.markdown .markItUpEditor{background-image:url(images/bg-editor-markdown.png)}.textile .markItUpEditor{background-image:url(images/bg-editor-textile.png)}.bbcode .markItUpEditor{background-image:url(images/bg-editor-bbcode.png)}.wiki .markItUpEditor,.dotclear .markItUpEditor{background-image:url(images/bg-editor-wiki.png)}.markItUp .markItUpButton1 a{background-image:url(images/h1.png)}.markItUp .markItUpButton2 a{background-image:url(images/h2.png)}.markItUp .markItUpButton3 a{background-image:url(images/h3.png)}.markItUp .markItUpButton4 a{background-image:url(images/h4.png)}.markItUp .markItUpButton5 a{background-image:url(images/h5.png)}.markItUp .markItUpButton6 a{background-image:url(images/h6.png)}.markItUp .markItUpButton7 a{background-image:url(images/paragraph.png)}.markItUp .markItUpButton8 a{background-image:url(images/bold.png)}.markItUp .markItUpButton9 a{background-image:url(images/italic.png)}.markItUp .markItUpButton10 a{background-image:url(images/stroke.png)}.markItUp .markItUpButton11 a{background-image:url(images/list-bullet.png)}.markItUp .markItUpButton12 a{background-image:url(images/list-numeric.png)}.markItUp .markItUpButton13 a{background-image:url(images/list-item.png)}.markItUp .markItUpButton14 a{background-image:url(images/picture.png)}.markItUp .markItUpButton15 a{background-image:url(images/link.png)}.markItUp .clean a{background-image:url(images/clean.png)}.markItUp .preview a{background-image:url(images/preview.png)}.navbar-light{background-color:#428bca;border-color:#E7E7E7}.navbar-light .navbar-brand{color:#fff}.navbar-light .navbar-brand:hover,.navbar-light .navbar-brand:focus{color:#333;background-color:transparent}.navbar-light .navbar-text{color:#fff}.navbar-light .navbar-nav>li>a{color:#777}.navbar-light .navbar-nav>li>a:hover,.navbar-light .navbar-nav>li>a:focus{color:#333;background-color:transparent}.navbar-light .navbar-nav>.active>a{color:#fff;background-color:transparent}.navbar-light .navbar-nav>.active>a:hover,.navbar-light .navbar-nav>.active>a:focus{color:#333;background-color:transparent}.navbar-light .navbar-nav>.disabled>a{color:#aaaaaa;background-color:transparent}.navbar-light .navbar-nav>.disabled>a:hover,.navbar-light .navbar-nav>.disabled>a:focus{color:#aaaaaa;background-color:transparent}.navbar-light .navbar-link{color:#fff}.navbar-light .navbar-link:hover{color:#333}@media (max-width: 767px){.navbar-inverse{border-radius:4px}}
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+/* line 19, ../sass/pandemic.scss */
+body {
+  padding-top: 70px; }
+
+/* line 26, ../sass/pandemic.scss */
+input, select, textarea {
+  color: black; }
+
+/* line 30, ../sass/pandemic.scss */
+textarea {
+  width: 100%; }
+
+/* line 35, ../sass/pandemic.scss */
+.roundcorners {
+  border-radius: 5px; }
+
+@media (min-width: 768px) {
+  /* line 42, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    display: block; } }
+@media (min-width: 480px) and (max-width: 768px) {
+  /* line 56, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    display: block; } }
+@media (max-width: 480px) {
+  /* line 70, ../sass/pandemic.scss */
+  .mapcanvas {
+    height: 500px;
+    width: 100%;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 0px;
+    display: block; } }
+/* line 86, ../sass/pandemic.scss */
+.container-panel {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* line 91, ../sass/pandemic.scss */
+.container-full {
+  margin: 0 auto;
+  width: 100%; }
+
+/* line 96, ../sass/pandemic.scss */
+.margin-xs {
+  margin: 5px; }
+
+/* line 100, ../sass/pandemic.scss */
+.margin-sm {
+  margin: 15px; }
+
+/* line 104, ../sass/pandemic.scss */
+.margin-md {
+  margin: 25px; }
+
+/* line 108, ../sass/pandemic.scss */
+.margin-lg {
+  margin: 35px; }
+
+/* line 112, ../sass/pandemic.scss */
+.margin-top {
+  margin-top: 15px; }
+
+/* line 116, ../sass/pandemic.scss */
+.margin-bot {
+  margin-bottom: 15px; }
+
+/* line 119, ../sass/pandemic.scss */
+.margin-left {
+  margin-left: 15px; }
+
+/* line 123, ../sass/pandemic.scss */
+.press {
+  color: #222;
+  text-shadow: 0px 2px 3px #555; }
+
+/* line 128, ../sass/pandemic.scss */
+.hvzfont {
+  font-family: "Carme", sans-serif; }
+
+/* line 133, ../sass/pandemic.scss */
+.hvzbigheader {
+  font-family: Arial, sans-serif;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+  color: #000;
+  letter-spacing: 0.1em;
+  font-size: 3em;
+  top: 7px;
+  left: 10px;
+  position: absolute; }
+
+/* line 145, ../sass/pandemic.scss */
+#loginnavbutton {
+  color: white;
+  background-color: #4fc1e9;
+  margin: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid white; }
+
+/* line 155, ../sass/pandemic.scss */
+.bitetext {
+  padding: 5px;
+  text-align: center;
+  color: orange; }
+
+/* line 162, ../sass/pandemic.scss */
+.form-control {
+  color: black; }
+
+/* line 166, ../sass/pandemic.scss */
+.badge-primary {
+  background-color: #428bca; }
+
+/* line 169, ../sass/pandemic.scss */
+.badge-success {
+  background-color: #5cb85c; }
+
+/* line 172, ../sass/pandemic.scss */
+.badge-info {
+  background-color: #5bc0de; }
+
+/* line 175, ../sass/pandemic.scss */
+.badge-warning {
+  background-color: #f0ad4e; }
+
+/* line 178, ../sass/pandemic.scss */
+.badge-danger {
+  background-color: #d9534f; }
+
+/* line 181, ../sass/pandemic.scss */
+.badge-default {
+  background-color: #999; }
+
+/* line 186, ../sass/pandemic.scss */
+.navbartext {
+  font-size: 1.3em; }
+
+/* datetimepicker styles */
+/* line 198, ../sass/pandemic.scss */
+.ui-timepicker-div .ui-widget-header {
+  margin-bottom: 8px; }
+/* line 201, ../sass/pandemic.scss */
+.ui-timepicker-div dl {
+  text-align: left; }
+  /* line 203, ../sass/pandemic.scss */
+  .ui-timepicker-div dl dt {
+    float: left;
+    clear: left;
+    padding: 0 0 0 5px; }
+  /* line 208, ../sass/pandemic.scss */
+  .ui-timepicker-div dl dd {
+    margin: 0 10px 10px 45%; }
+/* line 212, ../sass/pandemic.scss */
+.ui-timepicker-div td {
+  font-size: 90%; }
+
+/* line 217, ../sass/pandemic.scss */
+.ui-tpicker-grid-label {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0; }
+
+/* line 224, ../sass/pandemic.scss */
+.ui-timepicker-rtl {
+  direction: rtl; }
+  /* line 226, ../sass/pandemic.scss */
+  .ui-timepicker-rtl dl {
+    text-align: right;
+    padding: 0 5px 0 0; }
+    /* line 229, ../sass/pandemic.scss */
+    .ui-timepicker-rtl dl dt {
+      float: right;
+      clear: right; }
+    /* line 233, ../sass/pandemic.scss */
+    .ui-timepicker-rtl dl dd {
+      margin: 0 45% 10px 10px; }
+
+/* timepicker styles end */
+/* line 248, ../sass/pandemic.scss */
+.table-no-border > thead > tr > th,
+.table-no-border > tbody > tr > th,
+.table-no-border > tfoot > tr > th,
+.table-no-border > thead > tr > td,
+.table-no-border > tbody > tr > td,
+.table-no-border > tfoot > tr > td {
+  border-top: none; }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media (min-width: 320px) and (max-device-width: 480px) {
+  /* Styles */ }
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* Styles */ }
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  /* Styles */ }
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  /* Styles */ }
+/* line 282, ../sass/pandemic.scss */
+.container-wide {
+  margin-left: auto;
+  margin-right: auto; }
+  @media (min-width: 1200px) {
+    /* line 282, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1200px) {
+    /* line 282, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1200px; } }
+  @media (min-width: 1400px) {
+    /* line 282, ../sass/pandemic.scss */
+    .container-wide {
+      width: 1400px; } }
+
+/* line 297, ../sass/pandemic.scss */
+.squaditem {
+  margin-bottom: 0px;
+  background-color: black;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }
+
+/* line 306, ../sass/pandemic.scss */
+.centertext {
+  text-align: center; }
+
+/* line 311, ../sass/pandemic.scss */
+.navmenubutton {
+  padding-right: 0px; }
+
+/* line 317, ../sass/pandemic.scss */
+.markItUp {
+  width: 100%;
+  margin: 5px 0 5px 0;
+  border: 5px solid #F5F5F5; }
+  /* line 318, ../sass/pandemic.scss */
+  .markItUp * {
+    margin: 0px;
+    padding: 0px;
+    outline: none; }
+  /* line 324, ../sass/pandemic.scss */
+  .markItUp a:link, .markItUp a:visited {
+    color: #000;
+    text-decoration: none; }
+
+/* line 334, ../sass/pandemic.scss */
+.markItUpContainer {
+  border: 1px solid #3C769D;
+  background: white url(images/bg-container.png) repeat-x top left;
+  padding: 5px 5px 2px 5px;
+  font: 11px Verdana, Arial, Helvetica, sans-serif; }
+
+/* line 341, ../sass/pandemic.scss */
+.markItUpEditor {
+  font: 12px 'Courier New', Courier, monospace;
+  padding: 5px 5px 5px 35px;
+  border: 3px solid #3C769D;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  background: white url(images/bg-editor.png) no-repeat;
+  clear: both;
+  line-height: 18px;
+  overflow: auto; }
+
+/* line 354, ../sass/pandemic.scss */
+.markItUpPreviewFrame {
+  overflow: auto;
+  background-color: #FFFFFF;
+  border: 1px solid #3C769D;
+  width: 99.9%;
+  height: 300px;
+  margin: 5px 0; }
+
+/* line 363, ../sass/pandemic.scss */
+.markItUpFooter {
+  width: 100%;
+  cursor: n-resize; }
+
+/* line 368, ../sass/pandemic.scss */
+.markItUpResizeHandle {
+  overflow: hidden;
+  width: 22px;
+  height: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url(images/handle.png);
+  cursor: n-resize; }
+
+/* line 379, ../sass/pandemic.scss */
+.markItUpHeader ul li {
+  list-style: none;
+  float: left;
+  position: relative; }
+  /* line 383, ../sass/pandemic.scss */
+  .markItUpHeader ul li ul {
+    display: none; }
+  /* line 386, ../sass/pandemic.scss */
+  .markItUpHeader ul li:hover > ul {
+    display: block; }
+/* line 390, ../sass/pandemic.scss */
+.markItUpHeader ul .markItUpDropMenu {
+  background: transparent url(images/menu.png) no-repeat 115% 50%;
+  margin-right: 5px; }
+  /* line 393, ../sass/pandemic.scss */
+  .markItUpHeader ul .markItUpDropMenu li {
+    margin-right: 0px; }
+/* line 397, ../sass/pandemic.scss */
+.markItUpHeader ul .markItUpSeparator {
+  margin: 0 10px;
+  width: 1px;
+  height: 16px;
+  overflow: hidden;
+  background-color: #CCC; }
+/* line 404, ../sass/pandemic.scss */
+.markItUpHeader ul ul {
+  display: none;
+  position: absolute;
+  top: 18px;
+  left: 0px;
+  background: #F5F5F5;
+  border: 1px solid #3C769D;
+  height: inherit; }
+  /* line 405, ../sass/pandemic.scss */
+  .markItUpHeader ul ul .markItUpSeparator {
+    width: auto;
+    height: 1px;
+    margin: 0px; }
+  /* line 417, ../sass/pandemic.scss */
+  .markItUpHeader ul ul li {
+    float: none;
+    border-bottom: 1px solid #3C769D; }
+  /* line 421, ../sass/pandemic.scss */
+  .markItUpHeader ul ul .markItUpDropMenu {
+    background: whitesmoke url(images/submenu.png) no-repeat 100% 50%; }
+  /* line 424, ../sass/pandemic.scss */
+  .markItUpHeader ul ul ul {
+    position: absolute;
+    top: -1px;
+    left: 150px; }
+    /* line 428, ../sass/pandemic.scss */
+    .markItUpHeader ul ul ul li {
+      float: none; }
+/* line 433, ../sass/pandemic.scss */
+.markItUpHeader ul a {
+  display: block;
+  width: 16px;
+  height: 16px;
+  text-indent: -10000px;
+  background-repeat: no-repeat;
+  padding: 3px;
+  margin: 0px; }
+/* line 442, ../sass/pandemic.scss */
+.markItUpHeader ul ul a {
+  display: block;
+  padding-left: 0px;
+  text-indent: 0;
+  width: 120px;
+  padding: 5px 5px 5px 25px;
+  background-position: 2px 50%; }
+  /* line 449, ../sass/pandemic.scss */
+  .markItUpHeader ul ul a:hover {
+    color: #FFF;
+    background-color: #3C769D; }
+
+/* line 457, ../sass/pandemic.scss */
+.html .markItUpEditor {
+  background-image: url(images/bg-editor-html.png); }
+
+/* line 461, ../sass/pandemic.scss */
+.markdown .markItUpEditor {
+  background-image: url(images/bg-editor-markdown.png); }
+
+/* line 465, ../sass/pandemic.scss */
+.textile .markItUpEditor {
+  background-image: url(images/bg-editor-textile.png); }
+
+/* line 469, ../sass/pandemic.scss */
+.bbcode .markItUpEditor {
+  background-image: url(images/bg-editor-bbcode.png); }
+
+/* line 473, ../sass/pandemic.scss */
+.wiki .markItUpEditor, .dotclear .markItUpEditor {
+  background-image: url(images/bg-editor-wiki.png); }
+
+/* line 478, ../sass/pandemic.scss */
+.markItUp .markItUpButton1 a {
+  background-image: url(images/h1.png); }
+/* line 481, ../sass/pandemic.scss */
+.markItUp .markItUpButton2 a {
+  background-image: url(images/h2.png); }
+/* line 484, ../sass/pandemic.scss */
+.markItUp .markItUpButton3 a {
+  background-image: url(images/h3.png); }
+/* line 487, ../sass/pandemic.scss */
+.markItUp .markItUpButton4 a {
+  background-image: url(images/h4.png); }
+/* line 490, ../sass/pandemic.scss */
+.markItUp .markItUpButton5 a {
+  background-image: url(images/h5.png); }
+/* line 493, ../sass/pandemic.scss */
+.markItUp .markItUpButton6 a {
+  background-image: url(images/h6.png); }
+/* line 496, ../sass/pandemic.scss */
+.markItUp .markItUpButton7 a {
+  background-image: url(images/paragraph.png); }
+/* line 499, ../sass/pandemic.scss */
+.markItUp .markItUpButton8 a {
+  background-image: url(images/bold.png); }
+/* line 502, ../sass/pandemic.scss */
+.markItUp .markItUpButton9 a {
+  background-image: url(images/italic.png); }
+/* line 505, ../sass/pandemic.scss */
+.markItUp .markItUpButton10 a {
+  background-image: url(images/stroke.png); }
+/* line 508, ../sass/pandemic.scss */
+.markItUp .markItUpButton11 a {
+  background-image: url(images/list-bullet.png); }
+/* line 511, ../sass/pandemic.scss */
+.markItUp .markItUpButton12 a {
+  background-image: url(images/list-numeric.png); }
+/* line 514, ../sass/pandemic.scss */
+.markItUp .markItUpButton13 a {
+  background-image: url(images/list-item.png); }
+/* line 517, ../sass/pandemic.scss */
+.markItUp .markItUpButton14 a {
+  background-image: url(images/picture.png); }
+/* line 520, ../sass/pandemic.scss */
+.markItUp .markItUpButton15 a {
+  background-image: url(images/link.png); }
+/* line 523, ../sass/pandemic.scss */
+.markItUp .clean a {
+  background-image: url(images/clean.png); }
+/* line 526, ../sass/pandemic.scss */
+.markItUp .preview a {
+  background-image: url(images/preview.png); }
+
+/* comviewer component styles */
+/* line 535, ../sass/pandemic.scss */
+div.comviewer {
+  width: 600px;
+  height: 550px;
+  background: #4fc1e9; }
+  /* line 541, ../sass/pandemic.scss */
+  div.comviewer div#comnavbar {
+    background-color: #3bafda;
+    width: 100px;
+    height: 100%;
+    padding: 0px; }
+  /* line 548, ../sass/pandemic.scss */
+  div.comviewer ul#comnavlist {
+    padding: 0px;
+    list-style: none; }
+  /* line 553, ../sass/pandemic.scss */
+  div.comviewer ul#comnavlist li {
+    width: 100px;
+    height: 100px; }
+  /* line 559, ../sass/pandemic.scss */
+  div.comviewer ul#comnavlist li a {
+    text-decoration: none;
+    width: 100px;
+    height: 100px;
+    padding: 0px;
+    font-size: 25px;
+    font-family: arial;
+    text-align: center;
+    line-height: 100px;
+    border: none;
+    background-color: #3bafda;
+    display: block;
+    color: #fff; }
+  /* line 574, ../sass/pandemic.scss */
+  div.comviewer ul#comnavlist li a:hover {
+    background-color: #4fc1e9; }
+
+/* sidr menu component styles */
+/* line 587, ../sass/pandemic.scss */
+#mobile-header {
+  height: 50px;
+  display: none;
+  background: #333;
+  color: #fff;
+  padding-top: 0px; }
+  /* line 594, ../sass/pandemic.scss */
+  #mobile-header ul {
+    margin: 0px;
+    list-style: none;
+    padding-top: 5px; }
+    /* line 599, ../sass/pandemic.scss */
+    #mobile-header ul li {
+      float: right;
+      height: 45px;
+      width: 45px;
+      display: inline-block; }
+
+/* line 611, ../sass/pandemic.scss */
+.responsive-button {
+  font-size: 38px;
+  color: #fff;
+  background-color: transparent; }
+  /* line 612, ../sass/pandemic.scss */
+  .responsive-button span {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline; }
+  /* line 621, ../sass/pandemic.scss */
+  .responsive-button :hover {
+    color: #4fc1e9;
+    cursor: pointer;
+    cursor: hand; }
+
+/* line 631, ../sass/pandemic.scss */
+#sidemenu-button {
+  margin-left: 5px;
+  float: left;
+  text-decoration: none;
+  font-size: 40px;
+  color: #fff;
+  background-color: transparent; }
+  /* line 638, ../sass/pandemic.scss */
+  #sidemenu-button :hover {
+    color: #4fc1e9;
+    cursor: pointer;
+    cursor: hand;
+    background-color: transparent;
+    text-decoration: none; }
+
+/* line 648, ../sass/pandemic.scss */
+.responsive-menu-button {
+  color: #fff;
+  background-color: transparent; }
+  /* line 651, ../sass/pandemic.scss */
+  .responsive-menu-button span {
+    font-size: 38px;
+    color: #fff; }
+  /* line 655, ../sass/pandemic.scss */
+  .responsive-menu-button span:hover {
+    color: #4fc1e9; }
+  /* line 658, ../sass/pandemic.scss */
+  .responsive-menu-button :hover {
+    cursor: pointer;
+    cursor: hand; }
+
+@media (max-width: 767px) {
+  /* line 668, ../sass/pandemic.scss */
+  #navigation {
+    display: none; }
+
+  /* line 672, ../sass/pandemic.scss */
+  #mobile-header {
+    display: block;
+    position: absolute;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 200; } }
+/* line 682, ../sass/pandemic.scss */
+#mobile-header {
+  display: none; }
+
+@media (max-width: 767px) {
+  /* line 686, ../sass/pandemic.scss */
+  #mobile-header {
+    display: block; } }
+/* line 693, ../sass/pandemic.scss */
+div#sidemenu {
+  display: none;
+  width: 100%;
+  height: 100%; }
+  /* line 698, ../sass/pandemic.scss */
+  div#sidemenu div#sidemenubar {
+    background-color: #3bafda;
+    width: 75px;
+    height: 100%;
+    padding: 0px; }
+  /* line 705, ../sass/pandemic.scss */
+  div#sidemenu ul#sidemenulist {
+    padding: 0px;
+    list-style: none; }
+  /* line 710, ../sass/pandemic.scss */
+  div#sidemenu ul#sidemenulist li {
+    width: 75px;
+    height: 75px; }
+  /* line 716, ../sass/pandemic.scss */
+  div#sidemenu ul#sidemenulist li a {
+    text-decoration: none;
+    width: 75px;
+    height: 75px;
+    padding: 0px;
+    font-size: 15px;
+    font-family: arial;
+    text-align: center;
+    line-height: 75px;
+    border: none;
+    background-color: #3bafda;
+    display: block;
+    color: #fff; }
+  /* line 731, ../sass/pandemic.scss */
+  div#sidemenu ul#sidemenulist li a:hover {
+    background-color: #4fc1e9; }
+
+/* line 740, ../sass/pandemic.scss */
+.sidr {
+  /* Default Settings */
+  display: none;
+  position: absolute;
+  position: fixed;
+  top: 0;
+  height: 100%;
+  z-index: 999999;
+  width: 75px;
+  overflow-x: none;
+  overflow-y: auto;
+  /* Theme Settings */
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  background: #333333;
+  color: white; }
+
+/* line 758, ../sass/pandemic.scss */
+.sidr .sidr-inner {
+  padding: 0 0 15px; }
+
+/* line 762, ../sass/pandemic.scss */
+.sidr .sidr-inner > p {
+  margin-left: 15px;
+  margin-right: 15px; }
+
+/* line 767, ../sass/pandemic.scss */
+.sidr.right {
+  left: auto;
+  right: -75px; }
+
+/* line 772, ../sass/pandemic.scss */
+.sidr.left {
+  left: -75px;
+  right: auto; }
+
+/* line 777, ../sass/pandemic.scss */
+.sidr h1, .sidr h2, .sidr h3, .sidr h4, .sidr h5, .sidr h6 {
+  font-size: 11px;
+  font-weight: normal;
+  padding: 0 15px;
+  margin: 0 0 5px;
+  color: white;
+  line-height: 24px; }
+
+/* line 786, ../sass/pandemic.scss */
+.sidr p {
+  font-size: 13px;
+  margin: 0 0 12px; }
+
+/* line 791, ../sass/pandemic.scss */
+.sidr p a {
+  color: rgba(255, 255, 255, 0.9); }
+
+/* line 795, ../sass/pandemic.scss */
+.sidr > p {
+  margin-left: 15px;
+  margin-right: 15px; }
+
+/* line 800, ../sass/pandemic.scss */
+.sidr ul {
+  display: block;
+  margin: 0 0 15px;
+  padding: 0; }
+
+/* line 806, ../sass/pandemic.scss */
+.sidr ul li {
+  display: inline-block;
+  margin: 0;
+  line-height: 32px;
+  width: 75px; }
+
+/* line 814, ../sass/pandemic.scss */
+.sidr ul li:hover, .sidr ul li.active, .sidr ul li.sidr-class-active {
+  border-top: none;
+  line-height: 32px; }
+
+/* line 821, ../sass/pandemic.scss */
+.sidr ul li a {
+  text-decoration: none;
+  width: 75px;
+  height: 75px;
+  padding: 0px;
+  font-size: 40px;
+  font-family: arial;
+  text-align: center;
+  line-height: 82px;
+  display: block;
+  color: #fff; }
+
+/* line 834, ../sass/pandemic.scss */
+.sidr ul li ul {
+  border-bottom: none;
+  margin: 0; }
+
+/* line 839, ../sass/pandemic.scss */
+.sidr ul li ul li {
+  line-height: 25px;
+  font-size: 13px; }
+
+/* line 844, ../sass/pandemic.scss */
+.sidr ul li ul li:last-child {
+  border-bottom: none; }
+
+/* line 848, ../sass/pandemic.scss */
+.sidr ul li ul li:hover, .sidr ul li ul li.active, .sidr ul li ul li.sidr-class-active {
+  border-top: none;
+  line-height: 25px; }
+
+/* line 854, ../sass/pandemic.scss */
+.sidr ul li ul li a {
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 25px; }
+
+/* line 859, ../sass/pandemic.scss */
+.sidr form {
+  margin: 0 15px; }
+
+/* line 863, ../sass/pandemic.scss */
+.sidr label {
+  font-size: 13px; }
+
+/* line 878, ../sass/pandemic.scss */
+.sidr input[type="text"],
+.sidr input[type="password"],
+.sidr input[type="date"],
+.sidr input[type="datetime"],
+.sidr input[type="email"],
+.sidr input[type="number"],
+.sidr input[type="search"],
+.sidr input[type="tel"],
+.sidr input[type="time"],
+.sidr input[type="url"],
+.sidr textarea, .sidr select {
+  width: 100%;
+  font-size: 13px;
+  padding: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 0 10px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  clear: both; }
+
+/* line 898, ../sass/pandemic.scss */
+.sidr input[type=checkbox] {
+  width: auto;
+  display: inline;
+  clear: none; }
+
+/* line 905, ../sass/pandemic.scss */
+.sidr input[type=button],
+.sidr input[type=submit] {
+  color: #333333;
+  background: white; }
+
+/* line 911, ../sass/pandemic.scss */
+.sidr input[type=button]:hover,
+.sidr input[type=submit]:hover {
+  background: rgba(255, 255, 255, 0.9); }
+
+/* stuff for testing the layout  */
+/* line 918, ../sass/pandemic.scss */
+.item {
+  margin-bottom: 10px;
+  margin-top: 10px; }
+
+@media (max-width: 700px) {
+  /* line 925, ../sass/pandemic.scss */
+  .item-content {
+    padding-left: 0px;
+    padding-right: 0px; }
+
+  /* line 929, ../sass/pandemic.scss */
+  .item {
+    padding-left: 0px;
+    padding-right: 0px; } }
+/* line 935, ../sass/pandemic.scss */
+.item-content {
+  padding: 5px; }
+
+/* line 940, ../sass/pandemic.scss */
+#indexlayout {
+  margin: 0;
+  padding: 0;
+  border: 0; }
